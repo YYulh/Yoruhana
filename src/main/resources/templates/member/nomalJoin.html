@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+<div id="section" align="center">
+  <h3>회원가입</h3>
+  <div>
+    <form action="/joinSubmit.do"  name="form1">
+      <table>
+        <tr>
+          <th>이름</th>
+        </tr>
+        <tr>
+          <th><input type="text" name = "mb_name"></th>
+        </tr>
+        <tr>
+          <th>비밀번호</th>
+        </tr>
+        <tr>
+          <th><input type="password" name = "mb_pw"</th>
+        </tr>
+        <tr>
+          <th>이메일</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" name="mb_email1">
+            @
+            <input type="text" name="mb_email2">
+          </th>
+        </tr>
+        <tr>
+          <th>연락처</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="number" name="mb_tel1">-<input type="number" name="mb_tel2">-<input type="number" name="mb_tel3">
+          </th>
+        </tr>
+        <tr>
+          <th>개인정보 약관 동의</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="radio" name="mb_agree" value="0">동의
+            <input type="radio" name="mb_agree" value="1">비동의
+          </th>
+        </tr>
+        <tr>
+          <th><input type="button" value="가입하기" onclick="joinSubmit();"></th>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+</body>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+<script>
+  function joinSubmit(){
+    document.form1.submit();
+   return;
+  }
+</script>
+
+</html>

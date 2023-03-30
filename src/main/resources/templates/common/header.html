@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment = "header">
+<head>
+    <meta charset="UTF-8">
+    <title>YoruHana</title>
+</head>
+<style>
+    #section{
+    display:flex;
+    justify-content:space-between;
+    border-bottom: 1px solid #dcdcdc;
+    }
+    #nav>ul{
+    list-style:none;
+    display:flex;
+    }
+    #nav>ul>li>a{
+    text-decoration:none;
+    }
+    #nav>ul>li{
+    padding-left:15px;
+    padding-right:15px;
+    }
+</style>
+<body>
+    <div id = "section" align="center">
+        <div>
+            <h3>YORUHANA</h3>
+        </div>
+        <div>Title</div>
+        <div id="nav">
+            <ul>
+                <li><a href = "/login.do">Login</a></li>
+                <li><a href = "/join.do">Join</a></li>
+                <li><a>Calender</a></li>
+                <li><a>메세지</a></li>
+                <li><a>알림</a></li>
+                <li><a>프로필</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+

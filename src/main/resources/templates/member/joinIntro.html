@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+  #section{
+  display:flex;
+  }
+  body>a{
+   text-decoration:none;
+  }
+</style>
+<body>
+
+<div th:insert = "~{common/header :: header}"></div>
+
+
+
+
+
+
+
+
+
+  <div id="section" align="center">
+    <h3>회원가입</h3>
+      <div>
+        <a th:href="@{/joinForm.do(joinMode=nomal)}">일반회원 가입</a>
+      </div>
+    <div>
+        <a href="#">카카오 가입</a>
+    </div>
+    <div>
+      <a href="#">라인 가입</a>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div th:insert = "~{common/footer :: footer}"></div>
+</body>
+</html>
