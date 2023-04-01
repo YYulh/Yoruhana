@@ -36,7 +36,7 @@ public class MemberController {
         int result = memberService.insertJoin(vo);
         if(result != 0){
             msg = "회원가입에 성공하였습니다";
-            url = "result";
+            url = "/";
         } else {
             msg = "회원가입에 실패하였습니다. 관리자에게 문의해주세요.";
             url = "/";
@@ -44,6 +44,6 @@ public class MemberController {
         model.addAttribute("msg",msg);
         model.addAttribute("url",url);
 
-        return "result";
+        return "common/result";
     }
 }
