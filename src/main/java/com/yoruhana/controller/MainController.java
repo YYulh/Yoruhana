@@ -11,11 +11,5 @@ public class MainController {
     public String main(){
         return "main/index";
     }
-    @GetMapping("/login.do")
-    public String login(Model model){
-        String a = "바보";
 
-        model.addAttribute("a",a);
-        return "main/index";
-    }
 }

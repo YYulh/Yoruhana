@@ -5,8 +5,23 @@
 
     <!--회원가입-->
     <insert id="insertJoin" parameterType="com.yoruhana.entity.MemberVO">
-        insert into members (mb_name, mb_email, mb_pw, mb_tel, mb_stat,mb_join_date)
-                    values(#{mb_name},CONCAT(#{mb_email1},'@',#{mb_email2}),#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),0,NOW())
+        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw, mb_tel, mb_stat,mb_join_date, mb_prof_stat)
+                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),0,NOW(),1)
     </insert>
 
+    <select id = "login" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
+        select mb_no, mb_country, mb_nick ,mb_name , mb_id from members where mb_id = #{mb_id} and mb_pw = #{mb_pw}
+    </select>
+
+    <select id="checkNick" parameterType="String" resultType="com.yoruhana.entity.MemberVO">
+        select * from members where mb_nick = #{mb_nick}
+    </select>
+
+    <select id="getInfo" parameterType="int" resultType="com.yoruhana.entity.MemberVO">
+        select * from members where mb_no = #{mb_no}
+    </select>
+
+    <select id="getProfPic" parameterType="int" resultType="com.yoruhana.entity.MemberVO">
+        select * from membersPic where mb_no = #{mb_no}
+    </select>
 </mapper>

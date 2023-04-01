@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/join.css" />
+
+<body id = "joinbody">
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+
+  <div id="section" align="center">
+    <h3>회원가입</h3>
+    <div >
+      <form action="/joinSubmit.do"  name="form1">
+        <table>
+          <tr>
+            <th>국적</th>
+          </tr>
+          <tr>
+            <th>
+              <select id="mb_country" name="mb_country" style="width:100%;">
+                <option value="japan">Japan</option>
+                <option value="South,Korea" selected >South,Korea</option>
+              </select>
+            </th>
+          </tr>
+          <tr>
+            <th>닉네임</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off">
+              <input type="button" value="중복확인" onclick="checkNick();" >
+              <span id="checkNick"></span>
+            </th>
+          </tr>
+          <tr>
+            <th>이름</th>
+          </tr>
+          <tr>
+            <th><input type="text" id="mb_name" name="mb_name"></th>
+          </tr>
+          <tr>
+            <th>아이디</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_id" name="mb_id">
+            </th>
+          </tr>
+          <tr>
+            <th>비밀번호</th>
+          </tr>
+          <tr>
+            <th><input type="password" id="mb_pw" name="mb_pw"></th>
+          </tr>
+          <tr>
+            <th>연락처</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_tel1" name="mb_tel1" maxlength="3" style="width:30%;">-
+              <input type="text" id="mb_tel2" name="mb_tel2" maxlength="4" style="width:30%;">-
+              <input type="text" id="mb_tel3" name="mb_tel3" maxlength="4" style="width:30%;">
+            </th>
+          </tr>
+          <tr>
+            <th>성별</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_sex1" name="mb_sex" value="0">남자
+              <input type="radio" id="mb_sex2" name="mb_sex" value="1">여자
+            </th>
+          </tr>
+          <tr>
+            <th>개인정보 약관 동의</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_agree1" name="mb_agree" value="0">동의
+              <input type="radio" id="mb_agree2" name="mb_agree" value="1">비동의
+            </th>
+          </tr>
+          <tr>
+            <th><input type="button" id="join_btn" class="button" value="가입하기" onclick="joinSubmit();"></th>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</body>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+<script>
+
+  function joinSubmit(){
+    document.form1.submit();
+   return;
+  }
+
+  function checkNick(){
+    	const mb_nick = document.getElementById("mb_nick");
+
+		 if(mb_nick.value == ""){
+			 alert("닉네임을 입력해주십시오");
+			 return;
+		 }
+    	httpRequest = new XMLHttpRequest();
+
+    	if(!httpRequest){
+    		alert("인스턴스 생성 불가");
+    		return;
+    	}
+    	var httpMethod ="GET";
+    	var httpParam = "mb_nick=" + encodeURIComponent(mb_nick.value);
+    	var httpURL = "/checkNick?" + httpParam;
+
+    	httpRequest.open(httpMethod,httpURL,true);
+
+    	httpRequest.onreadystatechange = resultCheckNick;
+    	httpRequest.send();
+
+ }
+
+        function resultCheckNick(){
+    	if(httpRequest.readyState == 4 && httpRequest.status == 200){
+    		var data = httpRequest.responseText;
+    		const check = document.getElementById("checkNick");
+
+    		if(data == '사용가능한 닉네임입니다'){
+    			check.style.cssText="color: blue; font-size: 12px;";
+    		}else{
+    			document.form1.mb_nick.value = '';
+    			check.style.cssText="color: red; font-size: 12px;";
+    		}
+    		check.innerText = data;
+    	}
+    }
+
+</script>
+
+</html>

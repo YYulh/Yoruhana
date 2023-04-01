@@ -4,42 +4,71 @@
     <meta charset="UTF-8">
     <title>YoruHana</title>
 </head>
-<style>
-    #section{
-    display:flex;
-    justify-content:space-between;
-    border-bottom: 1px solid #dcdcdc;
-    }
-    #nav>ul{
-    list-style:none;
-    display:flex;
-    }
-    #nav>ul>li>a{
-    text-decoration:none;
-    }
-    #nav>ul>li{
-    padding-left:15px;
-    padding-right:15px;
-    }
-</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+<link type="text/css" rel="stylesheet" href="/css/header.css" />
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+
 <body>
-    <div id = "section" align="center">
+    <div id = "header" align="center">
         <div>
-            <h3>YORUHANA</h3>
+            <h3 id="logo"><a href = "/"><img src="/img/main.png"></a></h3>
         </div>
-        <div>Title</div>
-        <div id="nav">
-            <ul>
-                <li><a href = "/login.do">Login</a></li>
-                <li><a href = "/join.do">Join</a></li>
-                <li><a>Calender</a></li>
-                <li><a>메세지</a></li>
-                <li><a>알림</a></li>
-                <li><a>프로필</a></li>
+        <div id="title" th:text="${session.title}"></div>
+        <div id="nav" class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <ul id="nav_item">
+                <li th:if="${session.nick}==null"><a href = "/loginForm.do">Login</a></li>
+                <li th:if="${session.nick}==null"><a href = "/joinForm.do">Join</a></li>
+                <li><a>Ground</a></li>
+                <li><a>Calendar</a></li>
+                <li><a>Message</a></li>
+                <li><a><img src="/img/bell.svg" id="bell"></a></li>
+                <li id="drop_li">
+                    <a href="#" id ="menu" th:if ="${session.profile}==null">
+                        <img src = "/img/person-circle.svg" id="none_pic">
+                    </a>
+                    <ul id="drop1">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="/mypageForm.do">Mypage</a></li>
+                        <li><a href="/logout.do">Logout</a></li>
+                        <li><a href="#">Setting</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+	function googleTranslateElementInit() {
+		new google.translate.TranslateElement({
+			pageLanguage: 'ko',
+			includedLanguages: 'ko,zh-CN,zh-TW,ja,vi,th,tl,km,my,mn,ru,en,fr,ar',
+			//layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+			autoDisplay: false
+		}, 'google_translate_element');
+	};
+
+	$(function(){
+        $("#menu").click(function(){
+           $("#drop1").slideToggle();
+        });
+     });
+
+    const bell = document.querySelector('#bell');
+
+      bell.addEventListener('mouseover', () => {
+      bell.src = '/img/bell-fill.svg';
+    });
+
+    // 마우스 아웃 시 다시 원래 이미지로 변경
+    bell.addEventListener('mouseout', () => {
+      bell.src = '/img/bell.svg';
+    });
+
+</script>
+
 </html>
 
 
