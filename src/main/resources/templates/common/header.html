@@ -27,11 +27,16 @@
                     <a href="#" id ="menu" th:if ="${session.profile}==null">
                         <img src = "/img/person-circle.svg" id="none_pic">
                     </a>
-                    <ul id="drop1">
-                        <li><a href="#">Profile</a></li>
-                        <li><a href="/mypageForm.do">Mypage</a></li>
-                        <li><a href="/logout.do">Logout</a></li>
-                        <li><a href="#">Setting</a></li>
+
+                    <ul id="drop1" >
+                        <li th:if="${session.no} != null"><a href="#">Profile</a></li>
+                        <li th:if="${session.no} != null"><a href="/mypageCon.do" >Mypage</a></li>
+                        <li th:if="${session.no} != null"><a href="/logout.do" >Logout</a></li>
+                        <li th:if="${session.no} != null"><a href="#" >Setting</a></li>
+
+                        <li th:if="${session.no} == null"><a href="/require.do">Profile</a></li>
+                        <li th:if="${session.no} == null"><a href="/require.do" >Mypage</a></li>
+                        <li th:if="${session.no} == null"><a href="#" >Setting</a></li>
                     </ul>
                 </li>
             </ul>

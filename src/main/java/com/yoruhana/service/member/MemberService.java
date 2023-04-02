@@ -11,6 +11,7 @@ public interface MemberService{
    public MemberVO login(MemberVO vo);
 
    public MemberVO checkNick(String mb_nick);
+   public MemberVO checkId(String mb_id);
    public MemberVO getInfo(int mb_no);
    public List<MemberVO> getProfPic(int mb_no);
 }

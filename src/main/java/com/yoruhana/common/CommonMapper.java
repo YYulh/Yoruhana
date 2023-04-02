@@ -11,4 +11,5 @@ public class CommonMapper {
     public CommonMapper(){};
 
     public int insert;
+
 }

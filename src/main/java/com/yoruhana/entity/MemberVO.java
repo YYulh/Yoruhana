@@ -27,5 +27,9 @@ public class MemberVO {
     private String mb_ptn_nick;
     private Date mb_ptn_con_date;
 
+    private int mb_agree1;
+
+    private int mb_agree2;
+
 
 }

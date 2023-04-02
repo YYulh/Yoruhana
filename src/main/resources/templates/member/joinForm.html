@@ -17,10 +17,10 @@
   <div id="section" align="center">
     <h3>회원가입</h3>
     <div >
-      <form action="/joinSubmit.do"  name="form1">
+      <form action="/joinSubmit.do"  name="form1" onsubmit="return check(this)">
         <table>
           <tr>
-            <th>국적</th>
+            <th>국적*</th>
           </tr>
           <tr>
             <th>
@@ -31,43 +31,51 @@
             </th>
           </tr>
           <tr>
-            <th>닉네임</th>
+            <th>닉네임*</th>
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off">
-              <input type="button" value="중복확인" onclick="checkNick();" >
+              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" placeholder="다른 회원이 알아볼 수 있도록 영어로 만드는것을 권장합니다.">
+              <input type="button" value="중복확인" onclick="checkNick();" class="button">
               <span id="checkNick"></span>
             </th>
           </tr>
           <tr>
-            <th>이름</th>
+            <th>이름*</th>
           </tr>
           <tr>
             <th><input type="text" id="mb_name" name="mb_name"></th>
           </tr>
           <tr>
-            <th>아이디</th>
+            <th>아이디*</th>
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_id" name="mb_id">
+              <input type="text" id="mb_id" name="mb_id" placeholder="아이디는 6~16글자,숫자,소문자를 모두 포함해야 합니다.">
+              <input type="button" value="중복확인" onclick="checkId();" class="button">
+              <span id="checkId"></span>
             </th>
           </tr>
           <tr>
-            <th>비밀번호</th>
+            <th>비밀번호*</th>
           </tr>
           <tr>
-            <th><input type="password" id="mb_pw" name="mb_pw"></th>
+            <th><input type="password" id="mb_pw" name="mb_pw" placeholder="비밀번호는 8~16글자,숫자,소문자를 모두 포함해야 합니다."></th>
+          </tr>
+          <tr>
+            <th>비밀번호 확인*</th>
+          </tr>
+          <tr>
+            <th><input type="password" id="mb_pw_re" name="mb_pw_re" placeholder="비밀번호는 8~16글자,숫자,소문자를 모두 포함해야 합니다."></th>
           </tr>
           <tr>
             <th>연락처</th>
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_tel1" name="mb_tel1" maxlength="3" style="width:30%;">-
-              <input type="text" id="mb_tel2" name="mb_tel2" maxlength="4" style="width:30%;">-
-              <input type="text" id="mb_tel3" name="mb_tel3" maxlength="4" style="width:30%;">
+              <input type="text" id="mb_tel1" name="mb_tel1" maxlength="3" style="width:30%;" placeholder="000">-
+              <input type="text" id="mb_tel2" name="mb_tel2" maxlength="4" style="width:30%;" placeholder="0000">-
+              <input type="text" id="mb_tel3" name="mb_tel3" maxlength="4" style="width:30%;" placeholder="0000">
             </th>
           </tr>
           <tr>
@@ -75,7 +83,7 @@
           </tr>
           <tr>
             <th>
-              <input type="radio" id="mb_sex1" name="mb_sex" value="0">남자
+              <input type="radio" id="mb_sex1" name="mb_sex" value="0" checked>남자
               <input type="radio" id="mb_sex2" name="mb_sex" value="1">여자
             </th>
           </tr>
@@ -84,8 +92,83 @@
           </tr>
           <tr>
             <th>
-              <input type="radio" id="mb_agree1" name="mb_agree" value="0">동의
-              <input type="radio" id="mb_agree2" name="mb_agree" value="1">비동의
+              <textarea style="width:100%; height:180px;" class ="text_area">이용약관
+
+최종 변경일 : 2023년 4월 02일
+
+다음은 웹사이트 방문자 및 이용자와 웹사이트(yoruhana.com)의 소유자 및 관리자간의 법적 동의서입니다. 웹사이트를 이용하는 것은, 이 동의서의 내용에 동의함을 의미합니다. 이용약관에 동의하지 않는다면 지금 곧 본 웹사이트의 이용을 중지바랍니다.
+
+이 동의서는 별도의 고지없이 변경되거나 추가될 수 있으므로 규칙적으로 이용약관을 확인하도록 권장합니다. 변경사항이 있는 경우, 구체적인 변경사항은 본 문서의 시작부분에 고지됩니다.
+
+본 웹사이트의 이용에 관하여
+
+이용자는 본 웹사이트의 이용이 가능하고 본 사이트의 이용시에는 타인에 의한 아이디 계정의 부정이용을 포함하여, 발생할 수 있는 모든 책임을 이용자 본인이 진다는 것에 동의합니다. 본 웹사이트는 남녀노소 모두가 건전하게 이용하는 교류사이트를 지향합니다. 광고 메세지, 미풍양속에 맞지 않는 메세지, 불건전한 메세지를 보내거나, 이성 교제 및 광고와 같이 펜팔 본래의 목적에 맞지 않는 이용을 금합니다. 이와 같은 행위시 본 웹사이트는 해당 이용자를 차단할 권리를 가지며, 차단된 후에도 아이피를 우회 및 새로운 아이디 개설 등의 방법으로 재접속시에는 정상적인 업무를 방해하는 목적으로 파악하고 손해배상을 청구할 수 있습니다.
+
+본 웹사이트는 1인 1아이디 이용을 원칙으로 합니다. 다수의 아이디 이용을 금하고 있으며, 다수의 아이디를 이용하거나, 빈번하게 아이디를 삭제후 새로 생성하는 경우 사이트 이용을 제한할 수 있는 권리를 갖습니다.
+
+본 웹사이트상에 게재되는 모든 저작물은 당사 및 해당 정보의 제공자의 소유물이며, 국제저작권법에 의해 보호받습니다.
+
+본 웹사이트와 해당 정보 제공자는 본 웹사이트의 서비스에 대한 정확한 정보를 제공하기 위해 최선을 다합니다. 그러나 우리의 이런 모든 노력에도 불구하고, 인쇄상의 그리고 기술적인 오류가 발생할 수 있습니다. 본 웹사이트는 본 웹사이트에 게재된 정보의 부정확성에서 발생하는 손실 또는 피해에 대해 책임을 지지 않습니다.
+
+개인정보 보호원칙
+
+본 사이트는 통계자료집계 및 연락을 목적으로 이용자에 대한 몇가지 정보를 수집하고 있습니다. 본 사이트는 당신의 정보를 안정적으로 보관하고, 제 3자에게 판매하지 않으며, 공공의 장소에서 공개하지 않습니다.
+
+면책조항
+
+이용자는 본 규약에 대한 위반, 본 웹사이트의 이용 및 정보의 이용, 변조 혹은 다른 정보와의 편집, 이용불능, 이용자에 따른 라이센스 규약위반, 또는 정보의 이용에 관련한 제3자의 공소에 의해 발생하는 청구, 책임, 손해배상, 비용, 타당한 재판에 소요되는 제반비용에 대해 이용자의 책임과 비용으로 대응하며, 본 웹사이트과 그 책임자, 사원, 주주, 이사, 서버 관리자 그리고 정보제공자에게 책임소재가 발생하지 않도록 보호, 변호 및 면책하는 것을 동의합니다.
+
+보증과 의무
+
+본 웹사이트 및 정보는 편집되지 않은, 최초 제공된 상태 그대로 제공됩니다. 본 웹사이트는 본 규약에 의거하여, 상품성의 보증 및 특정 목적 적합성에 관한 묵시적인 보증책임 등을 포함, 모든 정보, 웹사이트, 정보의 정확성, 또는 본규약의 모든 권리나 허가에 대해, 명시적 혹은 묵시적 보증책임을 지지 않습니다. 본 웹사이트는 본 웹사이트나 정보가 이용자의 요건에 적합하도록 하는 것, 계속하여 서비스를 제공하는 것, 또는 장애가 발생하지 않도록 하는 것 등에 대해 일절 보장하지 않습니다.
+
+본 웹사이트는 이용자나 그외의 개인 또는 법인에 대해, 일반적, 징벌적, 특별, 간접적, 결과적, 부수적손해, 또는 이익손실이나 기타 손해, 혹은 이용자가 본 웹사이트나 그 정보를 이용한 것에 의해 발생한 비용이나 손실을 일절 보증하지 않습니다.
+
+본 웹사이트는 저작권 소유자의 구체적인 승낙없이 저작물의 사용에 대한 권한을 부여하지 않습니다.
+
+본 웹사이트는 본 웹사이트에서 제공되는 부가적인 정보성 서비스에 대한 기부를 수용하고 있습니다. 본 웹사이트는 제공되는 정보들에 대해 금전적인 지불을 수락하지 않으며 요금을 부과하지도 않습니다.
+              </textarea>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_agree1" name="mb_agree1" value="0 ">동의
+              <input type="radio" id="mb_agree2" name="mb_agree1" value="1"  checked>비동의
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <textarea style="width:100%; height:180px;" class ="text_area"> * 처리하는 개인정보의 항목
+
+요루하나는 다음의 개인정보 항목을 처리하고 있습니다.
+
+● 필수항목 : 비밀번호, 로그인ID
+● 선택항목 : 생년월일, 성별, 직업, 취미, 종교
+
+
+
+* 처리하는 개인정보의 수집/이용 목적
+
+하이펜팔은 다음의 목적으로 개인정보를 수집 및 처리하고 있습니다.
+
+● 필수항목인 비밀번호, 로그인ID, 이메일, 아이피주소는 본인여부 확인 및 안내 메일 발송, 부정 이용 방지, 비인가 사용 방지를 위해 수집됩니다.
+● 선택항목인 '생년월일, 성별, 직업, 취미, 종교'은 이용자가 선택적으로 입력이 가능하며, 사이트내 원활한 서비스 제공 및 신규 서비스 개발을 위해 수집 및 처리되고 있습니다.
+
+
+
+* 개인정보의 보유·이용 기간
+
+개인정보는 이용주체의 가입시부터 탈퇴전까지 이용기간중 보유하며 탈퇴시 아이피 주소, 메일주소, 아이디를 제외한 모든 정보가 즉시 파기됩니다.
+
+● 부정 이용 방지, 비인가 사용 방지를 위해 메일주소, 아이피주소는 탈퇴 후 1년간 보관합니다.
+● 타회원에 의한 아이디 재사용 방지, 중복가입을 방지하기 위해 아이디는 사람을 특정할 수 없는 상태에서 보존되며 서비스 종료시 완전폐기 됩니다.
+              </textarea>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_agree3" name="mb_agree2" value="0 ">동의
+              <input type="radio" id="mb_agree4" name="mb_agree2" value="1"  checked>비동의
             </th>
           </tr>
           <tr>
@@ -99,15 +182,106 @@
 
 <div th:insert = "~{common/footer :: footer}"></div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
+  $('#mb_id').on("blur keyup", function() {
+		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );
+		$(this).val( $(this).val().replace( /[ぁ-ゔ]+|[ァ-ヴー]+[々〆〤]/, '' ) );
+	});
+
   function joinSubmit(){
-    document.form1.submit();
+  var checkNick = document.getElementById("checkNick");
+  var checkId = document.getElementById("checkId");
+
+
+  let f = document.form1;
+
+  let reg_id = /^(?=.*?[a-z])(?=.*?[0-9]).{6,16}$/
+  let reg_pw = /^(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+
+ if(f.mb_nick.value == ""){
+  alert("닉네임 항목은 필수 입력값입니다.");
+  f.mb_nick.focus();
+  return false;
+
+  }else if(checkNick.innerText ==""){
+  alert("닉네임 중복확인은 필수 입니다.");
+  f.mb_nick.focus();
+  return false;
+
+  }else if(checkNick.innerText =="이미 사용중인 닉네임입니다."){
+  f.mb_nick.focus();
+  return false;
+
+  }else if(f.mb_name.value == ""){
+  alert("이름 항목은 필수 입력값입니다.");
+  f.mb_name.focus();
+  return false;
+
+  }else if(f.mb_id.value == ""){
+  alert("아이디 항목은 필수 입력값입니다.");
+  f.mb_id.focus();
+  return false;
+
+  }else if(checkId.innerText ==""){
+  alert("아이디 중복확인은 필수 입니다.");
+  f.mb_id.focus();
+  return false;
+
+  }else if(!reg_id.test(f.mb_id.value)) {
+  alert("아이디는 6~16글자,숫자,소문자를 모두 포함해야 합니다.");
+  f.mb_id.focus();
+  return false;
+
+  }else if(f.mb_pw.value == ""){
+  alert("패스워드 항목은 필수 입력값입니다.");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(!reg_pw.test(f.mb_pw.value)) {
+  alert("비밀번호는 8~16글자,숫자,소문자를 모두 포함해야 합니다.");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(f.mb_pw.value != f.mb_pw_re.value){
+  alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다.");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(checkId.innerText =="이미 사용중인 아이디입니다."){
+  f.mb_id.focus();
+  return false;
+
+  }else if(f.mb_tel1.value == ""){
+  alert("연락처를 입력하지 않으셨습니다.");
+  f.mb_tel1.focus();
+  return false;
+
+  }else if(f.mb_tel2.value == ""){
+  alert("연락처를 입력하지 않으셨습니다.");
+  f.mb_tel2.focus();
+  return false;
+
+  }else if(f.mb_tel3.value == ""){
+  alert("연락처를 입력하지 않으셨습니다.");
+  f.mb_tel3.focus();
+  return false;
+
+
+  }else if(f.mb_agree1.value == 1 || f.mb_agree2.value == 1){
+  alert("필수 항목에 동의 하지 않으셨습니다.");
+  f.mb_agree1.focus();
+  return false;
+}
+   document.form1.submit();
    return;
   }
 
+
   function checkNick(){
-    	const mb_nick = document.getElementById("mb_nick");
+        var checkNick = document.getElementById("checkNick");
+    	var mb_nick = document.getElementById("mb_nick");
 
 		 if(mb_nick.value == ""){
 			 alert("닉네임을 입력해주십시오");
@@ -131,19 +305,60 @@
  }
 
         function resultCheckNick(){
+        var checkNick = document.getElementById("checkNick");
+
     	if(httpRequest.readyState == 4 && httpRequest.status == 200){
     		var data = httpRequest.responseText;
-    		const check = document.getElementById("checkNick");
 
-    		if(data == '사용가능한 닉네임입니다'){
-    			check.style.cssText="color: blue; font-size: 12px;";
+    		if(data == '사용가능한 닉네임입니다.'){
+    			checkNick.style.cssText="color: blue; font-size: 12px;";
     		}else{
     			document.form1.mb_nick.value = '';
-    			check.style.cssText="color: red; font-size: 12px;";
+    			checkNick.style.cssText="color: red; font-size: 12px;";
     		}
-    		check.innerText = data;
+    		checkNick.innerText = data;
     	}
     }
+
+        function checkId(){
+          var checkId = document.getElementById("checkId");
+          const mb_id = document.getElementById("mb_id");
+
+           if(mb_id.value == ""){
+               alert("아이디를 입력해주십시오");
+               return;
+           }
+          httpRequest = new XMLHttpRequest();
+
+          if(!httpRequest){
+              alert("인스턴스 생성 불가");
+              return;
+          }
+          var httpMethod ="GET";
+          var httpParam = "mb_id=" + encodeURIComponent(mb_id.value);
+          var httpURL = "/checkId?" + httpParam;
+
+          httpRequest.open(httpMethod,httpURL,true);
+
+          httpRequest.onreadystatechange = resultCheckId;
+          httpRequest.send();
+
+   }
+
+          function resultCheckId(){
+          var checkId = document.getElementById("checkId");
+          if(httpRequest.readyState == 4 && httpRequest.status == 200){
+              var data = httpRequest.responseText;
+
+              if(data == '사용가능한 아이디입니다.'){
+                  checkId.style.cssText="color: blue; font-size: 12px;";
+              }else{
+                  document.form1.mb_id.value = '';
+                  checkId.style.cssText="color: red; font-size: 12px;";
+              }
+              checkId.innerText = data;
+          }
+      }
 
 </script>
 

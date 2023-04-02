@@ -5,8 +5,8 @@
 
     <!--회원가입-->
     <insert id="insertJoin" parameterType="com.yoruhana.entity.MemberVO">
-        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw, mb_tel, mb_stat,mb_join_date, mb_prof_stat)
-                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),0,NOW(),1)
+        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw, mb_tel, mb_stat,mb_join_date, mb_prof_stat,mb_agree1,mb_agree2)
+                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),0,NOW(),1,0,0)
     </insert>
 
     <select id = "login" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
@@ -15,6 +15,10 @@
 
     <select id="checkNick" parameterType="String" resultType="com.yoruhana.entity.MemberVO">
         select * from members where mb_nick = #{mb_nick}
+    </select>
+
+    <select id="checkId" parameterType="String" resultType="com.yoruhana.entity.MemberVO">
+        select * from members where mb_id = #{mb_id}
     </select>
 
     <select id="getInfo" parameterType="int" resultType="com.yoruhana.entity.MemberVO">

@@ -24,6 +24,8 @@ public class MemberServiceImpl implements MemberService {
     public MemberVO checkNick(String mb_nick){ return memberMapper.checkNick(mb_nick);}
 
     @Override
+    public MemberVO checkId(String mb_id){ return memberMapper.checkId(mb_id);}
+    @Override
     public MemberVO getInfo(int mb_no){ return memberMapper.getInfo(mb_no);}
     @Override
     public List<MemberVO> getProfPic(int mb_no){return memberMapper.getProfPic(mb_no);

@@ -99,6 +99,7 @@ public class MemberController {
             session.setAttribute("no",vo.getMb_no());
             session.setAttribute("nick", vo.getMb_nick());
             session.setAttribute("country", vo.getMb_country());
+            session.setAttribute("id", vo.getMb_id());
 
             String ckid = request.getParameter("ckid");
 
@@ -158,11 +159,23 @@ public class MemberController {
         MemberVO nick = memberService.checkNick(mb_nick);
 
         if(nick == null){
-            return "사용가능한 닉네임입니다";
+            return "사용가능한 닉네임입니다.";
         } else {
-            return "이미 사용중인 닉네임입니다";
+            return "이미 사용중인 닉네임입니다.";
         }
 
+    }
+    @GetMapping("/checkId")
+    @ResponseBody
+    public String checkId(String mb_id){
+
+        MemberVO id = memberService.checkId(mb_id);
+
+        if(id == null){
+            return "사용가능한 아이디입니다.";
+        } else {
+            return "이미 사용중인 아이디입니다.";
+        }
     }
 
     @GetMapping("/logout.do")
@@ -176,42 +189,46 @@ public class MemberController {
         return "common/result";
     }
 
+    @GetMapping("/mypageCon.do")
+    public String mypageCon(HttpServletRequest request){
+
+        return "member/mypageCon";
+    }
+
     @GetMapping("/mypageForm.do")
-    public String mypageForm(HttpServletRequest request){
+    public String mypageForm(HttpServletRequest request,MemberVO vo){
 
-        HttpSession session = (HttpSession) request.getSession();
+        vo = memberService.login(vo);
+        if(vo==null){
+            String msg = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+            String url = "member/mypageCon";
 
-        int mb_no = (Integer) session.getAttribute("no");
+            return "common/result";
+        } else {
 
-        System.out.println(mb_no);
+            HttpSession session = (HttpSession) request.getSession();
 
-        MemberVO vo = new MemberVO();
+            int mb_no = (Integer) session.getAttribute("no");
 
-        vo = memberService.getInfo(mb_no); //회원정보
+            System.out.println(mb_no);
+
+            vo = memberService.getInfo(mb_no); //회원정보
+        }
 
         if(vo == null){
             String msg = "잘못된 계정 정보입니다. 관리자에게 문의해 주십시오";
             return "/";
-        }else{
-            String str = vo.getMb_tel();
-            String [] tel = str.split("-");
+        }else if(vo.getMb_tel()!=null){
 
-            vo.setMb_tel1(tel[0]);
-            vo.setMb_tel2(tel[1]);
-            vo.setMb_tel3(tel[2]);
+                String str = vo.getMb_tel();
+                String[] tel = str.split("-");
+
+                vo.setMb_tel1(tel[0]);
+                vo.setMb_tel2(tel[1]);
+                vo.setMb_tel3(tel[2]);
 
         }
-
-   /*     try {
-            List<MemberVO> list = memberService.getProfPic(mb_no); //회원 사진
-            request.setAttribute("list",list);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }*/
-
-
         request.setAttribute("vo",vo);
-
 
         return "member/mypageForm";
     }

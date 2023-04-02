@@ -10,6 +10,7 @@ public interface MemberMapper {
     int insertJoin(MemberVO vo);
     MemberVO login(MemberVO vo);
     MemberVO checkNick(String mb_nick);
+    MemberVO checkId(String mb_id);
 
     MemberVO getInfo(int mb_no);
 
