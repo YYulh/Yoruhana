@@ -1,0 +1,33 @@
+/* 버튼 스타일 */
+input[type="button"] {
+  background-color: #A2D9CE;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  border: none;
+
+}
+
+/* 중복확인 버튼 스타일 */
+#mb_nick + input[type="button"] {
+  background-color: #A2D9CE;
+  color: #fff;
+  border: none;
+}
+
+.button:hover{
+opacity:70%;
+}
+
+#section {
+  background-color: #F2F6FF;
+  padding: 50px;
+  border-radius: 10px;
+  align:center;
+  margin:auto;
+  margin-top:70px;
+  width:50%;
+}
