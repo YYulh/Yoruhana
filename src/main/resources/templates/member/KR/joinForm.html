@@ -35,7 +35,7 @@
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" placeholder="다른 회원이 알아볼 수 있도록 영어로 만드는것을 권장합니다.">
+              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" >
               <input type="button" value="중복확인" onclick="checkNick();" class="button">
               <span id="checkNick"></span>
             </th>
@@ -189,6 +189,10 @@
 		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );
 		$(this).val( $(this).val().replace( /[ぁ-ゔ]+|[ァ-ヴー]+[々〆〤]/, '' ) );
 	});
+  $('#mb_nick').on("blur keyup", function() {
+		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );
+		$(this).val( $(this).val().replace( /[ぁ-ゔ]+|[ァ-ヴー]+[々〆〤]/, '' ) );
+	});
 
   function joinSubmit(){
   var checkNick = document.getElementById("checkNick");
@@ -324,6 +328,12 @@
           var checkId = document.getElementById("checkId");
           const mb_id = document.getElementById("mb_id");
 
+         let reg_id = /^(?=.*?[a-z])(?=.*?[0-9]).{6,16}$/
+
+          if(!reg_id.test(mb_id.value)) {
+                alert("아이디는 6~16글자,숫자,소문자를 모두 포함해야 합니다.");
+                return false;
+           }
            if(mb_id.value == ""){
                alert("아이디를 입력해주십시오");
                return;

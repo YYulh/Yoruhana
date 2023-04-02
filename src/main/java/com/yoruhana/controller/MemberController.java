@@ -19,12 +19,18 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    //회원가입 form
     @GetMapping("/joinForm.do")
-    public String joinForm() {
+    public String joinForm(HttpServletRequest request) {
 
-    return "member/joinForm";
+        HttpSession session = request.getSession();
+
+        String lang = (String)session.getAttribute("lang");
+
+    return "member/"+ lang +"/joinForm";
     }
 
+    //회원가입
     @GetMapping("/joinSubmit.do")
     public String joinSubmit(Model model, MemberVO vo){
 
@@ -45,9 +51,13 @@ public class MemberController {
         return "common/result";
     }
 
+    //로그인 form
     @GetMapping("/loginForm.do")
     public String loginForm(HttpServletRequest request,MemberVO vo){
 
+        HttpSession session = request.getSession();
+
+        String lang = (String)session.getAttribute("lang");
 
             String mb_id = vo.getMb_id();
 
@@ -75,26 +85,27 @@ public class MemberController {
             request.setAttribute("mb_id", mb_id);
             request.setAttribute("check", check);
 
-        return "member/loginForm";
+        return "member/"+ lang +"/loginForm";
 
     }
 
+    //로그인
     @GetMapping("/login.do")
     public String login(MemberVO vo, HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession();
+
+        String lang = (String)session.getAttribute("lang");
+
         String msg = "";
         String url = "/loginForm.do";
-        String mb_name = vo.getMb_id();
 
         vo = memberService.login(vo);
 
         boolean check = false;
 
         if(vo != null){
-            msg = vo.getMb_nick() + "님 로그인에 성공하셨습니다.";
-            check = true;
-            url = "/";
 
-            HttpSession session = (HttpSession) request.getSession();
+            check = true;
 
             session.setAttribute("no",vo.getMb_no());
             session.setAttribute("nick", vo.getMb_nick());
@@ -143,58 +154,106 @@ public class MemberController {
                 }
             }
         }else{
-            msg = "로그인에 실패하셨습니다.";
-        }
-        request.setAttribute("msg", msg);
-        request.setAttribute("check", check);
-        request.setAttribute("url", url);
+            if(lang.equals("KR")){
+                msg = "확인되지 않는 아이디/비밀번호 입니다.";
+            }else if(lang.equals("JP")){
+                msg = "確認できないIDまたはパスワードです。";
+            }
 
-        return "common/result";
+            request.setAttribute("msg",msg);
+            request.setAttribute("url",url);
+            return "common/result";
+        }
+
+        request.setAttribute("check", check);
+
+        return "main/index";
     }
 
+    //닉네임 중복확인
     @GetMapping("/checkNick")
     @ResponseBody
-    public String checkNick(String mb_nick){
+    public String checkNick(String mb_nick,HttpServletRequest request) {
 
         MemberVO nick = memberService.checkNick(mb_nick);
 
-        if(nick == null){
-            return "사용가능한 닉네임입니다.";
-        } else {
-            return "이미 사용중인 닉네임입니다.";
+        HttpSession session = request.getSession();
+        String lang = (String) session.getAttribute("lang");
+
+        if (lang.equals("KR")) {
+            if (nick == null) {
+                return "사용가능한 닉네임입니다.";
+            } else {
+                return "이미 사용중인 닉네임입니다.";
+            }
         }
 
+        if (lang.equals("JP")) {
+            if (nick == null) {
+                return "使用可能なニックネームです。";
+            } else {
+                return "すでに使用中のニックネームです。";
+            }
+        }
+        return "error";
     }
+
+    //ID 중복확인
     @GetMapping("/checkId")
     @ResponseBody
-    public String checkId(String mb_id){
+    public String checkId(String mb_id, HttpServletRequest request){
 
+        HttpSession session = request.getSession();
+
+        String lang = (String)session.getAttribute("lang");
         MemberVO id = memberService.checkId(mb_id);
 
-        if(id == null){
-            return "사용가능한 아이디입니다.";
-        } else {
-            return "이미 사용중인 아이디입니다.";
+
+        if(lang.equals("KR")) {
+            if (id == null) {
+                return "사용가능한 아이디입니다.";
+            } else {
+                return "이미 사용중인 아이디입니다.";
+            }
         }
+        if (lang.equals("JP")) {
+            if (id == null) {
+                return "使用可能なIDです。";
+            } else {
+                return "すでに使用中のIDです。";
+            }
+        }
+        return "error";
     }
-
+    //로그아웃
     @GetMapping("/logout.do")
-    public String logout(Model model, HttpSession session) {
+    public String logout(Model model, HttpSession sessionEnd,HttpServletRequest request) {
 
-        session.invalidate();
+        HttpSession session = request.getSession();
 
-        model.addAttribute("msg", "로그아웃 되었습니다.");
+        String lang = (String)session.getAttribute("lang");
+
+        if(lang.equals("KR")){
+            model.addAttribute("msg", "로그아웃 되었습니다.");
+        } else if(lang.equals("JP")){
+            model.addAttribute("msg", "ログアウトされました。");
+        }
+
+        sessionEnd.invalidate();
+
         model.addAttribute("url", "/");
 
         return "common/result";
     }
 
+    //마이페이지 비밀번호 확인
     @GetMapping("/mypageCon.do")
     public String mypageCon(HttpServletRequest request){
 
         return "member/mypageCon";
     }
 
+    //마이페이지
     @GetMapping("/mypageForm.do")
     public String mypageForm(HttpServletRequest request,MemberVO vo){
 
