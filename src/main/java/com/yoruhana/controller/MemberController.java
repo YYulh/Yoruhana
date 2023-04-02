@@ -249,23 +249,33 @@ public class MemberController {
     //마이페이지 비밀번호 확인
     @GetMapping("/mypageCon.do")
     public String mypageCon(HttpServletRequest request){
+        HttpSession session = request.getSession();
 
-        return "member/mypageCon";
+        String lang = (String)session.getAttribute("lang");
+
+        return "member/"+ lang +"/mypageCon";
     }
 
     //마이페이지
     @GetMapping("/mypageForm.do")
     public String mypageForm(HttpServletRequest request,MemberVO vo){
 
+        HttpSession session = request.getSession();
+
+        String lang = (String)session.getAttribute("lang");
+
         vo = memberService.login(vo);
         if(vo==null){
-            String msg = "아이디 혹은 비밀번호가 일치하지 않습니다.";
-            String url = "member/mypageCon";
+            if(lang.equals("KR")){
+                String msg = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+            }else if(lang.equals("JP")){
+                String msg = "IDまたはパスワードが一致しません。";
+            }
+
+            String url = "member/"+lang+"/mypageCon";
 
             return "common/result";
         } else {
-
-            HttpSession session = (HttpSession) request.getSession();
 
             int mb_no = (Integer) session.getAttribute("no");
 
@@ -273,22 +283,15 @@ public class MemberController {
 
             vo = memberService.getInfo(mb_no); //회원정보
         }
+            String str = vo.getMb_tel();
+            String[] tel = str.split("-");
 
-        if(vo == null){
-            String msg = "잘못된 계정 정보입니다. 관리자에게 문의해 주십시오";
-            return "/";
-        }else if(vo.getMb_tel()!=null){
+            vo.setMb_tel1(tel[0]);
+            vo.setMb_tel2(tel[1]);
+            vo.setMb_tel3(tel[2]);
 
-                String str = vo.getMb_tel();
-                String[] tel = str.split("-");
+            request.setAttribute("vo",vo);
 
-                vo.setMb_tel1(tel[0]);
-                vo.setMb_tel2(tel[1]);
-                vo.setMb_tel3(tel[2]);
-
-        }
-        request.setAttribute("vo",vo);
-
-        return "member/mypageForm";
+        return "member/"+ lang +"/mypageForm";
     }
 }
