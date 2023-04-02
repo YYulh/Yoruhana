@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/login.css" />
+
+<body>
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+
+
+<div align="center" id = "section">
+  <h3 id="head">계정 정보 변경</h3>
+  <br><br><br>
+  <form action="/mypageForm.do" onsubmit="return check(this)" name="form1">
+    <table>
+      <tr class="loginInput">
+        <th><input type="text" id="mb_id" name="mb_id" th:value="${session.id}" readonly></th>
+      </tr>
+      <tr class="loginInput">
+        <th><input type="password" id="mb_pw" name="mb_pw" placeholder="비밀번호"></th>
+      </tr>
+      <tr class="loginInput">
+        <th><input type="password" id="mb_pw_re" name="mb_pw_re" placeholder="비밀번호 확인"></th>
+      </tr>
+      <tr>
+        <th>
+          <input type="button" value="확인" id ="login_Btn" onclick="loginCheck();" class="button">
+        </th>
+      </tr>
+    </table>
+  </form>
+</div>
+
+
+
+
+
+
+
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+</body>
+
+<script>
+
+  function loginCheck(){
+
+  let f = document.form1;
+  let reg_pw = /^(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+
+ if(f.mb_pw.value == ""){
+  alert("비밀번호가 입력되지 않았습니다.");
+  f.mb_pw.focus();
+  return false;
+  }else if(!reg_pw.test(f.mb_pw.value)) {
+  alert("비밀번호는 8~16글자,숫자,소문자를 모두 포함해야 합니다.");
+  f.mb_pw.focus();
+  return false;
+  }else if(f.mb_pw.value != f.mb_pw_re.value){
+  alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다.");
+  f.mb_pw.focus();
+  return false;
+  }
+  f.submit();
+  return true;
+  }
+
+</script>
+
+</html>

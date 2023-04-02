@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/join.css" />
+
+<body>
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+<div id="section" align="center">
+  <h3>회원정보 변경</h3>
+  <div >
+    <form action="#"  name="form1">
+      <table>
+        <tr>
+          <th>국적</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_country" name="mb_country" th:value="${vo.mb_country}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>닉네임</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" th:value="${vo.mb_nick}">
+            <input type="button" value="중복확인" onclick="checkNick();" >
+            <span id="checkNick"></span>
+          </th>
+        </tr>
+        <tr>
+          <th>이름</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_name" name="mb_name" th:value="${vo.mb_name}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>아이디</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_id" name="mb_id" th:value="${vo.mb_id}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>새로운 비밀번호</th>
+        </tr>
+        <tr>
+          <th><input type="password" id="mb_pw" name="mb_pw"></th>
+        </tr>
+        <tr>
+          <th>비밀번호 확인</th>
+        </tr>
+        <tr>
+          <th><input type="password" id="mb_pw_re" name="mb_pw_re"></th>
+        </tr>
+        <tr>
+          <th>연락처</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_tel1" name="mb_tel1" maxlength="3" style="width:30%;" th:value="${vo.mb_tel1}">-
+            <input type="text" id="mb_tel2" name="mb_tel2" maxlength="4" style="width:30%;" th:value="${vo.mb_tel2}">-
+            <input type="text" id="mb_tel3" name="mb_tel3" maxlength="4" style="width:30%;" th:value="${vo.mb_tel3}">
+          </th>
+        </tr>
+        <tr>
+          <th><input type="button" id="mypage_btn" class="button" value="수정하기" onclick="mypageSubmit();"></th>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+</body>
+
+
+</html>

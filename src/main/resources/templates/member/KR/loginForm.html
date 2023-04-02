@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/login.css" />
+
+<body>
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+
+<div align="center" id = "section">
+  <h3 id="head">로그인</h3>
+  <br><br><br>
+  <form action="/login.do" name="form1">
+    <table>
+        <tr>
+            <th align="left" style="padding-left:15px;">아이디</th>
+        </tr>
+      <tr class="loginInput">
+        <th><input type="text" id="mb_id" name="mb_id" th:value="${mb_id}" placeholder="아이디"></th>
+      </tr>
+        <tr>
+            <th align="left" style="padding-left:15px;">비밀번호</th>
+        </tr>
+      <tr class="loginInput">
+        <th><input type="password" id="mb_pw" name="mb_pw" placeholder="비밀번호"></th>
+      </tr>
+      <tr>
+        <th>
+			<span class="ckid" th:if ="${check}">
+				<input type="checkbox" name="ckid" value="true" checked="checked">
+                   <span class="ckid_text">아이디 기억하기</span>
+			</span>
+            <span class="ckid" th:unless ="${check}">
+                <input type="checkbox" name="ckid" value="true">
+                   <span class="ckid_text">아이디 기억하기</span> |
+			</span>
+
+
+          <span id="find">
+			<a href="#">ID찾기</a> |
+			<a href="#">PW찾기</a>
+		  </span>
+        </th>
+
+      </tr>
+        <tr>
+            <th>
+                <input type="button" value="Login" id ="login_Btn" onclick="loginCheck();" class="button">
+            </th>
+        </tr>
+    </table>
+  </form>
+</div>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+</body>
+<script>
+
+
+function loginCheck() {
+let f = document.form1;
+
+let reg_id = /^(?=.*?[a-z])(?=.*?[0-9]).{6,16}$/
+let reg_pw = /^(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+
+if(f.mb_id.value == ""){
+alert("아이디가 입력되지 않았습니다.");
+f.mb_id.focus();
+return false;
+}else if(!reg_id.test(f.mb_id.value)) {
+alert("아이디는 6~16글자,숫자,소문자를 모두 포함해야 합니다.");
+f.mb_id.focus();
+return false;
+}else if(f.mb_pw.value == ""){
+alert("비밀번호가 입력되지 않았습니다.");
+f.mb_pw.focus();
+return false;
+}else if(!reg_pw.test(f.mb_pw.value)) {
+alert("비밀번호는 8~16글자,숫자,소문자를 모두 포함해야 합니다.");
+f.mb_pw.focus();
+return false;
+}
+
+f.submit();
+return true;
+}
+</script>
+
+</html>

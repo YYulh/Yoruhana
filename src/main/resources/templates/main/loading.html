@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<body>
+<!--초기 언어 설정 페이지-->
+</body>
+
+<script>
+$.getJSON("http://www.geoplugin.net/json.gp?jsoncallback=?", function(data){
+
+  console.log(data.geoplugin_countryCode);
+
+  location.href ="/index.do?country=" + data.geoplugin_countryCode;
+});
+
+
+</script>
+
+</html>

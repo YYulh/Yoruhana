@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/join.css" />
+
+<body id = "joinbody">
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+
+  <div id="section" align="center">
+    <h3>会員加入</h3>
+    <div >
+      <form action="/joinSubmit.do"  name="form1" onsubmit="return check(this)">
+        <table>
+          <tr>
+            <th>国籍</th>
+          </tr>
+          <tr>
+            <th>
+              <select id="mb_country" name="mb_country" style="width:100%;">
+                <option value="japan">Japan</option>
+                <option value="South,Korea" selected >South,Korea</option>
+              </select>
+            </th>
+          </tr>
+          <tr>
+            <th>ニックネーム</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" >
+              <input type="button" value="重複確認" onclick="checkNick();" class="button">
+              <span id="checkNick"></span>
+            </th>
+          </tr>
+          <tr>
+            <th>名前</th>
+          </tr>
+          <tr>
+            <th><input type="text" id="mb_name" name="mb_name"></th>
+          </tr>
+          <tr>
+            <th>ID</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_id" name="mb_id" placeholder="IDは6~16文字、数字、小文字をすべて含める必要があります。">
+              <input type="button" value="重複確認" onclick="checkId();" class="button">
+              <span id="checkId"></span>
+            </th>
+          </tr>
+          <tr>
+            <th>PW</th>
+          </tr>
+          <tr>
+            <th><input type="password" id="mb_pw" name="mb_pw" placeholder="パスワードには 8 ~ 16 文字、数字、小文字をすべて含める必要があります。"></th>
+          </tr>
+          <tr>
+            <th>PW 確認</th>
+          </tr>
+          <tr>
+            <th><input type="password" id="mb_pw_re" name="mb_pw_re" placeholder="パスワードには 8 ~ 16 文字、数字、小文字をすべて含める必要があります。"></th>
+          </tr>
+          <tr>
+            <th>連絡所</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_tel1" name="mb_tel1" maxlength="3" style="width:30%;" placeholder="000">-
+              <input type="text" id="mb_tel2" name="mb_tel2" maxlength="4" style="width:30%;" placeholder="0000">-
+              <input type="text" id="mb_tel3" name="mb_tel3" maxlength="4" style="width:30%;" placeholder="0000">
+            </th>
+          </tr>
+          <tr>
+            <th>性別</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_sex1" name="mb_sex" value="0" checked>男
+              <input type="radio" id="mb_sex2" name="mb_sex" value="1">女
+            </th>
+          </tr>
+          <tr>
+            <th>個人情報約款に同意</th>
+          </tr>
+          <tr>
+            <th>
+              <textarea style="width:100%; height:180px;" class ="text_area">利用規約
+
+最終変更日:2023年4月02日
+
+以下は、ウェブサイトの訪問者および利用者とウェブサイト(yoruhana.com )の所有者および管理者との間の法的同意書です。 ウェブサイトを利用することは、この同意書の内容に同意することを意味します。 利用約款に同意しない場合は、今すぐ本ウェブサイトの利用を中止してください。
+
+この同意書は、別途の告知なしに変更または追加される場合がありますので、定期的に利用規約を確認することをお勧めします。 変更がある場合、具体的な変更点は本文書の冒頭に告知されます。
+
+本ウェブサイトの利用について
+
+利用者は本ウェブサイトの利用が可能であり、本サイトの利用時には他人によるIDアカウントの不正利用を含め、発生しうるすべての責任を利用者本人が負うことに同意します。 本ウェブサイトは老若男女誰もが健全に利用する交流サイトを目指しています。 広告メッセージ、美風良俗に合わないメッセージ、不健全なメッセージを送ったり、異性交際や広告のようにペンパル本来の目的に合わない利用を禁じます。 このような行為の際、本ウェブサイトは当該利用者を遮断する権利を有し、遮断された後もIPを迂回及び新しいID開設などの方法で再接続する際には正常な業務を妨害する目的と把握し損害賠償を請求することができます。
+
+本ウェブサイトは、1人1IDの利用を原則とします。 多数のIDの利用を禁じており、多数のIDを利用したり、頻繁にIDを削除して新たに生成する場合、サイト利用を制限する権利があります。
+
+本ウェブサイト上に掲載されるすべての著作物は、当社及び当該情報の提供者の所有物であり、国際著作権法により保護されます。
+
+本ウェブサイトとその情報提供者は、本ウェブサイトのサービスに関する正確な情報を提供するために最善を尽くします。 しかし、私たちのこれらすべての努力にもかかわらず、印刷上の技術的エラーが発生する可能性があります。 本ウェブサイトは、本ウェブサイトに掲載されている情報の不正確さから生じる損失または被害に対して責任を負いません。
+
+個人情報保護原則
+
+本サイトでは、統計資料の集計や連絡を目的として、利用者に関するいくつかの情報を収集しています。 本サイトは、あなたの情報を安定的に保管し、第三者に販売しておらず、公共の場で公開していません。
+
+免責条項
+
+利用者は、本規約に対する違反、本ウェブサイトの利用及び情報の利用、変造若しくは他の情報との編集、利用不能、利用者によるライセンス規約違反又は情報の利用に係る第三者の公訴により発生する請求、責任、損害賠償、費用及び妥当な裁判に要する諸費用について利用者の責任と費用で対応し、本ウェブサイトとその責任者、社員、株主、取締役、サーバー管理者そして情報提供者に責任所在が発生しないよう保護及び免責することに同意します。
+
+保証と義務
+
+本ウェブサイトおよび情報は、編集されていない、最初に提供された状態のまま提供されます。 本ウェブサイトは本規約に基づき、商品性の保証及び特定目的適合性に関する黙示的な保証責任等を含め、すべての情報、ウェブサイト、情報の正確性又は本規約のすべての権利又は許可について、明示的若しくは黙示的保証責任を負いません。 本ウェブサイトは、本ウェブサイトや情報が利用者の要件に適合すること、引き続きサービスを提供すること、または障害が発生しないようにすることなどについて一切保障しません。
+
+本ウェブサイトは、利用者又はその他の個人又は法人に対し、一般的、懲罰的、特別、間接的、結果的、付随的損害又は利益損失若しくはその他の損害並びに利用者が本ウェブサイト若しくはその情報を利用したことにより生じた費用や損失を一切保証いたしません。
+
+本ウェブサイトは著作権所有者の具体的な承諾なしに著作物の使用に対する権限を付与しません。
+
+本ウェブサイトは、本ウェブサイトで提供される付加的な情報性サービスへの寄付を受け付けています。 本ウェブサイトは、提供される情報に対して金銭的な支払いを受け付けておらず、料金も請求していません。
+              </textarea>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_agree1" name="mb_agree1" value="0 ">同意
+              <input type="radio" id="mb_agree2" name="mb_agree1" value="1"  checked>同意しない
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <textarea style="width:100%; height:180px;" class ="text_area"> * 処理する個人情報の項目
+
+夜花は次の個人情報項目を処理しています。
+
+● 必須項目:パスワード、ログインID
+● 選択項目:生年月日、性別、職業、趣味、宗教
+
+
+
+* 処理する個人情報の収集/利用目的
+
+ハイペンパルは次の目的で個人情報を収集および処理しています。
+
+● 必須項目であるパスワード、ログインID、Eメール、IPアドレスは本人確認および案内メールの送信、不正利用防止、非認可使用防止のために収集されます。
+● 選択項目である「生年月日、性別、職業、趣味、宗教」は利用者が選択的に入力でき、サイト内の円滑なサービス提供および新規サービス開発のために収集および処理されています。
+
+
+
+* 個人情報の保有·利用期間
+
+個人情報は利用主体の登録時から脱退前まで利用期間中に保有し、脱退時にIPアドレス、メールアドレス、IDを除くすべての情報が直ちに破棄されます。
+
+● 不正利用防止、非認可使用防止のためメールアドレス、IPアドレスは退会後1年間保管します。
+● 他会員によるIDの再利用防止、重複加入を防止するため、IDは人を特定できない状態で保存され、サービス終了時に完全廃棄されます。
+              </textarea>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <input type="radio" id="mb_agree3" name="mb_agree2" value="0 ">同意
+              <input type="radio" id="mb_agree4" name="mb_agree2" value="1"  checked>同意しない
+            </th>
+          </tr>
+          <tr>
+            <th><input type="button" id="join_btn" class="button" value="加入する" onclick="joinSubmit();"></th>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</body>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  $('#mb_id').on("blur keyup", function() {
+		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );
+		$(this).val( $(this).val().replace( /[ぁ-ゔ]+|[ァ-ヴー]+[々〆〤]/, '' ) );
+	});
+  $('#mb_nick').on("blur keyup", function() {
+		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );
+		$(this).val( $(this).val().replace( /[ぁ-ゔ]+|[ァ-ヴー]+[々〆〤]/, '' ) );
+	});
+
+  function joinSubmit(){
+  var checkNick = document.getElementById("checkNick");
+  var checkId = document.getElementById("checkId");
+
+
+  let f = document.form1;
+
+  let reg_id = /^(?=.*?[a-z])(?=.*?[0-9]).{6,16}$/
+  let reg_pw = /^(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+
+ if(f.mb_nick.value == ""){
+  alert("ニックネーム項目は必須入力値です。");
+  f.mb_nick.focus();
+  return false;
+
+  }else if(checkNick.innerText ==""){
+  alert("ニックネームの重複確認は必須です");
+  f.mb_nick.focus();
+  return false;
+
+  }else if(checkNick.innerText =="すでに使用中のニックネームです。"){
+  f.mb_nick.focus();
+  return false;
+
+  }else if(f.mb_name.value == ""){
+  alert("名前が入力されていません。");
+  f.mb_name.focus();
+  return false;
+
+  }else if(f.mb_id.value == ""){
+  alert("IDが入力されていません。");
+  f.mb_id.focus();
+  return false;
+
+  }else if(checkId.innerText ==""){
+  alert("IDの重複確認は必須です。");
+  f.mb_id.focus();
+  return false;
+
+  }else if(!reg_id.test(f.mb_id.value)) {
+  alert("IDは6~16文字、数字、小文字をすべて含める必要があります。");
+  f.mb_id.focus();
+  return false;
+
+  }else if(f.mb_pw.value == ""){
+  alert("パスワードが入力されていません。");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(!reg_pw.test(f.mb_pw.value)) {
+  alert("パスワードには 8 ~ 16 文字、数字、小文字をすべて含める必要があります。");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(f.mb_pw.value != f.mb_pw_re.value){
+  alert("パスワードとパスワードの確認値が一致しません。");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(checkId.innerText =="すでに使用中のIDです。"){
+  f.mb_id.focus();
+  return false;
+
+  }else if(f.mb_tel1.value == ""){
+  alert("連絡先を入力していません。");
+  f.mb_tel1.focus();
+  return false;
+
+  }else if(f.mb_tel2.value == ""){
+  alert("連絡先を入力していません。");
+  f.mb_tel2.focus();
+  return false;
+
+  }else if(f.mb_tel3.value == ""){
+  alert("連絡先を入力していません。");
+  f.mb_tel3.focus();
+  return false;
+
+
+  }else if(f.mb_agree1.value == 1 || f.mb_agree2.value == 1){
+  alert("必須項目に同意しませんでした。");
+  f.mb_agree1.focus();
+  return false;
+}
+   document.form1.submit();
+   return;
+  }
+
+
+  function checkNick(){
+        var checkNick = document.getElementById("checkNick");
+    	var mb_nick = document.getElementById("mb_nick");
+
+		 if(mb_nick.value == ""){
+			 alert("ニックネームを入力してください。");
+			 return;
+		 }
+    	httpRequest = new XMLHttpRequest();
+
+    	if(!httpRequest){
+    		alert("インスタンス作成不可");
+    		return;
+    	}
+    	var httpMethod ="GET";
+    	var httpParam = "mb_nick=" + encodeURIComponent(mb_nick.value);
+    	var httpURL = "/checkNick?" + httpParam;
+
+    	httpRequest.open(httpMethod,httpURL,true);
+
+    	httpRequest.onreadystatechange = resultCheckNick;
+    	httpRequest.send();
+
+ }
+
+        function resultCheckNick(){
+        var checkNick = document.getElementById("checkNick");
+
+    	if(httpRequest.readyState == 4 && httpRequest.status == 200){
+    		var data = httpRequest.responseText;
+
+    		if(data == '使用可能なニックネームです。'){
+    			checkNick.style.cssText="color: blue; font-size: 12px;";
+    		}else{
+    			document.form1.mb_nick.value = '';
+    			checkNick.style.cssText="color: red; font-size: 12px;";
+    		}
+    		checkNick.innerText = data;
+    	}
+    }
+
+        function checkId(){
+          var checkId = document.getElementById("checkId");
+          const mb_id = document.getElementById("mb_id");
+
+          let reg_id = /^(?=.*?[a-z])(?=.*?[0-9]).{6,16}$/
+
+          if(!reg_id.test(mb_id.value)) {
+                alert("IDは6~16文字、数字、小文字をすべて含める必要があります。");
+                return false;
+           }
+
+           if(mb_id.value == ""){
+               alert("IDを入力してください。");
+               return;
+           }
+          httpRequest = new XMLHttpRequest();
+
+          if(!httpRequest){
+              alert("インスタンス作成不可");
+              return;
+          }
+          var httpMethod ="GET";
+          var httpParam = "mb_id=" + encodeURIComponent(mb_id.value);
+          var httpURL = "/checkId?" + httpParam;
+
+          httpRequest.open(httpMethod,httpURL,true);
+
+          httpRequest.onreadystatechange = resultCheckId;
+          httpRequest.send();
+
+   }
+
+          function resultCheckId(){
+          var checkId = document.getElementById("checkId");
+          if(httpRequest.readyState == 4 && httpRequest.status == 200){
+              var data = httpRequest.responseText;
+
+              if(data == '使用可能なIDです。'){
+                  checkId.style.cssText="color: blue; font-size: 12px;";
+              }else{
+                  document.form1.mb_id.value = '';
+                  checkId.style.cssText="color: red; font-size: 12px;";
+              }
+              checkId.innerText = data;
+          }
+      }
+
+</script>
+
+</html>
