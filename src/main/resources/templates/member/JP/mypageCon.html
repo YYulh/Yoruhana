@@ -18,7 +18,7 @@
 <div align="center" id = "section">
   <h3 id="head">アカウント情報の変更</h3>
   <br><br><br>
-  <form action="/mypageForm.do" onsubmit="return check(this)" name="form1">
+  <form action="/mypageForm.do" onsubmit="return check(this)" name="form1" method="post">
     <table>
       <tr class="loginInput">
         <th><input type="text" id="mb_id" name="mb_id" th:value="${session.id}" readonly></th>

@@ -32,4 +32,9 @@ public class MemberServiceImpl implements MemberService {
     }
     @Override
     public int mypageUpdate(MemberVO vo){return memberMapper.mypageUpdate(vo);}
+
+    @Override
+    public int updateProfile(MemberVO vo){return memberMapper.updateProfile(vo);}
+    @Override
+    public List<MemberVO> searchPenpalList(){return memberMapper.searchPenpalList();}
 }

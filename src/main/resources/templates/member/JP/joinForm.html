@@ -17,7 +17,7 @@
   <div id="section" align="center">
     <h3>会員加入</h3>
     <div >
-      <form action="/joinSubmit.do"  name="form1" onsubmit="return check(this)">
+      <form action="/joinSubmit.do"  name="form1" onsubmit="return check(this)" method="post">
         <table>
           <tr>
             <th>国籍</th>
@@ -35,7 +35,7 @@
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" >
+              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" onclick = "clearNick();">
               <input type="button" value="重複確認" onclick="checkNick();" class="button">
               <span id="checkNick"></span>
             </th>
@@ -51,7 +51,7 @@
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_id" name="mb_id" placeholder="IDは6~16文字、数字、小文字をすべて含める必要があります。">
+              <input type="text" id="mb_id" name="mb_id" placeholder="IDは6~16文字、数字、小文字をすべて含める必要があります。" onclick = "clearId();">
               <input type="button" value="重複確認" onclick="checkId();" class="button">
               <span id="checkId"></span>
             </th>
@@ -93,8 +93,8 @@
           </tr>
           <tr>
             <th>
-              <input type="radio" id="mb_sex1" name="mb_sex" value="0" checked>男
-              <input type="radio" id="mb_sex2" name="mb_sex" value="1">女
+              <input type="radio" id="mb_sex1" name="mb_sex" value="남" checked>男
+              <input type="radio" id="mb_sex2" name="mb_sex" value="여">女
             </th>
           </tr>
           <tr>
@@ -194,6 +194,15 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+  function clearNick(){
+   var checkNick = document.getElementById("checkNick");
+   checkNick.innerText ="";
+   }
+   function clearId(){
+   var checkId = document.getElementById("checkId");
+   checkId.innerText ="";
+   }
 
   $('#mb_id').on("blur keyup", function() {
 		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );

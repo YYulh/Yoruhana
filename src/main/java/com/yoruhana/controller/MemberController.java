@@ -6,15 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static jdk.nashorn.internal.objects.NativeDate.now;
 
@@ -35,7 +42,7 @@ public class MemberController {
     }
 
     //회원가입
-    @GetMapping("/joinSubmit.do")
+    @PostMapping("/joinSubmit.do")
     public String joinSubmit(Model model, MemberVO vo) {
 
         String msg = "";
@@ -94,7 +101,7 @@ public class MemberController {
     }
 
     //로그인
-    @GetMapping("/login.do")
+    @PostMapping(value = "/login.do")
     public String login(MemberVO vo, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
@@ -115,6 +122,7 @@ public class MemberController {
             session.setAttribute("nick", vo.getMb_nick());
             session.setAttribute("country", vo.getMb_country());
             session.setAttribute("id", vo.getMb_id());
+            session.setAttribute("file", vo.getMb_file());
 
             String ckid = request.getParameter("ckid");
 
@@ -262,7 +270,7 @@ public class MemberController {
     }
 
     //마이페이지
-    @GetMapping("/mypageForm.do")
+    @PostMapping("/mypageForm.do")
     public String mypageForm(HttpServletRequest request, MemberVO vo) {
 
         HttpSession session = request.getSession();
@@ -311,8 +319,21 @@ public class MemberController {
         return "member/" + lang + "/mypageForm";
     }
 
-    @GetMapping("/profileUpdate.do")
+    @GetMapping("/profile.do")
     public String profileForm(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        int mb_no = (Integer) session.getAttribute("no");
+        String lang = (String) session.getAttribute("lang");
+
+        MemberVO vo = memberService.getInfo(mb_no);
+
+        request.setAttribute("vo", vo);
+
+        return "member/" + lang + "/profile";
+    }
+
+    @PostMapping("/profileUpdateForm.do")
+    public String profileUpdateForm(HttpServletRequest request) {
         HttpSession session = request.getSession();
         int mb_no = (Integer) session.getAttribute("no");
         String lang = (String) session.getAttribute("lang");
@@ -324,7 +345,7 @@ public class MemberController {
         return "member/" + lang + "/profileUpdate";
     }
 
-    @GetMapping("/mypageUpdate.do")
+    @PostMapping("/mypageUpdate.do")
     public String mypageUpdate(MemberVO vo, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute("lang");
@@ -352,5 +373,60 @@ public class MemberController {
         request.setAttribute("url", url);
 
         return "common/result";
+    }
+
+    @PostMapping("/profileUpdate.do")
+    public String profileUpdate(MemberVO vo, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String lang = (String) session.getAttribute("lang");
+        String msg = "";
+        String url = "/profile.do";
+
+        System.out.println(vo.getMb_file());
+
+
+        //--------------------------------------
+        int result = memberService.updateProfile(vo);
+        if (lang.equals("KR")) {
+
+            if (result == 0) {
+                msg = "업데이트에 실패하였습니다. 관리자에게 문의해주세요.";
+            } else {
+                msg = "성공적으로 수정되었습니다.";
+            }
+        } else if (lang.equals("JP")) {
+            if (result == 0) {
+                msg = "アップデートに失敗しました。 管理者にお問い合わせください。";
+            } else {
+                msg = "修正に成功しました。";
+            }
+        }
+        request.setAttribute("msg", msg);
+        request.setAttribute("url", url);
+
+        return "common/result";
+    }
+    @GetMapping("/searchPenpalForm.do")
+    public String searchPenpalForm(Model model,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String lang = (String) session.getAttribute("lang");
+
+        List<MemberVO> list = memberService.searchPenpalList();
+
+        for(int i = 0; i <list.size(); i++){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+            Calendar c1 = Calendar.getInstance();
+            String strToday = sdf.format(c1.getTime());
+
+            int parse = ((Integer.parseInt(strToday) - Integer.parseInt(list.get(i).getMb_bir())) / 10000);
+            String mb_bir = String.valueOf(parse);
+
+            list.get(i).setMb_bir(mb_bir);
+
+        }
+        model.addAttribute("list",list);
+
+        return "member/"+lang + "/searchPenpal";
     }
 }

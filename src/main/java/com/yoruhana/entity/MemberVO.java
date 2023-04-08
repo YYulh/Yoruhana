@@ -2,6 +2,7 @@ package com.yoruhana.entity;
 
 import lombok.Data;
 
+import java.sql.Blob;
 import java.util.Date;
 
 @Data
@@ -32,10 +33,10 @@ public class MemberVO {
     private String mb_ptn_email;
     private String mb_ptn_nick;
     private Date mb_ptn_con_date;
-
+    private String mb_sex;
     private int mb_agree1;
-
     private int mb_agree2;
+
 
 
 }

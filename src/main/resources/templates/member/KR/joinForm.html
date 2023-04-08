@@ -17,7 +17,7 @@
   <div id="section" align="center">
     <h3>회원가입</h3>
     <div >
-      <form action="/joinSubmit.do"  name="form1" onsubmit="return check(this)">
+      <form action="/joinSubmit.do"  name="form1" onsubmit="return check(this)" method="post">
         <table>
           <tr>
             <th>국적*</th>
@@ -35,8 +35,8 @@
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" >
-              <input type="button" value="중복확인" onclick="checkNick();" class="button">
+              <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" onclick="clearNick();">
+              <input type="button" value="중복확인" onclick="checkNick();" class="button" >
               <span id="checkNick"></span>
             </th>
           </tr>
@@ -51,7 +51,7 @@
           </tr>
           <tr>
             <th>
-              <input type="text" id="mb_id" name="mb_id" placeholder="아이디는 6~16글자,숫자,소문자를 모두 포함해야 합니다.">
+              <input type="text" id="mb_id" name="mb_id" placeholder="아이디는 6~16글자,숫자,소문자를 모두 포함해야 합니다." onclick="clearId();">
               <input type="button" value="중복확인" onclick="checkId();" class="button">
               <span id="checkId"></span>
             </th>
@@ -93,8 +93,8 @@
           </tr>
           <tr>
             <th>
-              <input type="radio" id="mb_sex1" name="mb_sex" value="0" checked>남자
-              <input type="radio" id="mb_sex2" name="mb_sex" value="1">여자
+              <input type="radio" id="mb_sex1" name="mb_sex" value="남" checked>남자
+              <input type="radio" id="mb_sex2" name="mb_sex" value="여">여자
             </th>
           </tr>
           <tr>
@@ -182,7 +182,7 @@
             </th>
           </tr>
           <tr>
-            <th><input type="button" id="join_btn" class="button" value="가입하기" onclick="joinSubmit();"></th>
+            <th><input type="button" id="join_btn" class="button" value="가입하기" onclick="joinSubmit();" style="width:100%;"></th>
           </tr>
         </table>
       </form>
@@ -194,6 +194,14 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+ function clearNick(){
+ var checkNick = document.getElementById("checkNick");
+ checkNick.innerText ="";
+ }
+ function clearId(){
+ var checkId = document.getElementById("checkId");
+ checkId.innerText ="";
+ }
 
   $('#mb_id').on("blur keyup", function() {
 		$(this).val( $(this).val().replace( /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' ) );

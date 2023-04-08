@@ -20,14 +20,19 @@
                 <li th:if="${session.nick}==null"><a href = "/loginForm.do">Login</a></li>
                 <li th:if="${session.nick}==null"><a href = "/joinForm.do">Join</a></li>
                 <li><a>Ground</a></li>
-                <li><a>Calendar</a></li>
-                <li><a>Message</a></li>
+                <li><a href="/searchPenpalForm.do">Search Penpal</a></li>
+                <li><a>Post</a></li>
                 <li><a><img src="/img/bell.svg" id="bell"></a></li>
                 <li id="drop_li">
-                    <a href="#" id ="menu" th:if ="${session.profile}==null">
-                        <img src = "/img/person-circle.svg" id="none_pic">
-                    </a>
+                    <div id="img_box_header">
+                        <a href="#" id ="menu" th:if ="${session.file}==null" class ="menu">
+                            <img src = "/img/person-circle.svg" id="none_pic">
+                        </a>
 
+                        <a href="#" id ="menu2" th:if ="${session.file}!=null">
+                            <img th:src = "${session.file}" id="mb_file" class ="menu">
+                        </a>
+                    </div>
                     <ul id="drop1" >
                         <li th:if="${session.no} != null"><a href="/profile.do">Profile</a></li>
                         <li th:if="${session.no} != null"><a href="/mypageCon.do" >Mypage</a></li>
@@ -56,7 +61,7 @@
 	};
 
 	$(function(){
-        $("#menu").click(function(){
+        $(".menu").click(function(){
            $("#drop1").slideToggle();
         });
      });
