@@ -1,15 +1,10 @@
-/* 버튼 스타일 */
-input[type="button"] {
-  background-color: #A2D9CE;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-
-  border: none;
-
+#head {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px white;
 }
+
 
 /* 중복확인 버튼 스타일 */
 #mb_nick + input[type="button"] {
@@ -22,12 +17,29 @@ input[type="button"] {
 opacity:70%;
 }
 
-#section {
-  background-color: #F2F6FF;
-  padding: 50px;
-  border-radius: 10px;
-  align:center;
-  margin:auto;
-  margin-top:70px;
-  width:50%;
-}
+
+h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #283747;
+  }
+
+  /* 약관 동의 라디오 버튼 스타일 */
+  input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  /* 선택된 라디오 버튼 스타일 */
+  input[type="radio"]:checked + label {
+    font-weight: bold;
+  }
+
+   th:selected {
+     background-color: #F7DC6F;
+   }
+
+    /* 선택된 라디오 버튼 라벨의 마우스 호버 시 스타일 */
+    label:hover {
+      text-decoration: underline;
+    }
+

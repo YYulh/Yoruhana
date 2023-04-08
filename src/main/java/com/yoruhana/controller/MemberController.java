@@ -12,7 +12,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+
+import static jdk.nashorn.internal.objects.NativeDate.now;
 
 @Controller
 public class MemberController {
@@ -25,76 +29,76 @@ public class MemberController {
 
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
+        String lang = (String) session.getAttribute("lang");
 
-    return "member/"+ lang +"/joinForm";
+        return "member/" + lang + "/joinForm";
     }
 
     //회원가입
     @GetMapping("/joinSubmit.do")
-    public String joinSubmit(Model model, MemberVO vo){
+    public String joinSubmit(Model model, MemberVO vo) {
 
         String msg = "";
         String url = "";
 
         int result = memberService.insertJoin(vo);
-        if(result != 0){
+        if (result != 0) {
             msg = "회원가입에 성공하였습니다";
             url = "/";
         } else {
             msg = "회원가입에 실패하였습니다. 관리자에게 문의해주세요.";
             url = "/";
         }
-        model.addAttribute("msg",msg);
-        model.addAttribute("url",url);
+        model.addAttribute("msg", msg);
+        model.addAttribute("url", url);
 
         return "common/result";
     }
 
     //로그인 form
     @GetMapping("/loginForm.do")
-    public String loginForm(HttpServletRequest request,MemberVO vo){
+    public String loginForm(HttpServletRequest request, MemberVO vo) {
 
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
+        String lang = (String) session.getAttribute("lang");
 
-            String mb_id = vo.getMb_id();
+        String mb_id = vo.getMb_id();
 
-            boolean check = false;
+        boolean check = false;
 
-            if(mb_id == null){
+        if (mb_id == null) {
 
-                Cookie[] cks = request.getCookies();
+            Cookie[] cks = request.getCookies();
 
-                if(cks != null){
-                    for(Cookie ck : cks){
-                        if(ck.getName().equals("ckid")){
-                            mb_id = ck.getValue();
-                            check = true;
-                            break;
-                        }
+            if (cks != null) {
+                for (Cookie ck : cks) {
+                    if (ck.getName().equals("ckid")) {
+                        mb_id = ck.getValue();
+                        check = true;
+                        break;
                     }
-                }
-
-                if(mb_id == null){
-                    mb_id = "";
                 }
             }
 
-            request.setAttribute("mb_id", mb_id);
-            request.setAttribute("check", check);
+            if (mb_id == null) {
+                mb_id = "";
+            }
+        }
 
-        return "member/"+ lang +"/loginForm";
+        request.setAttribute("mb_id", mb_id);
+        request.setAttribute("check", check);
+
+        return "member/" + lang + "/loginForm";
 
     }
 
     //로그인
     @GetMapping("/login.do")
-    public String login(MemberVO vo, HttpServletRequest request, HttpServletResponse response){
+    public String login(MemberVO vo, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
+        String lang = (String) session.getAttribute("lang");
 
         String msg = "";
         String url = "/loginForm.do";
@@ -103,11 +107,11 @@ public class MemberController {
 
         boolean check = false;
 
-        if(vo != null){
+        if (vo != null) {
 
             check = true;
 
-            session.setAttribute("no",vo.getMb_no());
+            session.setAttribute("no", vo.getMb_no());
             session.setAttribute("nick", vo.getMb_nick());
             session.setAttribute("country", vo.getMb_country());
             session.setAttribute("id", vo.getMb_id());
@@ -119,49 +123,49 @@ public class MemberController {
             Cookie[] cks = request.getCookies();
 
 
-            if(cks != null){
-                for(Cookie c : cks){
-                    if(c.getName().equals("ckid")){
+            if (cks != null) {
+                for (Cookie c : cks) {
+                    if (c.getName().equals("ckid")) {
                         ck = c;
                         break;
                     }
                 }
             }
 
-            if(ckid != null){
-                if(ck == null){
-                    ck = new Cookie("ckid",vo.getMb_id());
+            if (ckid != null) {
+                if (ck == null) {
+                    ck = new Cookie("ckid", vo.getMb_id());
 
 
                     ck.setPath("/");
 
-                    ck.setMaxAge(60*60*24);
+                    ck.setMaxAge(60 * 60 * 24);
 
                     response.addCookie(ck);
-                }else{
-                    if(!ck.getValue().equals(vo.getMb_id())){
+                } else {
+                    if (!ck.getValue().equals(vo.getMb_id())) {
                         ck.setValue(vo.getMb_id());
                         response.addCookie(ck);
                     }
                 }
-            }else{
-                if(ck != null){
-                    if(ck.getValue().equals(vo.getMb_id())){
+            } else {
+                if (ck != null) {
+                    if (ck.getValue().equals(vo.getMb_id())) {
                         ck.setMaxAge(0);
                         ck.setPath("/");
                         response.addCookie(ck);
                     }
                 }
             }
-        }else{
-            if(lang.equals("KR")){
+        } else {
+            if (lang.equals("KR")) {
                 msg = "확인되지 않는 아이디/비밀번호 입니다.";
-            }else if(lang.equals("JP")){
+            } else if (lang.equals("JP")) {
                 msg = "確認できないIDまたはパスワードです。";
             }
 
-            request.setAttribute("msg",msg);
-            request.setAttribute("url",url);
+            request.setAttribute("msg", msg);
+            request.setAttribute("url", url);
             return "common/result";
         }
 
@@ -173,7 +177,7 @@ public class MemberController {
     //닉네임 중복확인
     @GetMapping("/checkNick")
     @ResponseBody
-    public String checkNick(String mb_nick,HttpServletRequest request) {
+    public String checkNick(String mb_nick, HttpServletRequest request) {
 
         MemberVO nick = memberService.checkNick(mb_nick);
 
@@ -201,15 +205,15 @@ public class MemberController {
     //ID 중복확인
     @GetMapping("/checkId")
     @ResponseBody
-    public String checkId(String mb_id, HttpServletRequest request){
+    public String checkId(String mb_id, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
+        String lang = (String) session.getAttribute("lang");
         MemberVO id = memberService.checkId(mb_id);
 
 
-        if(lang.equals("KR")) {
+        if (lang.equals("KR")) {
             if (id == null) {
                 return "사용가능한 아이디입니다.";
             } else {
@@ -225,17 +229,18 @@ public class MemberController {
         }
         return "error";
     }
+
     //로그아웃
     @GetMapping("/logout.do")
-    public String logout(Model model, HttpSession sessionEnd,HttpServletRequest request) {
+    public String logout(Model model, HttpSession sessionEnd, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
+        String lang = (String) session.getAttribute("lang");
 
-        if(lang.equals("KR")){
+        if (lang.equals("KR")) {
             model.addAttribute("msg", "로그아웃 되었습니다.");
-        } else if(lang.equals("JP")){
+        } else if (lang.equals("JP")) {
             model.addAttribute("msg", "ログアウトされました。");
         }
 
@@ -248,31 +253,34 @@ public class MemberController {
 
     //마이페이지 비밀번호 확인
     @GetMapping("/mypageCon.do")
-    public String mypageCon(HttpServletRequest request){
+    public String mypageCon(HttpServletRequest request) {
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
+        String lang = (String) session.getAttribute("lang");
 
-        return "member/"+ lang +"/mypageCon";
+        return "member/" + lang + "/mypageCon";
     }
 
     //마이페이지
     @GetMapping("/mypageForm.do")
-    public String mypageForm(HttpServletRequest request,MemberVO vo){
+    public String mypageForm(HttpServletRequest request, MemberVO vo) {
 
         HttpSession session = request.getSession();
 
-        String lang = (String)session.getAttribute("lang");
-
+        String lang = (String) session.getAttribute("lang");
+        String msg ="";
         vo = memberService.login(vo);
-        if(vo==null){
-            if(lang.equals("KR")){
-                String msg = "아이디 혹은 비밀번호가 일치하지 않습니다.";
-            }else if(lang.equals("JP")){
-                String msg = "IDまたはパスワードが一致しません。";
+        if (vo == null) {
+            if (lang.equals("KR")) {
+                msg = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+            } else if (lang.equals("JP")) {
+                msg = "IDまたはパスワードが一致しません。";
             }
 
-            String url = "member/"+lang+"/mypageCon";
+            String url = "/mypageCon.do";
+
+            request.setAttribute("msg", msg);
+            request.setAttribute("url", url);
 
             return "common/result";
         } else {
@@ -283,15 +291,66 @@ public class MemberController {
 
             vo = memberService.getInfo(mb_no); //회원정보
         }
-            String str = vo.getMb_tel();
-            String[] tel = str.split("-");
+        String str = vo.getMb_tel();
+        String[] tel = str.split("-");
 
-            vo.setMb_tel1(tel[0]);
-            vo.setMb_tel2(tel[1]);
-            vo.setMb_tel3(tel[2]);
+        vo.setMb_tel1(tel[0]);
+        vo.setMb_tel2(tel[1]);
+        vo.setMb_tel3(tel[2]);
 
-            request.setAttribute("vo",vo);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
-        return "member/"+ lang +"/mypageForm";
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+        int parse = ((Integer.parseInt(strToday) - Integer.parseInt(vo.getMb_bir())) / 10000);
+        String mb_bir = String.valueOf(parse);
+        vo.setMb_bir(mb_bir);
+
+        request.setAttribute("vo", vo);
+
+        return "member/" + lang + "/mypageForm";
+    }
+
+    @GetMapping("/profileUpdate.do")
+    public String profileForm(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        int mb_no = (Integer) session.getAttribute("no");
+        String lang = (String) session.getAttribute("lang");
+
+        MemberVO vo = memberService.getInfo(mb_no);
+
+        request.setAttribute("vo", vo);
+
+        return "member/" + lang + "/profileUpdate";
+    }
+
+    @GetMapping("/mypageUpdate.do")
+    public String mypageUpdate(MemberVO vo, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String lang = (String) session.getAttribute("lang");
+        String msg = "";
+        String url = "/mypageCon.do";
+
+        int result = memberService.mypageUpdate(vo);
+
+        if (lang.equals("KR")) {
+
+            if (result == 0) {
+                msg = "업데이트에 실패하였습니다. 관리자에게 문의해주세요.";
+            } else {
+                msg = "성공적으로 수정되었습니다.";
+            }
+        } else if (lang.equals("JP")) {
+            if (result == 0) {
+                msg = "アップデートに失敗しました。 管理者にお問い合わせください。";
+            } else {
+                msg = "修正に成功しました。";
+            }
+        }
+
+        request.setAttribute("msg", msg);
+        request.setAttribute("url", url);
+
+        return "common/result";
     }
 }

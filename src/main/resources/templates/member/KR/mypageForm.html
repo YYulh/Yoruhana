@@ -16,8 +16,14 @@
 <div id="section" align="center">
   <h3>회원정보 변경</h3>
   <div >
-    <form action="#"  name="form1">
+    <form action="/mypageUpdate.do"  name="form1">
       <table>
+        <tr>
+          <th>나이 (만)</th>
+        </tr>
+        <tr>
+          <th th:text="${vo.mb_bir}"></th>
+        </tr>
         <tr>
           <th>국적</th>
         </tr>
@@ -31,9 +37,7 @@
         </tr>
         <tr>
           <th>
-            <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" th:value="${vo.mb_nick}">
-            <input type="button" value="중복확인" onclick="checkNick();" >
-            <span id="checkNick"></span>
+            <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" th:value="${vo.mb_nick}" readonly>
           </th>
         </tr>
         <tr>
@@ -53,19 +57,19 @@
           </th>
         </tr>
         <tr>
-          <th>새로운 비밀번호</th>
+          <th>새로운 비밀번호 [수정가능]</th>
         </tr>
         <tr>
           <th><input type="password" id="mb_pw" name="mb_pw"></th>
         </tr>
         <tr>
-          <th>비밀번호 확인</th>
+          <th>비밀번호 확인 [수정가능]</th>
         </tr>
         <tr>
           <th><input type="password" id="mb_pw_re" name="mb_pw_re"></th>
         </tr>
         <tr>
-          <th>연락처</th>
+          <th>연락처 [수정가능]</th>
         </tr>
         <tr>
           <th>
@@ -85,6 +89,49 @@
 <div th:insert = "~{common/footer :: footer}"></div>
 
 </body>
+<script>
+  function mypageSubmit(){
 
+
+  let reg_pw = /^(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+  let f = document.form1;
+
+  if(f.mb_pw.value == ""){
+  alert("패스워드 항목은 필수 입력값입니다.");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(!reg_pw.test(f.mb_pw.value)) {
+  alert("비밀번호는 8~16글자,숫자,소문자를 모두 포함해야 합니다.");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(f.mb_pw.value != f.mb_pw_re.value){
+  alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다.");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(f.mb_tel1.value == ""){
+  alert("연락처를 입력하지 않으셨습니다.");
+  f.mb_tel1.focus();
+  return false;
+
+  }else if(f.mb_tel2.value == ""){
+  alert("연락처를 입력하지 않으셨습니다.");
+  f.mb_tel2.focus();
+  return false;
+
+  }else if(f.mb_tel3.value == ""){
+  alert("연락처를 입력하지 않으셨습니다.");
+  f.mb_tel3.focus();
+  return false;
+
+ }else{
+   document.form1.submit();
+   return;
+  }
+
+  }
+</script>
 
 </html>

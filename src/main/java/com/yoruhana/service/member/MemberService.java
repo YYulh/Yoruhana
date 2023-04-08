@@ -14,6 +14,8 @@ public interface MemberService{
    public MemberVO checkId(String mb_id);
    public MemberVO getInfo(int mb_no);
    public List<MemberVO> getProfPic(int mb_no);
+   public int mypageUpdate(MemberVO vo);
+
 }
 
 

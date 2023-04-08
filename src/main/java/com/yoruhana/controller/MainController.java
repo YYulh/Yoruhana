@@ -22,7 +22,7 @@ public class MainController {
 
         HttpSession session = request.getSession();
         //-------------일본 코드 테스트
-        String country="JP";
+        String country="KR";
         //-------------
         session.setAttribute("lang",country);
 
@@ -40,12 +40,12 @@ public class MainController {
         String lang = (String)session.getAttribute("lang");
 
         if(lang.equals("KR")){
-            msg = "로그인이 필요한 서비스 입니다. 회원가입 페이지로 이동합니다.";
+            msg = "로그인이 필요한 서비스 입니다. 로그인 페이지로 이동합니다.";
         } else if(lang.equals("JP")) {
-            msg = "ログインが必要なサービスです。 会員登録ページに移動します。";
+            msg = "ログインが必要なサービスです。 ログインページに移動します。";
         }
 
-        String url="/joinForm.do";
+        String url="/loginForm.do";
 
         request.setAttribute("msg",msg);
         request.setAttribute("url",url);

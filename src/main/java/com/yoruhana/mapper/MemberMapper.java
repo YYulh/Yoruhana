@@ -11,8 +11,7 @@ public interface MemberMapper {
     MemberVO login(MemberVO vo);
     MemberVO checkNick(String mb_nick);
     MemberVO checkId(String mb_id);
-
     MemberVO getInfo(int mb_no);
-
     List<MemberVO> getProfPic(int mb_no);
+    int mypageUpdate(MemberVO vo);
 }

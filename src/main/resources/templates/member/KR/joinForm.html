@@ -79,6 +79,16 @@
             </th>
           </tr>
           <tr>
+            <th>생년월일</th>
+          </tr>
+          <tr>
+            <th>
+              <input type="text" id="mb_bir1" name="mb_bir1" minlength="4" maxlength="4" style="width:30%;" placeholder="년 0000">-
+              <input type="text" id="mb_bir2" name="mb_bir2" minlength="4" maxlength="2" style="width:30%;" placeholder="월 00">-
+              <input type="text" id="mb_bir3" name="mb_bir3" minlength="4" maxlength="2" style="width:30%;" placeholder="일 00">
+            </th>
+          </tr>
+          <tr>
             <th>성별</th>
           </tr>
           <tr>
@@ -272,6 +282,20 @@
   f.mb_tel3.focus();
   return false;
 
+ }else if(f.mb_bir1.value == ""){
+  alert("생년월일을 입력하지 않으셨습니다.");
+  f.mb_bir1.focus();
+  return false;
+
+   }else if(f.mb_bir2.value == ""){
+  alert("생년월일을 입력하지 않으셨습니다.");
+  f.mb_bir2.focus();
+  return false;
+
+   }else if(f.mb_bir3.value == ""){
+  alert("생년월일을 입력하지 않으셨습니다.");
+  f.mb_bir3.focus();
+  return false;
 
   }else if(f.mb_agree1.value == 1 || f.mb_agree2.value == 1){
   alert("필수 항목에 동의 하지 않으셨습니다.");

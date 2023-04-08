@@ -19,9 +19,15 @@ public class MemberVO {
     private String mb_tel2;
     private String mb_tel3;
     private int mb_stat;
-    private int mb_prof_stat;
     private Date mb_join_date;
+    private String mb_file;
+    private int mb_prof_stat;
     private String mb_prof_content;
+    private String mb_bir;
+    private String mb_bir1;
+    private String mb_bir2;
+    private String mb_bir3;
+    private int mb_see;
     private String mb_ptn_name;
     private String mb_ptn_email;
     private String mb_ptn_nick;

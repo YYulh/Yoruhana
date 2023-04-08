@@ -30,4 +30,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberVO> getProfPic(int mb_no){return memberMapper.getProfPic(mb_no);
     }
+    @Override
+    public int mypageUpdate(MemberVO vo){return memberMapper.mypageUpdate(vo);}
 }

@@ -1,24 +1,36 @@
+/* 버튼 스타일 */
+input[type="button"] {
+  background-color: #A2D9CE;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
 
-
-/* 제목 스타일 */
-h3 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #283747;
+}
+#head {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px white;
 }
 
-/* 테이블 스타일 */
-table {
-  width: 100%;
-  border-collapse: collapse;
+#section {
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 12px;
+  align:center;
+  margin:auto;
+  margin-top:70px;
+  width:50%;
 }
-
-/* 셀 스타일 */
 th {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
+
 .text_area{
   padding: 10px;
   width: 97%;
@@ -26,28 +38,6 @@ th {
   border: 1px solid #ccc;
   font-size: 16px;
   margin-bottom: 10px;
-}
-
-/* 인풋 스타일 */
-input[type="text"],
-input[type="password"],
-input[type="number"],
-select {
-  padding: 10px;
-  width: 97%;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-/* 약관 동의 라디오 버튼 스타일 */
-input[type="radio"] {
-  margin-right: 10px;
-}
-
-/* 선택된 라디오 버튼 스타일 */
-input[type="radio"]:checked + label {
-  font-weight: bold;
 }
 
 /* 에러 텍스트 스타일 */
@@ -70,22 +60,39 @@ input[type="radio"]:checked + label {
 }
 
 /* 선택된 셀 스타일 */
-th.selected {
-  background-color: #F7DC6F;
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  select {
+    padding: 10px;
+    width: 97%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+      /* 테이블 스타일 */
+  table {
+   width: 100%;
+   border-collapse: collapse;
+  }
+
+#head {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px white;
 }
 
-/* 마우스 호버 시 셀 스타일 */
-th:hover {
-  background-color: #F0F3F4;
+/* 중복확인 버튼 스타일 */
+#mb_nick + input[type="button"] {
+  background-color: #A2D9CE;
+  color: #fff;
+  border: none;
 }
 
-/* 선택된 라디오 버튼 라벨 스타일 */
-label {
-  font-weight: normal;
-  cursor: pointer;
-}
 
-/* 선택된 라디오 버튼 라벨의 마우스 호버 시 스타일 */
-label:hover {
-  text-decoration: underline;
-}
+
+
+

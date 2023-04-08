@@ -5,8 +5,8 @@
 
     <!--회원가입-->
     <insert id="insertJoin" parameterType="com.yoruhana.entity.MemberVO">
-        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw, mb_tel, mb_stat,mb_join_date, mb_prof_stat,mb_agree1,mb_agree2)
-                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),0,NOW(),1,0,0)
+        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw, mb_tel,mb_bir, mb_stat,mb_join_date, mb_prof_stat,mb_agree1,mb_agree2,mb_see)
+                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),CONCAT(#{mb_bir1},#{mb_bir2},#{mb_bir3}),0,NOW(),1,0,0,0)
     </insert>
 
     <select id = "login" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
@@ -28,4 +28,8 @@
     <select id="getProfPic" parameterType="int" resultType="com.yoruhana.entity.MemberVO">
         select * from membersPic where mb_no = #{mb_no}
     </select>
+
+    <update id = "mypageUpdate" parameterType="com.yoruhana.entity.MemberVO">
+        update members set mb_pw = #{mb_pw} , mb_tel = CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3})
+    </update>
 </mapper>
