@@ -36,5 +36,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int updateProfile(MemberVO vo){return memberMapper.updateProfile(vo);}
     @Override
-    public List<MemberVO> searchPenpalList(){return memberMapper.searchPenpalList();}
+    public List<MemberVO> searchPenpalList(int start,int limit){return memberMapper.searchPenpalList(start,limit);}
+    @Override
+    public int getTotal(){return memberMapper.getTotal();}
+    @Override
+    public MemberVO getInfo_Nick(String mb_nick_a){return memberMapper.getInfo_Nick(mb_nick_a);}
 }

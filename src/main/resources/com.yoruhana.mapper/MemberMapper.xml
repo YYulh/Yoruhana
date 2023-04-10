@@ -37,7 +37,15 @@
         update members set mb_file = #{mb_file}, mb_prof_stat = #{mb_prof_stat}, mb_prof_content = #{mb_prof_content} where mb_no = #{mb_no}
     </update>
 
-    <select id="searchPenpalList" resultType="com.yoruhana.entity.MemberVO">
-        SELECT * FROM members WHERE mb_prof_stat = 0 and mb_stat =0
+    <select id="searchPenpalList" parameterType="int" resultType="com.yoruhana.entity.MemberVO">
+        SELECT * FROM members WHERE mb_prof_stat = 0 and mb_stat =0 limit #{start},#{limit}
+    </select>
+
+    <select id = "getTotal" resultType="int">
+        SELECT COUNT(mb_no) FROM members WHERE mb_prof_stat = 0 and mb_stat =0
+    </select>
+
+    <select id="getInfo_Nick" parameterType="String" resultType="com.yoruhana.entity.MemberVO">
+        select * from members where mb_nick = #{mb_nick_a}
     </select>
 </mapper>

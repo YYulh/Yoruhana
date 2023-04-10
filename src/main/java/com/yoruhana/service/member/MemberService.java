@@ -16,7 +16,9 @@ public interface MemberService{
    public List<MemberVO> getProfPic(int mb_no);
    public int mypageUpdate(MemberVO vo);
    public int updateProfile(MemberVO vo);
-   public List<MemberVO> searchPenpalList();
+   public List<MemberVO> searchPenpalList(int start, int limit);
+   public int getTotal();
+   public MemberVO getInfo_Nick(String mb_nick_a);
 
 }
 

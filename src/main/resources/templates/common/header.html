@@ -11,7 +11,7 @@
 <body>
     <div id = "header" align="center">
         <div>
-            <h3 id="logo"><a href = "/"><img src="/img/main.png"></a></h3>
+            <h3 id="logo"><a href = "/"><img src="/img/main.png" style="width:230px;"></a></h3>
         </div>
         <div id="title" th:text="${session.title}"></div>
         <div id="nav" class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -20,8 +20,8 @@
                 <li th:if="${session.nick}==null"><a href = "/loginForm.do">Login</a></li>
                 <li th:if="${session.nick}==null"><a href = "/joinForm.do">Join</a></li>
                 <li><a>Ground</a></li>
-                <li><a href="/searchPenpalForm.do">Search Penpal</a></li>
-                <li><a>Post</a></li>
+                <li><a href="/searchPenpalForm.do">SearchPenpal</a></li>
+                <li><a href="/chatList.do">ChatList</a></li>
                 <li><a><img src="/img/bell.svg" id="bell"></a></li>
                 <li id="drop_li">
                     <div id="img_box_header">

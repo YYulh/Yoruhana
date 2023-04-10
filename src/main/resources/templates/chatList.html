@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>ChatList</title>
+  <link rel="stylesheet" th:href="@{/css/chatList.css}">
+</head>
+<body>
+
+
+
+<div class="wrapper">
+
+</div>
+
+<script th:inline="javascript">
+    /*[[#{nick.input}]]*/
+    var nick = /*[[${nick}]]*/ '';
+
+    $(document).ready(function () {
+        initialize();
+    });
+
+    function initialize() {
+        getChatList();
+
+    }
+
+    function getChatList() {
+        console.log("getChatList inprocess");
+        $.ajax({
+            url: "/chatList/ajax",
+            type: "POST",
+            data: JSON.stringify({
+                nick: nick
+            }),
+            contentType: "application/json",
+            success: function (data) {
+                var parsed = JSON.parse(data);
+                var length = parsed.chatList.length;
+                for (var i = 0; i < length; i++) {
+                    addChatDivImg(i, parsed.chatList[i].pr_img_1);
+                }
+            }
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

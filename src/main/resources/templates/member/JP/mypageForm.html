@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/join.css" />
+
+<body>
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+<div id="section" align="center">
+  <h3>会員情報の変更</h3>
+  <div >
+    <form action="/mypageUpdate.do"  name="form1" method="post">
+      <table>
+        <tr>
+          <th>年齢</th>
+        </tr>
+        <tr>
+          <th th:text="${vo.mb_bir}"></th>
+        </tr>
+        <tr>
+          <th>国籍</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_country" name="mb_country" th:value="${vo.mb_country}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>ニックネーム</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_nick" name="mb_nick" autocomplete="off" th:value="${vo.mb_nick}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>名前</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_name" name="mb_name" th:value="${vo.mb_name}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>ID</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_id" name="mb_id" th:value="${vo.mb_id}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>新しいパスワード [修正可能]</th>
+        </tr>
+        <tr>
+          <th><input type="password" id="mb_pw" name="mb_pw"></th>
+        </tr>
+        <tr>
+          <th>パスワード確認[修正可能]</th>
+        </tr>
+        <tr>
+          <th><input type="password" id="mb_pw_re" name="mb_pw_re"></th>
+        </tr>
+        <tr>
+          <th>連絡先[修正可能]</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id="mb_tel1" name="mb_tel1" maxlength="3" style="width:30%;" th:value="${vo.mb_tel1}">-
+            <input type="text" id="mb_tel2" name="mb_tel2" maxlength="4" style="width:30%;" th:value="${vo.mb_tel2}">-
+            <input type="text" id="mb_tel3" name="mb_tel3" maxlength="4" style="width:30%;" th:value="${vo.mb_tel3}">
+          </th>
+        </tr>
+        <tr>
+          <th><input type="button" id="mypage_btn" class="button" value="修正する" onclick="mypageSubmit();"></th>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+</body>
+<script>
+  function mypageSubmit(){
+
+
+  let reg_pw = /^(?=.*?[a-z])(?=.*?[0-9]).{8,16}$/
+  let f = document.form1;
+
+  if(f.mb_pw.value == ""){
+  alert("パスワード項目は必須入力値です。");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(!reg_pw.test(f.mb_pw.value)) {
+  alert("パスワードには 8 ~ 16 文字、数字、小文字をすべて含める必要があります。");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(f.mb_pw.value != f.mb_pw_re.value){
+  alert("パスワードとパスワードの確認値が一致しません。");
+  f.mb_pw.focus();
+  return false;
+
+  }else if(f.mb_tel1.value == ""){
+  alert("連絡先を入力していません。");
+  f.mb_tel1.focus();
+  return false;
+
+  }else if(f.mb_tel2.value == ""){
+  alert("連絡先を入力していません。");
+  f.mb_tel2.focus();
+  return false;
+
+  }else if(f.mb_tel3.value == ""){
+  alert("連絡先を入力していません。");
+  f.mb_tel3.focus();
+  return false;
+
+ }else{
+   document.form1.submit();
+   return;
+  }
+
+  }
+</script>
+
+</html>

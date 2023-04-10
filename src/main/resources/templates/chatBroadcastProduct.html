@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Broadcast Product</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- w3 css import -->
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- font-awesome icon css import -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <!-- Bootstrap 4 css import -->
+  <!-- pingendo css import -->
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-green.css">
+  <!-- w3 theme color -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+  <!-- body font -->
+  <!-- Top Import -->
+
+  <input type="hidden" th:value="${mb_nick}" id="mb_nick"/>
+  <input type="hidden" th:value="${mb_name}" id="mb_name"/>
+  <input type="hidden" th:value="${mb_no}" id="mb_no"/>
+</head>
+<body>
+<div class="chatbox">
+  <!-- 채팅 내용 -->
+  <div id="content">
+    <div th:each="chatRoom : ${chatHistory}">
+      <th:block th:if="${chatRoom.senderName == mb_name}">
+        <div class="chatbox_messages">
+          <div class="chatbox_messageBox" style="text-align:right">
+            <div class="chatRoomSenderName" th:text="${chatRoom.senderName}"></div>
+            <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}"></div>
+            <div class="chatRoomSendTime" th:text="${#strings.substring(chatRoom.sendTime, 0, 6)}"></div>
+          </div>
+        </div>
+      </th:block>
+      
+      <th:block th:if="${chatRoom.senderName != mb_name}">
+        <div class="chatbox_messages">
+          <div class="chatbox_messageBox" style="text-align:left">
+            <div class="chatRoomSenderName" th:text="${chatRoom.senderName}"></div>
+            <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}"></div>
+            <div class="chatRoomSendTime" th:text="${#strings.substring(chatRoom.sendTime, 0, 6)}"></div>
+          </div>
+        </div>
+      </th:block>
+    </div>
+  </div>
+  <!-- 채팅 내용 끝 -->
+</div>
+<!-- Footer 고정 Nav 버튼 -->
+<footer class="w3-bottom">
+  <div class="chatbox_inputPanel">
+    <input type="text" id="message" class="chatbox_input" placeholder="Message" th:placeholder="#{chat.placeholder.message}">
+    <div class="chatbox__tooltip chatbox__tooltip--bottom">
+      <button id="send_btn" class="btn chatbox_button w3-theme" style="padding:0.375rem;" th:onclick="'send()'" th:text="전송하기"><i class="fa fa-paper-plane fa-lg" aria-hidden="true"></i></button>
+    </div>
+    <input type="hidden" th:value="${chatRoomInfo.mb_nick_a}" id="mb_nick_a" />
+    <input type="hidden" th:value="${chatRoomInfo.mb_name_a}" id="mb_name_a" />
+    <input type="hidden" th:value="${chatRoomInfo.id}" id="id" />
+    <input type="hidden" th:value="${chatRoomInfo.mb_nick_b}" id="mb_nick_b" />
+    <input type="hidden" th:value="${chatRoomInfo.mb_name_b}" id="mb_name_b" />
+  </div>
+</footer>
+</body>
+
+
+
+<script type="text/javascript">
+	
+	function scroll_go(){
+		$('html, body').scrollTop( $(document).height() );
+	}
+	
+	$( document ).ready(function() {
+		scroll_go();
+    });
+	
+	var mb_nick = $('#mb_nick').val();
+	var user_type = $('#user_type').val();
+		var stompClient = null;
+		var mb_nick_a = $('#mb_nick_a').val();
+		var mb_name_a = $('#mb_name_a').val();
+		var mb_name_b = $('#mb_name_b').val();
+		var id = $('#id').val();
+		var mb_nick_b = $('#mb_nick_b').val();	
+		var senderName = $('#mb_name').val();
+		var senderId = $('#mb_no').val();
+		
+		$(document).ready(connect());
+		$(document).ready(ajaxChatRead(mb_nick));
+		
+		function connect() {
+			<!--map URL using SockJS-->
+			<!--//console.log("connected");-->
+			var socket = new SockJS('/regenkids/broadcast');
+			var url = '/regenkids/topic/' + id + '/queue/messages';
+			
+			<!--//console.log("connect ajaxRead");-->
+			
+				<!-- webSocket 대신 SockJS을 사용하므로 Stomp.client()가 아닌 Stomp.over()를 사용함-->
+				stompClient = Stomp.over(socket);
+				<!--connect(header, connectCallback(==연결에 성공하면 실행되는 메서드))-->
+				stompClient.connect({}, function() {
+					
+					<!--url: 채팅방 참여자들에게 공유되는 경로-->
+					<!--callback(function()): 클라이언트가 서버(Controller broker로부터)로부터 메시지를 수신했을 때 실행 -->
+					stompClient.subscribe(url, function(output) {
+						<!--JSP <body>에 append할 메시지 contents-->
+						<!--//console.log("STOMP Body Init");-->
+						showBroadcastMessage(createTextNode(JSON.parse(output.body)));
+					});
+					}, 
+						<!-- connect() 에러 발생 시 실행-->
+							function (err) {
+								alert('안돼!! : ' + err);
+				});
+		
+		};
+		<!--WebSocket broker 경로로 JSON형태 String 타입 메시지 데이터를 전송함 -->
+		function sendBroadcast(json) {
+			
+			<!--//console.log("sendBroadCast INit" + cnt);
+			//console.log(JSON.stringify(json));-->
+			stompClient.send("/app/broadcast", {}, JSON.stringify(json));
+			
+		}
+		
+		<!--보내기 버튼 클릭시 실행되는 메서드-->
+		function send() {
+			console.log("send INit");
+		<!--	var content_origin = $('#message').val();
+			var content = content_origin.replace(/(<([^>]+)>)/ig,"");
+			sendBroadcast({
+				'id': id,
+				'content': content,
+				'mb_name_a': mb_name_a,
+				'mb_name_b': mb_name_b,
+				'mb_nick_a': mb_nick_a,
+				'mb_nick_b': mb_nick_b,
+				'senderName': senderName,
+				'senderNick': mb_nick
+				});
+			$('#message').val("");-->
+		}
+		
+		<!--메시지 입력 창에서 Enter키가 보내기와 연동되도록 설정-->
+		var inputMessage = document.getElementById('message'); 
+		inputMessage.addEventListener('keyup', function enterSend(event) {
+			
+			if (event.keyCode === null) {
+				event.preventDefault();
+			}
+			
+			if (event.keyCode === 13) {
+				send();
+			}
+		});
+		
+		<!--입력한 메시지를 HTML 형태로 가공-->
+		function createTextNode(messageObj) {
+			
+			let mb_name = $("#mb_name").val();
+			
+			<!--//console.log("createTextNode");
+			//console.log("messageObj: " + messageObj.content);-->
+			
+			var origin_time = messageObj.sendTime;
+			var time = origin_time.substring(0,5);
+			
+			<!--HTML 형태의 메시지를 화면에 출력해줌-->
+			if (mb_name == messageObj.senderName){
+				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: right" class="chatRoomSenderName"><div>' +
+	            messageObj.senderName +            
+	            '</div><div class="chatbox_message" class="chatRoomContent">' +
+	            messageObj.content+
+	            '</div><div class="chatRoomSendTime">' +
+	            time +
+	            '</div></div></div>';	
+			} else {
+				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: left" class="chatRoomSenderName"><div>' +
+	            messageObj.senderName +            
+	            '</div><div class="chatbox_message" class="chatRoomContent">' +
+	            messageObj.content+
+	            '</div><div class="chatRoomSendTime">' +
+	            time +
+	            '</div></div></div>';
+			}
+        }
+
+		<!--해당되는 id 태그의 모든 하위 내용들을 message가 추가된 내용으로 갱신해줌 -->
+		function showBroadcastMessage(message) {
+			<!--//console.log("showBroadcastMessage Init");-->
+            $("#content").html($("#content").html() + message);
+            scroll_go();
+        }
+		
+
+		<!--읽음처리-->
+		function ajaxChatRead(reader) {
+
+			<!--//console.log("hi");-->
+			var flag = "";
+			if (reader == mb_nick_a) {
+				flag = "mb_nick_a";
+			} else {
+				flag = "mb_nick_b";
+			}
+			$.ajax({
+				url:'/regenkids/chatread/product/ajax',
+				type: 'POST',
+				data: JSON.stringify({
+					id: id,
+					flag: flag
+				}),
+				dataType: 'json',
+				contentType: 'application/json'
+			})
+
+		}
+
+	
+	</script>
+
+</html>

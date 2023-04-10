@@ -1,0 +1,57 @@
+
+
+/* 로그인 섹션 스타일 */
+#section {
+ background-color:#fff;
+  width: 350px;
+  margin:auto;
+  border-radius: 10px;
+  align:center;
+}
+
+/* 로그인 섹션 제목 스타일 */
+#head {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px white;
+}
+
+/* 선택된 셀 스타일 */
+  input[type="text"],
+  input[type="password"],
+  select {
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+/* 버튼 스타일 */
+input[type="button"] {
+  background-color: #A2D9CE;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+width:100%;
+}
+
+/* 체크박스 스타일 */
+.ckid_text {
+  font-size: 14px;
+  color: #333;
+}
+
+.ckid input[type="checkbox"] {
+  margin-right: 5px;
+}
+/* 테이블 스타일 */
+table {
+  width: 100%;
+
+}

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/join.css" />
+<style>
+  .target_mb_file{
+  border-radius:50%;
+  }
+  .target_mb_file:hover{
+  background-color:none;
+  }
+
+  #img_box,#img_box2 {
+  width:250px;
+  height:250px;
+  border-radius:70%;
+  overflow:hidden;
+  }
+
+  #target_mb_file, #target_mb_file2{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  }
+
+  #target_mb_file2:hover{
+  cursor:pointer;
+  opacity:0.7;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* 모달 스타일 */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+    position: relative;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #333;
+    text-decoration: none;
+  }
+
+  /* 폼 스타일 */
+  .form-group {
+    margin-bottom: 15px;
+  }
+textarea{
+font-size:16px;
+}
+
+
+
+</style>
+
+
+<body>
+
+
+<div th:insert = "~{common/header :: header}"></div>
+
+<div id="section" align="center">
+  <h3 id="head">프로필 수정</h3>
+  <br><br>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>사진 등록</h2>
+      <form >
+        <div class="form-group">
+          <div id = "img_box2">
+          <img id = "target_mb_file2" name ="target_mb_file2" th:src="${vo.mb_file}" width="250px;">
+          </div>
+          <input type="file" id="file"  style="display:none;" th:onchange="change_img(this);">
+        </div>
+
+
+        <input type="button" value = "확인" id="upload_img" onclick = "upload();">
+      </form>
+    </div>
+  </div>
+
+
+  <div>
+    <form action="/profileUpdate.do" name = "form1" method="post" enctype="multipart/form-data">
+      <input type="hidden" th:value = "${vo.mb_no}" name ="mb_no">
+      <table>
+        <tr>
+          <td id = "mb_file_box" align="center">
+            <div align="center" id="img_box">
+              <img id = "target_mb_file" name ="target_mb_file" th:src="${vo.mb_file}" width="250px;">
+            </div>
+            <br>
+            <div>
+             <input type="hidden" name = "mb_file" id = "mb_file" th:value="${vo.mb_file}">
+
+             <input type="button" id="modalBtn" value="사진등록" style="width:250px;">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>조회 수 </th>
+        </tr>
+        <tr>
+          <th th:text="${vo.mb_see}"></th>
+        </tr>
+        <tr>
+          <th>국적</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" name = "mb_country" th:value="${vo.mb_country}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>닉네임</th>
+        </tr>
+        <tr>
+          <th>
+            <input type="text" id = "mb_nick" name = "mb_nick" th:value="${vo.mb_nick}" readonly>
+          </th>
+        </tr>
+        <tr>
+          <th>프로필 공개 여부
+            <span th:if="${vo.mb_prof_stat} == 0">
+              <input type = "radio" name = "mb_prof_stat" value = "0" checked>공개
+              <input type = "radio" name = "mb_prof_stat" value = "1">비공개
+            </span>
+            <span th:if="${vo.mb_prof_stat} == 1">
+              <input type = "radio" name = "mb_prof_stat" value = "0" >공개
+              <input type = "radio" name = "mb_prof_stat" value = "1" checked>비공개
+            </span>
+          </th>
+        </tr>
+        <tr>
+          <th>자기소개</th>
+        </tr>
+        <tr>
+          <th><textarea maxlength="1000" placeholder="최대 1000자" name = "mb_prof_content" style="width:100%; min-height:250px;" th:text="${vo.mb_prof_content}" ></textarea></th>
+        </tr>
+        <tr>
+          <th>
+            <input type="button" value="저장" class="button" style="width:100%" onclick = "submitProfile();">
+          </th>
+        </tr>
+
+      </table>
+    </form>
+  </div>
+</div>
+
+
+
+<div th:insert = "~{common/footer :: footer}"></div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function submitProfile(){
+document.form1.submit();
+return false;
+}
+
+
+ function upload() {
+ document.getElementById('target_mb_file' ).src = document.form1.mb_file.value;
+ modal.style.display = "none";
+
+
+  }
+
+  $('#target_mb_file2').click(function (e) {
+   document.form1.mb_file.value =  document.getElementById('target_mb_file' ).src;
+    e.preventDefault();
+    $('#file').click();
+});
+
+//-----------------------------------------------------------------------------------
+
+  function change_img(input){
+
+ if (input.files && input.files[0]) {
+
+   var reader = new FileReader();
+    reader.onload = function(e) {
+       document.getElementById('target_mb_file2').src = e.target.result;
+       document.form1.mb_file.value =  document.getElementById('target_mb_file2' ).src;
+    };
+    reader.readAsDataURL(input.files[0]);
+
+  } else {
+    document.getElementById('target_mb_file').src = "/img/person-circle.svg";
+  }
+ }
+
+//-----------------------------------------------------------------------------------
+
+  var modalBtn = document.getElementById("modalBtn");
+  var modal = document.getElementById("modal");
+  var span = document.getElementsByClassName("close")[0];
+  var upload_img = document.getElementById("upload_img");
+
+  modalBtn.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+//-----------------------------------------------------------------------------------
+
+
+
+</script>
+</html>

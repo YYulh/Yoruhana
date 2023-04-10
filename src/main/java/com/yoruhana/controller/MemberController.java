@@ -117,7 +117,8 @@ public class MemberController {
         if (vo != null) {
 
             check = true;
-
+            session.setAttribute("login",vo);
+            session.setAttribute("name", vo.getMb_name());
             session.setAttribute("no", vo.getMb_no());
             session.setAttribute("nick", vo.getMb_nick());
             session.setAttribute("country", vo.getMb_country());
@@ -382,9 +383,6 @@ public class MemberController {
         String msg = "";
         String url = "/profile.do";
 
-        System.out.println(vo.getMb_file());
-
-
         //--------------------------------------
         int result = memberService.updateProfile(vo);
         if (lang.equals("KR")) {
@@ -401,17 +399,35 @@ public class MemberController {
                 msg = "修正に成功しました。";
             }
         }
+
+        session.setAttribute("file",vo.getMb_file());
+
         request.setAttribute("msg", msg);
         request.setAttribute("url", url);
 
         return "common/result";
     }
     @GetMapping("/searchPenpalForm.do")
-    public String searchPenpalForm(Model model,HttpServletRequest request){
+    public String searchPenpalForm(Model model,HttpServletRequest request,Integer start, Integer limit){
+
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute("lang");
 
-        List<MemberVO> list = memberService.searchPenpalList();
+        if(start == null) {
+            start = 0;
+        }
+        if(limit == null) {
+            limit = 8;
+        }
+
+        //현재 페이지
+        int nowPage = (start) / limit + 1;
+
+        List<MemberVO> list = memberService.searchPenpalList(start,limit);
+
+        //총 글의 개수
+        int total = memberService.getTotal();
+        int totalPage = total % limit == 0 ? total / limit : total / limit + 1;
 
         for(int i = 0; i <list.size(); i++){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -425,7 +441,13 @@ public class MemberController {
             list.get(i).setMb_bir(mb_bir);
 
         }
+
+        model.addAttribute("start", start);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("total", total);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("list",list);
+        model.addAttribute("limit",limit);
 
         return "member/"+lang + "/searchPenpal";
     }
