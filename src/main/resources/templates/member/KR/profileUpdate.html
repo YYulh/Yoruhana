@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -129,33 +129,33 @@ font-size:16px;
   <h3 id="head">프로필 수정</h3>
   <br><br>
 
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>사진 등록</h2>
-      <form >
-        <div class="form-group">
-          <div id = "img_box2">
-          <img id = "target_mb_file2" name ="target_mb_file2" th:src="${vo.mb_file}" width="250px;">
-          </div>
-          <input type="file" id="file"  style="display:none;" th:onchange="change_img(this);">
-        </div>
-
-
-        <input type="button" value = "확인" id="upload_img" onclick = "upload();">
-      </form>
-    </div>
-  </div>
-
-
   <div>
     <form action="/profileUpdate.do" name = "form1" method="post" enctype="multipart/form-data">
+
+       <!--사진 등록 모달-->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>사진 등록</h2>
+            <div class="form-group">
+              <div id = "img_box2">
+                <img id = "target_mb_file2" name ="target_mb_file2" th:src="@{/upload/} + ${session.file}" width="250px;" th:if ="${session.file}!=''">
+                <img id = "target_mb_file2" name ="target_mb_file2" th:src="@{/upload/} + 'person-circle.svg'" width="250px;" th:if ="${session.file}==''">
+              </div>
+              <input type="file" id="file" name="file"  style="display:none;" th:onchange="change_img(this);">
+            </div>
+            <input type="button" value = "확인" id="upload_img" onclick = "upload();">
+        </div>
+      </div>
+
+      <!--사진 등록 버튼-->
       <input type="hidden" th:value = "${vo.mb_no}" name ="mb_no">
       <table>
         <tr>
           <td id = "mb_file_box" align="center">
             <div align="center" id="img_box">
-              <img id = "target_mb_file" name ="target_mb_file" th:src="${vo.mb_file}" width="250px;">
+              <img id = "target_mb_file" name ="target_mb_file" th:src="@{/upload/} + ${vo.mb_file}" width="250px;" th:if ="${session.file}!=''">
+              <img id = "target_mb_file" name ="target_mb_file" th:src="@{/upload/} + 'person-circle.svg'" width="250px;" th:if ="${session.file}==''">
             </div>
             <br>
             <div>
@@ -223,6 +223,7 @@ font-size:16px;
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
 function submitProfile(){
 document.form1.submit();
 return false;
@@ -230,7 +231,9 @@ return false;
 
 
  function upload() {
+ if(document.form1.mb_file.value != " "){
  document.getElementById('target_mb_file' ).src = document.form1.mb_file.value;
+ }
  modal.style.display = "none";
 
 

@@ -26,9 +26,7 @@ public class WebsocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
         registry.addEndpoint("/broadcast").withSockJS().setHeartbeatTime(60_000);
-//
-//		//when browser or network cause problems fallback allows realtime connectivity
-        //registry.addEndpoint("/broadcast").withSockJS().setHeartbeatTime(60_000);
+
     }
 
 }

@@ -377,14 +377,55 @@ public class MemberController {
     }
 
     @PostMapping("/profileUpdate.do")
-    public String profileUpdate(MemberVO vo, HttpServletRequest request){
+    public String profileUpdate(MemberVO vo, HttpServletRequest request,@RequestParam("file") MultipartFile photo){
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute("lang");
         String msg = "";
         String url = "/profile.do";
+        //--------------------------------------
+        //파일을 저장할 경로
+        String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        String filename = null;
+
+
+            //업로드된 실제파일명
+            filename = photo.getOriginalFilename();
+
+            if(!photo.isEmpty()) { //가져온 사진이 있으면
+
+                //File 객체 생성
+                File saveFile = new File(savePath,filename);
+
+                if(!saveFile.exists()) { //경로에 파일이 없으면
+                    saveFile.mkdirs();
+                }else { //있으면
+                    long time = System.currentTimeMillis(); //단지 이름 바꿔주는 방식, 다르게 바꿔줘도 됨.
+
+                    filename = String.format("%s%d%s", filename.substring(0, filename.lastIndexOf(".")),time,filename.substring(filename.lastIndexOf(".")));
+
+                    saveFile = new File(savePath,filename);
+                }
+
+                //업로드된 파일은 MultipartResolver라는 클래스가 지정한 임시저장소에 저장되어 있다...
+                //파일이 일정시간이 지나면 사라지기때문에 내가 지정한 경로로 복사해준다...
+                try {
+                    photo.transferTo(saveFile);
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                    saveFile.delete(); // 타임밀리언즈라 왠만하면 이름이 안겹치겠지만 호옥시라도 겹쳐서 오류나면 해당 파일 삭제!
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //등록된 파일이 없으면 null 대신 빈 문자열이 대신 저장될 수 있도록
+            }else {
+                filename = "";
+            }
+
+            vo.setMb_file(filename);
 
         //--------------------------------------
         int result = memberService.updateProfile(vo);
+
         if (lang.equals("KR")) {
 
             if (result == 0) {

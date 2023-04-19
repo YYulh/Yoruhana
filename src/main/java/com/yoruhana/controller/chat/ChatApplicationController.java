@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -116,14 +118,17 @@ System.out.println("냐옹4");
 
     @MessageMapping("/broadcast")
     public void send(ChatRoom chatRoom) throws IOException {
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        String formatedNow = formatter.format(now);
 
-        chatRoom.setSendTime(String.valueOf(System.currentTimeMillis()));
+        chatRoom.setSendTime(formatedNow);
         //chatRoom.setSenderName("테스트 유저");
         //chatRoom.setSenderEmail("gtu@naver.com"); // 테스트입니다.
 
         int id = chatRoom.getId();
         //System.out.println("브로드캐스트 진입 : " + id);
-        String url = "/yoruhana/topic/" + id + "/queue/messages";
+        String url = "/topic/" + id + "/queue/messages";
         simpMessage.convertAndSend(url, new ChatRoom(chatRoom.getContent(), chatRoom.getSenderName(),
                 chatRoom.getSendTime(), chatRoom.getSenderNick()));
         // append message to txtFile
