@@ -97,9 +97,9 @@ public class ChatRoomService implements ChatRoomMapper {
     }
 
     @Override
-    public List<ChatList> findByEmail(String nick) {
+    public List<ChatList> findByNick(String nick) {
 
-        return chatRoomMapper.findByEmail(nick);
+        return chatRoomMapper.findByNick(nick);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class ChatRoomService implements ChatRoomMapper {
         String sendTime = chatRoom.getSendTime();
         System.out.println("print:" + content);
 
-        String writeContent = senderName + "\n" + content + "\n" + "[" +  sendTime + "]" + "\n";
+        String writeContent = senderName + "\n" + content + "\n"  +  sendTime + "\n";
 
         byte[] b = writeContent.getBytes();
 
@@ -147,7 +147,9 @@ public class ChatRoomService implements ChatRoomMapper {
         }
 
     }
-
+public ChatRoom chatInfo(int read){
+        return  chatRoomMapper.chatInfo(read);
+}
     @Override
     public ChatRoom findByChatId2(int mb_no, String mb_nick_a) {
         return chatRoomMapper.findByChatId2(mb_no, mb_nick_a);
@@ -155,20 +157,17 @@ public class ChatRoomService implements ChatRoomMapper {
 
     @Override
     public int getId(String mb_nick_a, String mb_nick_b) {
-
         return chatRoomMapper.getId(mb_nick_a, mb_nick_b);
     }
 
     @Override
     public void updateChatReadBuy(int id, int chatRead_a) {
-
         chatRoomMapper.updateChatReadBuy(id, chatRead_a);
 
     }
 
     @Override
     public void updateChatReadSell(int id, int chatRead_b) {
-
         chatRoomMapper.updateChatReadSell(id, chatRead_b);
 
     }

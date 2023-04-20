@@ -6,6 +6,7 @@
 </head>
 
 <link type="text/css" rel="stylesheet" href="/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/css/searchPenpal.css" />
 <div th:insert = "~{common/header :: header}"></div>
 
 <body>
@@ -21,6 +22,7 @@
 
 <div th:each="list , i : ${list}" >
 
+<!--모달-->
   <div th:id="'modal' + ${list.mb_no}" class="modal" align="center">
     <div class="modal-content">
       <a  href="#" class = "close" th:onclick="|closing('${list.mb_no}')|">&times;</a>

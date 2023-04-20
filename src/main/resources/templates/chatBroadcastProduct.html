@@ -13,7 +13,18 @@
 </head>
 <style>
   #section{border:1px solid #ccc; }
+  .img_box {
+  width:40px;
+  height:40px;
+  border-radius:70%;
+  overflow:hidden;
+  }
 
+  .target_mb_file{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  }
 
 </style>
 <body>
@@ -40,7 +51,10 @@
       </th:block>
       
       <th:block th:if="${chatRoom.senderName != mb_name}" class="chat_content">
-        <div class="chatbox_messages">
+        <div class="chatbox_messages" style="display:flex; align-items:center;">
+          <div class="img_box">
+           <div><img th:src="@{/upload/}+${target_mb_file}" class ="target_mb_file" width="50px;"></div>
+          </div>
           <div class="chatbox_messageBox" style="text-align:left">
             <div class="chatRoomSenderName" th:text="${chatRoom.senderName}"></div>
             <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}" style="margin-inline-end: auto;"></div>
@@ -58,7 +72,7 @@
   <div class="chatbox_inputPanel" style="display:flex;">
     <input type="text" id="message" class="chatbox_input" placeholder="메세지를 입력해주세요">
     <div class="chatbox__tooltip chatbox__tooltip--bottom">
-      <input type="button" id="send_btn" class="button"  th:onclick="'send()'" value="전송하기"></input>
+      <input type="button" id="send_btn" class="button"  th:onclick="'send()'" value="전송하기">
     </div>
   </div>
     <input type="hidden" th:value="${chatRoomInfo.mb_nick_a}" id="mb_nick_a" />
@@ -66,6 +80,7 @@
     <input type="hidden" th:value="${chatRoomInfo.id}" id="id" />
     <input type="hidden" th:value="${chatRoomInfo.mb_nick_b}" id="mb_nick_b" />
     <input type="hidden" th:value="${chatRoomInfo.mb_name_b}" id="mb_name_b" />
+
 </div>
   </div>
 
@@ -74,10 +89,10 @@
 
 
 
-<script type="text/javascript">
+<script th:inline="javascript">
 	
 	function scroll_go(){
-$('.chatRoomSendTime').last().focus();
+$('#content').scrollTop($('#content')[0].scrollHeight);
 	}
 	
 	$( document ).ready(function() {
@@ -96,7 +111,7 @@ $('.chatRoomSendTime').last().focus();
 		var senderId = $('#mb_no').val();
 		
 		$(document).ready(connect());
-		$(document).ready(ajaxChatRead(mb_nick));
+		$(document).ready(chatReadInterval());
 		
 		function connect() {
 
@@ -164,7 +179,7 @@ $('.chatRoomSendTime').last().focus();
 
 			if (mb_name == messageObj.senderName){
 				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: right" class="chatRoomSenderName">'+
-	            '<div class="chatbox_message" class="chatRoomContent" style="margin-inline-start: auto;">' +
+	            '<div class="chatbox_message chatRoomContent" style="margin-inline-start: auto;">' +
 	            messageObj.content+
 	            '</div><div class="chatRoomSendTime">' +
 	            time +
@@ -172,7 +187,9 @@ $('.chatRoomSendTime').last().focus();
 			} else {
 				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: left" class="chatRoomSenderName"><div>' +
 	            messageObj.senderName +            
-	            '</div><div class="chatbox_message" class="chatRoomContent" style="margin-inline-end: auto;">' +
+	            '</div><div class="img_box">' +
+                '<div><img th:src="@{/upload/}+${target_mb_file}" class ="target_mb_file""></div>' +
+                '</div><div class="chatbox_message chatRoomContent" style="margin-inline-end: auto;">' +
 	            messageObj.content+
 	            '</div><div class="chatRoomSendTime">' +
 	            time +
@@ -185,10 +202,16 @@ $('.chatRoomSendTime').last().focus();
             $("#content").html($("#content").html() + message);
             scroll_go();
         }
-		
+
+		function chatReadInterval() {
+	 		setInterval(() => {
+	 			ajaxChatRead(mb_nick);
+			}, 1000);
+	 	}
 
 		function ajaxChatRead(reader) {
-
+  console.log("a로 저장된 사람" +mb_nick_a);
+  console.log("읽은사람(로그인한 사람)" +reader);
 			var flag = "";
 			if (reader == mb_nick_a) {
 				flag = "mb_nick_a";
@@ -197,7 +220,7 @@ $('.chatRoomSendTime').last().focus();
 			}
 
 			$.ajax({
-				url:'/chatread/product/ajax',
+				url:'/chatread.do',
 				type: 'POST',
 				data: JSON.stringify({
 					id: id,

@@ -27,14 +27,14 @@
         SELECT *
         FROM chat_chatRoom
         WHERE mb_no = #{mb_no} AND
-        mb_nick_a = #{mb_nick_a};
+        mb_nick_a = #{mb_nick_a}
     </select>
 
     <insert id="addChatRoom" parameterType="com.yoruhana.entity.ChatRoom"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         chat_chatRoom(mb_no, mb_nick_a, mb_nick_b, fileName, createdDate, mb_name_a, mb_name_b, users_title, chatRead_a, chatRead_b)
-        VALUES (#{mb_no}, #{mb_nick_a}, #{mb_nick_b}, #{fileName}, #{createdDate}, #{mb_name_a}, #{mb_name_b}, #{users_title}, 1, 1);
+        VALUES (#{mb_no}, #{mb_nick_a}, #{mb_nick_b}, #{fileName}, #{createdDate}, #{mb_name_a}, #{mb_name_b}, #{users_title}, 1, 1)
     </insert>
 
     <select id="getId" resultType="int" parameterType="String">
@@ -49,36 +49,36 @@
     <update id="updateFileName">
         UPDATE chat_chatRoom
         SET FILENAME = #{fileName}
-        WHERE ID = #{id};
+        WHERE ID = #{id}
     </update>
 
     <update id="updateChatReadBuy" parameterType="int">
         UPDATE chat_chatRoom
         SET chatRead_a = #{chatRead_a}
-        WHERE ID = #{id};
+        WHERE ID = #{id}
     </update>
 
     <update id="updateChatReadSell" parameterType="int">
         UPDATE chat_chatRoom
         SET chatRead_b = #{chatRead_b}
-        WHERE ID = #{id};
+        WHERE ID = #{id}
     </update>
 
     <select id="getUnreadMessages" resultType="int" parameterType="String">
         SELECT COUNT(id)
         FROM chat_chatRoom
-        WHERE (mb_nick_b = #{nick} AND chatread_b = 0) OR
-        (mb_nick_a = #{nick} AND chatread_a = 0);
+        WHERE (mb_nick_b = #{nick} AND chatRead_b = 0) OR
+        (mb_nick_a = #{nick} AND chatRead_a = 0)
     </select>
 
     <select id="getUnreadChatRoom" resultType="int" parameterType="String">
         SELECT id
         FROM chat_chatRoom
-        WHERE (mb_nick_b = #{nick} AND chatread_b = 0) OR
-        (mb_nick_a = #{nick} AND chatread_a = 0);
+        WHERE (mb_nick_b = #{nick} AND chatRead_b = 0) OR
+        (mb_nick_a = #{nick} AND chatRead_a = 0)
     </select>
 
-    <select id="findByEmail" resultType="com.yoruhana.entity.ChatList" parameterType="String">
+    <select id="findByNick" resultType="com.yoruhana.entity.ChatList" parameterType="String">
         SELECT *
         FROM chat_chatRoom
         WHERE
@@ -86,5 +86,9 @@
         mb_nick_a = #{nick}
     </select>
 
-
+    <select id="chatInfo" parameterType="int" resultType="com.yoruhana.entity.ChatRoom">
+        select chatRead_a,chatRead_b from chat_chatRoom
+        where
+        id = #{read}
+    </select>
 </mapper>

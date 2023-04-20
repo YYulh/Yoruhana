@@ -33,12 +33,13 @@ public interface ChatRoomMapper {
 
     public void updateFileName(@Param("id")int id, @Param("fileName")String fileName);
 
-    public void updateChatReadBuy(@Param("id")int id, @Param("chatRead_a")int chatRead_a);
+    public void updateChatReadBuy(int id,int chatRead_a);
 
-    public void updateChatReadSell(@Param("id")int id, @Param("chatRead_b")int chatRead_b);
+    public void updateChatReadSell(int id, int chatRead_b);
 
     public ChatRoom findByChatId2(@Param("mb_no")int mb_no, @Param("mb_nick_a")String mb_nick_a);
 
-    public List<ChatList> findByEmail(@Param("nick")String nick);
+    public List<ChatList> findByNick(@Param("nick")String nick);
     public int countByChatNick(@Param("mb_nick_a")String mb_nick_a, @Param("mb_nick_b")String mb_nick_b);
+    public ChatRoom chatInfo(int read);
 }

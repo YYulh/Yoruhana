@@ -61,18 +61,15 @@ public class ChatApplicationController {
         String mb_nick_b = session_mb_nick; //내 닉네임
 
         ChatRoom chatRoom = new ChatRoom();
-        chatRoom.setMb_no(mb_no);
-        chatRoom.setMb_nick_a(mb_nick_a);
-        chatRoom.setMb_nick_b(mb_nick_b);
 
+        String target_mb_name="";
+        int target_mb_no = 0;
+        String target_mb_file = "";
 
         MemberVO target_user = memberService.getInfo_Nick(mb_nick_a); //1차 정상
-        String target_mb_name = target_user.getMb_name(); //상대이름
-        int target_mb_no= target_user.getMb_no(); //상대 mb_no
-
-        chatRoom.setMb_name_a(target_mb_name);
-        chatRoom.setMb_name_b(mb_name);
-        chatRoom.setUsers_title("YORUHANA");
+        target_mb_name = target_user.getMb_name(); //상대이름
+        target_mb_no= target_user.getMb_no(); //상대 mb_no
+        target_mb_file = target_user.getMb_file(); //상대 사진
 
         // 파일업로드 상대경로 추출
         String fileUploadPath = applicationContext.getResource("classpath:/static").getFile().getAbsolutePath();
@@ -80,19 +77,39 @@ public class ChatApplicationController {
 
         // 이미 chatRoom이 만들어져있는지 확인
         if (chatRoomService.countByChatNick(mb_nick_a, mb_nick_b) > 0) {
+
             // get ChatRoomInfo
             ChatRoom chatRoomTemp = chatRoomService.findByChatId(mb_nick_a, mb_nick_b);
-
             // load existing chat history
             List<ChatRoom> chatHistory = chatRoomService.readChatHistory(chatRoomTemp, fileUploadPath);
+
+            //기존 사용된 방식대로 하면 읽음처리 시 상대방 닉네임이 유동적으로 변하게 됨
+            //상대의 사진을 받아오는 로직은 유지하되, 이미 채팅방이 만들어져있으면 DB에 저장되어 있는 룸 정보로 response 해주도록 함
+            chatRoom = chatRoomTemp;
+
             // transfer chatHistory Model to View
             model.addAttribute("chatHistory", chatHistory);
 
         } else {
+
+            //만들어져 있는 채팅방이 없다면 상대방 닉네임을 기반으로 정보를 저장
+            chatRoom.setMb_no(mb_no);
+            chatRoom.setMb_nick_a(mb_nick_a);
+            chatRoom.setMb_nick_b(mb_nick_b);
+
+            chatRoom.setMb_name_a(target_mb_name);
+            chatRoom.setMb_name_b(mb_name);
+            chatRoom.setUsers_title("YORUHANA");
+
+
             // chatRoom 생성
             chatRoomService.addChatRoom(chatRoom);
             // text file 생성
             chatRoomService.createFile(chatRoom.getMb_no(),chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b()), fileUploadPath);
+
+            //실시간 읽음 확인 처리
+            int read =chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b());
+            chatRoom = chatRoomService.chatInfo(read);
         }
 
         // chatRoom Add 시 생성될 chatId
@@ -100,7 +117,6 @@ public class ChatApplicationController {
 
         // chatRoom 객체 Model에 저장해 view로 전달
         model.addAttribute("chatRoomInfo", chatRoom);
-
         model.addAttribute("login_flag", "login");
         // 로그인 유저 정보 셋팅
 
@@ -112,7 +128,7 @@ public class ChatApplicationController {
         model.addAttribute("target_user_id", target_mb_no);
         model.addAttribute("target_nick", mb_nick_a);
         model.addAttribute("target_user_name", target_mb_name);
-
+        model.addAttribute("target_mb_file",target_mb_file);
         return "chatBroadcastProduct";
     }
 
@@ -135,26 +151,30 @@ public class ChatApplicationController {
         chatRoomService.appendMessage(chatRoom);
     }
 
-    @RequestMapping(value = "/chatread/chatroom/ajax", produces = "application/text; charset=UTF-8")
+/*    @RequestMapping(value = "/chatread/chatroom/ajax", produces = "application/text; charset=UTF-8")
     public void ajaxChatRoomRead(@RequestBody String json) throws IOException {
         JSONObject jsn = new JSONObject(json);
         String idStr = (String) jsn.get("id");
         int id = Integer.parseInt(idStr);
         String flag = (String) jsn.get("flag");
         if (flag.equals("mb_nick_b")) {
-            chatRoomService.updateChatReadSell(id, 1);
+            chatRoomService.updateChatReadSell(id,1);
         } else {
             chatRoomService.updateChatReadBuy(id, 1);
         }
-    }
-
-    @RequestMapping(value = "/chatread/product/ajax", produces = "application/json; charset=UTF-8")
+    }*/
+@ResponseBody
+    @RequestMapping(value = "/chatread.do",method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public void ajaxChatProductRead(@RequestBody String json) throws IOException {
+
         JSONObject jsn = new JSONObject(json);
         String idStr = (String) jsn.get("id");
+        System.out.println("여길봐아!!!!:" + idStr);
         int id = Integer.parseInt(idStr);
 
         String flag = (String) jsn.get("flag");
+        System.out.println("여길봐아!!!!:" + flag);
+
         if (flag.equals("mb_nick_b")) {
             chatRoomService.updateChatReadSell(id, 1);
         } else {
@@ -192,16 +212,6 @@ public class ChatApplicationController {
         model.addAttribute("mb_no", mb_no);
 
         String user_type = (String) session.getAttribute("type");
-        /* if(user_type.equals("Parent")) { model.addAttribute("nick_a", nick_a);
-         * model.addAttribute("nick_b", nick_b); }else { model.addAttribute("nick_a",
-         * nick_b); model.addAttribute("nick_b", nick_a); String origin_a =
-         * chatRoomRead.getnick_a(); String origin_b = chatRoomRead.getnick_b();
-         * String origin_a_name = chatRoomRead.getnick_a_name(); String origin_b_name =
-         * chatRoomRead.getnick_b_name(); chatRoomRead.setnick_a(origin_b);
-         * chatRoomRead.setnick_b(origin_a);
-         * chatRoomRead.setnick_a_name(origin_b_name);
-         * chatRoomRead.setnick_b_name(origin_a_name); }
-         */
         MemberVO login = (MemberVO) session.getAttribute("login");
         model.addAttribute("chatRoomInfo", chatRoomRead);
         model.addAttribute("users_title", users_title);
@@ -230,7 +240,7 @@ public class ChatApplicationController {
         return messages;
     }
 
-    @RequestMapping(value = "/matching/chatUnreadMessageInfo/ajax", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+    @RequestMapping(value = "/chatUnreadMessageInfo/ajax", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
     @ResponseBody
     public String chatListUnread(@RequestBody String json, HttpSession session) {
 
@@ -238,7 +248,7 @@ public class ChatApplicationController {
         // JSON.get([mapped name])으로 value 추출하기
         String nick = (String) jsn.get("nick");
         // email에 해당되는 모든 chatRoom select 받기
-        List<ChatList> chatRoomList = chatRoomService.findByEmail(nick);
+        List<ChatList> chatRoomList = chatRoomService.findByNick(nick);
         // chatRoom 정보는 JSON Array에 저장됨
         JSONArray ja = new JSONArray();
         // email에 해당되는 읽지 않은 chatRoom select 받기
@@ -282,13 +292,13 @@ public class ChatApplicationController {
         return result;
     }
 
-    @RequestMapping(value = "/matching/chatList/ajax", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+    @RequestMapping(value = "/chatList/ajax", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
     @ResponseBody
     public String chatList(@RequestBody String json, HttpSession session) {
 
         JSONObject jsn = new JSONObject(json);
         String nick = (String) jsn.get("nick");
-        List<ChatList> chatRoomList = chatRoomService.findByEmail(nick);
+        List<ChatList> chatRoomList = chatRoomService.findByNick(nick);
         JSONArray ja = new JSONArray();
 
         for (ChatList chatList : chatRoomList) {
