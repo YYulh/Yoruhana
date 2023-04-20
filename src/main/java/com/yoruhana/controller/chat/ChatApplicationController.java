@@ -69,11 +69,11 @@ public class ChatApplicationController {
         MemberVO target_user = memberService.getInfo_Nick(mb_nick_a); //1차 정상
         String target_mb_name = target_user.getMb_name(); //상대이름
         int target_mb_no= target_user.getMb_no(); //상대 mb_no
-System.out.println("냐옹1");
+
         chatRoom.setMb_name_a(target_mb_name);
         chatRoom.setMb_name_b(mb_name);
         chatRoom.setUsers_title("YORUHANA");
-System.out.println("냐옹2");
+
         // 파일업로드 상대경로 추출
         String fileUploadPath = applicationContext.getResource("classpath:/static").getFile().getAbsolutePath();
         model.addAttribute("fileUploadPath", fileUploadPath);
@@ -82,19 +82,19 @@ System.out.println("냐옹2");
         if (chatRoomService.countByChatNick(mb_nick_a, mb_nick_b) > 0) {
             // get ChatRoomInfo
             ChatRoom chatRoomTemp = chatRoomService.findByChatId(mb_nick_a, mb_nick_b);
-System.out.println("냐옹3");
+
             // load existing chat history
             List<ChatRoom> chatHistory = chatRoomService.readChatHistory(chatRoomTemp, fileUploadPath);
             // transfer chatHistory Model to View
             model.addAttribute("chatHistory", chatHistory);
-System.out.println("냐옹4");
+
         } else {
             // chatRoom 생성
             chatRoomService.addChatRoom(chatRoom);
             // text file 생성
             chatRoomService.createFile(chatRoom.getMb_no(),chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b()), fileUploadPath);
         }
-        System.out.println("냐옹5");
+
         // chatRoom Add 시 생성될 chatId
         chatRoom.setId(chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b()));
 

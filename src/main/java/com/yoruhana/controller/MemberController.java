@@ -384,7 +384,8 @@ public class MemberController {
         String url = "/profile.do";
         //--------------------------------------
         //파일을 저장할 경로
-        String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        //String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        String savePath = "C:\\Users\\GTU\\Desktop\\storage\\";
         String filename = null;
 
 
@@ -418,7 +419,7 @@ public class MemberController {
                 }
                 //등록된 파일이 없으면 null 대신 빈 문자열이 대신 저장될 수 있도록
             }else {
-                filename = "";
+                filename = (String) session.getAttribute("file");
             }
 
             vo.setMb_file(filename);

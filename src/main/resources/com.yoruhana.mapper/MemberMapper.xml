@@ -6,7 +6,7 @@
     <!--회원가입-->
     <insert id="insertJoin" parameterType="com.yoruhana.entity.MemberVO">
         insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw,mb_tel,mb_bir, mb_stat,mb_join_date, mb_prof_stat,mb_agree1,mb_agree2,mb_see ,mb_file, mb_sex)
-                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),CONCAT(#{mb_bir1},#{mb_bir2},#{mb_bir3}),0,NOW(),1,0,0,0,"/img/person-circle.svg",#{mb_sex})
+                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),CONCAT(#{mb_bir1},#{mb_bir2},#{mb_bir3}),0,NOW(),1,0,0,0,"person-circle.svg",#{mb_sex})
     </insert>
 
     <select id = "login" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
