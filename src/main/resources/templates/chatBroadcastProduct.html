@@ -7,14 +7,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   <link type="text/css" rel="stylesheet" href="/css/common.css" />
-  <link type="text/css" rel="stylesheet" href="/css/join.css" />
   <link type="text/css" rel="stylesheet" href="/css/test.css" />
 
 
 </head>
 <style>
   #section{border:1px solid #ccc; }
-  .chatbox_messageBox{border 1px solid #ccc; border-radius:15px; padding-bottom:12px;}
+
 
 </style>
 <body>
@@ -27,16 +26,15 @@
 <input type="hidden" th:value="${mb_name}" id="mb_name"/>
 <input type="hidden" th:value="${mb_no}" id="mb_no"/>
 
-<div class="chatbox" style="width:80%;" align="center">
+<div class="chatbox"  >
   <!-- 채팅 내용 -->
   <div id="content">
     <div th:each="chatRoom : ${chatHistory}">
       <th:block th:if="${chatRoom.senderName == mb_name}" class="chat_content">
         <div class="chatbox_messages">
           <div class="chatbox_messageBox" style="text-align:right">
-            <div class="chatRoomSenderName" th:text="${chatRoom.senderName}"></div>
-            <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}"></div>
-            <div class="chatRoomSendTime" th:text="${#strings.substring(chatRoom.sendTime, 0, 7)}"></div>
+            <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}" style="margin-inline-start: auto;"></div>
+            <div class="chatRoomSendTime" th:text="${chatRoom.sendTime}"></div>
           </div>
         </div>
       </th:block>
@@ -45,8 +43,8 @@
         <div class="chatbox_messages">
           <div class="chatbox_messageBox" style="text-align:left">
             <div class="chatRoomSenderName" th:text="${chatRoom.senderName}"></div>
-            <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}"></div>
-            <div class="chatRoomSendTime" th:text="${#strings.substring(chatRoom.sendTime, 0, 7)}"></div>
+            <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}" style="margin-inline-end: auto;"></div>
+            <div class="chatRoomSendTime" th:text="${chatRoom.sendTime}"></div>
           </div>
         </div>
       </th:block>
@@ -56,7 +54,7 @@
   <!-- 채팅 내용 끝 -->
 
 <!-- Footer 고정 Nav 버튼 -->
-<footer style="width:50%;" align="center;">
+<div style="width:570px;" align="center;">
   <div class="chatbox_inputPanel" style="display:flex;">
     <input type="text" id="message" class="chatbox_input" placeholder="메세지를 입력해주세요">
     <div class="chatbox__tooltip chatbox__tooltip--bottom">
@@ -68,7 +66,7 @@
     <input type="hidden" th:value="${chatRoomInfo.id}" id="id" />
     <input type="hidden" th:value="${chatRoomInfo.mb_nick_b}" id="mb_nick_b" />
     <input type="hidden" th:value="${chatRoomInfo.mb_name_b}" id="mb_name_b" />
-</footer>
+</div>
   </div>
 
 <div th:insert = "~{common/footer :: footer}"></div>
@@ -79,8 +77,7 @@
 <script type="text/javascript">
 	
 	function scroll_go(){
-
-		$('html, body').scrollTop( $(document).height() );
+$('.chatRoomSendTime').last().focus();
 	}
 	
 	$( document ).ready(function() {
@@ -102,7 +99,7 @@
 		$(document).ready(ajaxChatRead(mb_nick));
 		
 		function connect() {
-        console.log("커넥트");
+
 			var socket = new SockJS('/broadcast');
 			var url = '/topic/' + id + '/queue/messages';
 
@@ -124,7 +121,6 @@
 		};
 
 		function sendBroadcast(json) {
-		console.log("샌드 브로드캐스트 제이슨");
 			stompClient.send("/app/broadcast", {}, JSON.stringify(json));
 			
 		}
@@ -167,9 +163,8 @@
 			var time = origin_time.substring(0,5);
 
 			if (mb_name == messageObj.senderName){
-				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: right" class="chatRoomSenderName"><div>' +
-	            messageObj.senderName +            
-	            '</div><div class="chatbox_message" class="chatRoomContent">' +
+				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: right" class="chatRoomSenderName">'+
+	            '<div class="chatbox_message" class="chatRoomContent" style="margin-inline-start: auto;">' +
 	            messageObj.content+
 	            '</div><div class="chatRoomSendTime">' +
 	            time +
@@ -177,7 +172,7 @@
 			} else {
 				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: left" class="chatRoomSenderName"><div>' +
 	            messageObj.senderName +            
-	            '</div><div class="chatbox_message" class="chatRoomContent">' +
+	            '</div><div class="chatbox_message" class="chatRoomContent" style="margin-inline-end: auto;">' +
 	            messageObj.content+
 	            '</div><div class="chatRoomSendTime">' +
 	            time +
