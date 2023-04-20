@@ -25,7 +25,7 @@
                 <li><a><img src="/img/bell.svg" id="bell"></a></li>
                 <li id="drop_li">
                     <div id="img_box_header">
-                        <a href="#" id ="menu" th:if ="${session.file}==''" class ="menu">
+                        <a href="#" id ="menu" th:if ="${session.file}==null or ${session.file}==''" class ="menu">
                             <img th:src = "@{/upload/} + 'person-circle.svg'" id="none_pic">
                         </a>
                         <a href="#" id ="menu2" th:if ="${session.file} != ''">
