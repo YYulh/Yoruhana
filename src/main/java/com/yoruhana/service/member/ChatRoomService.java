@@ -45,6 +45,7 @@ public class ChatRoomService implements ChatRoomMapper {
         BufferedReader br = new BufferedReader(new FileReader(pathName));
         //View에 ChatRoom 객체로 전달
         ChatRoom chatRoomLines = new ChatRoom();
+        ChatRoom lastChat = new ChatRoom();
         List<ChatRoom> chatHistory = new ArrayList<ChatRoom>();
 
         String chatLine;
@@ -61,6 +62,8 @@ public class ChatRoomService implements ChatRoomMapper {
             } else if (answer == 2) {
                 //메시지내용
                 chatRoomLines.setContent(chatLine);
+
+
                 idx++;
             } else {
                 //보낸시간
@@ -147,9 +150,9 @@ public class ChatRoomService implements ChatRoomMapper {
         }
 
     }
-public ChatRoom chatInfo(int read){
+    public ChatRoom chatInfo(int read){
         return  chatRoomMapper.chatInfo(read);
-}
+    }
     @Override
     public ChatRoom findByChatId2(int mb_no, String mb_nick_a) {
         return chatRoomMapper.findByChatId2(mb_no, mb_nick_a);
@@ -196,10 +199,14 @@ public ChatRoom chatInfo(int read){
         return chatRoomMapper.findByChatId(mb_nick_a, mb_nick_b);
     }
 
+    public String getFile(String nick){
+        return chatRoomMapper.getFile(nick);
+    }
 
-
-
-
-
-
+    public void last_chat(String id, String content){
+        chatRoomMapper.last_chat(id,content);
+    }
+    public String getLast_chat(int id){
+        return chatRoomMapper.getLast_chat(id);
+    }
 }

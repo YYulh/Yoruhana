@@ -15,7 +15,7 @@ public class ChatRoom {
     private String mb_name_b;
     private int chatRead_a;
     private int chatRead_b;
-
+    private String last_chat;
 
     private String sendTime;
     private String senderName;
@@ -24,8 +24,7 @@ public class ChatRoom {
     private String content;
     private String fileName;
 
-    public ChatRoom(int id, int mb_no, String mb_nick_a, String mb_nick_b, Timestamp createdDate, String mb_name_a, String mb_name_b, int chatRead_a, int chatRead_b, String sendTime, String senderName, String senderNick, String users_title, String content, String fileName) {
-        super();
+    public ChatRoom(int id, int mb_no, String mb_nick_a, String mb_nick_b, Timestamp createdDate, String mb_name_a, String mb_name_b, int chatRead_a, int chatRead_b, String last_chat, String sendTime, String senderName, String senderNick, String users_title, String content, String fileName) {
         this.id = id;
         this.mb_no = mb_no;
         this.mb_nick_a = mb_nick_a;
@@ -35,6 +34,7 @@ public class ChatRoom {
         this.mb_name_b = mb_name_b;
         this.chatRead_a = chatRead_a;
         this.chatRead_b = chatRead_b;
+        this.last_chat = last_chat;
         this.sendTime = sendTime;
         this.senderName = senderName;
         this.senderNick = senderNick;

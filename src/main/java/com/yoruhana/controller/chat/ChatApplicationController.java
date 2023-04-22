@@ -93,6 +93,7 @@ public class ChatApplicationController {
         } else {
 
             //만들어져 있는 채팅방이 없다면 상대방 닉네임을 기반으로 정보를 저장
+
             chatRoom.setMb_no(mb_no);
             chatRoom.setMb_nick_a(mb_nick_a);
             chatRoom.setMb_nick_b(mb_nick_b);
@@ -101,16 +102,18 @@ public class ChatApplicationController {
             chatRoom.setMb_name_b(mb_name);
             chatRoom.setUsers_title("YORUHANA");
 
-
             // chatRoom 생성
             chatRoomService.addChatRoom(chatRoom);
             // text file 생성
             chatRoomService.createFile(chatRoom.getMb_no(),chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b()), fileUploadPath);
 
             //실시간 읽음 확인 처리
-            int read =chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b());
-            chatRoom = chatRoomService.chatInfo(read);
+
+
         }
+        int read = chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b());
+        ChatRoom chatRoomRead = chatRoomService.chatInfo(read);
+        model.addAttribute("chatRoomRead",chatRoomRead);
 
         // chatRoom Add 시 생성될 chatId
         chatRoom.setId(chatRoomService.getId(chatRoom.getMb_nick_a(), chatRoom.getMb_nick_b()));
@@ -118,6 +121,7 @@ public class ChatApplicationController {
         // chatRoom 객체 Model에 저장해 view로 전달
         model.addAttribute("chatRoomInfo", chatRoom);
         model.addAttribute("login_flag", "login");
+
         // 로그인 유저 정보 셋팅
 
         model.addAttribute("mb_no", mb_no);
@@ -169,11 +173,9 @@ public class ChatApplicationController {
 
         JSONObject jsn = new JSONObject(json);
         String idStr = (String) jsn.get("id");
-        System.out.println("여길봐아!!!!:" + idStr);
-        int id = Integer.parseInt(idStr);
 
+        int id = Integer.parseInt(idStr);
         String flag = (String) jsn.get("flag");
-        System.out.println("여길봐아!!!!:" + flag);
 
         if (flag.equals("mb_nick_b")) {
             chatRoomService.updateChatReadSell(id, 1);
@@ -254,16 +256,28 @@ public class ChatApplicationController {
         // email에 해당되는 읽지 않은 chatRoom select 받기
         List<Integer> unreadChatId = chatRoomService.getUnreadChatRoom(nick);
 
+        String file = "";
+        String last_chat = "";
+
         for (ChatList chatList : chatRoomList) {
             // chatRoom 정보를 JSON Object에 put 해줌. chatRoom이 반복문에서 넘어갈 때마다 객체 초기화
             JSONObject jo = new JSONObject();
-
+            jo.put("id",chatList.getId());
             jo.put("mb_no", chatList.getMb_no());
+
+            last_chat = chatRoomService.getLast_chat(chatList.getId());
+            jo.put("last_chat",last_chat);
             // 리스트에 출력할 상대방 닉네임 확인
             if (chatList.getMb_nick_a().equals(nick)) {
                 jo.put("senderName", chatList.getMb_name_b());
+
+                file = chatRoomService.getFile(chatList.getMb_nick_b());
+                jo.put("file",file);
             } else {
                 jo.put("senderName", chatList.getMb_name_a());
+
+                file = chatRoomService.getFile(chatList.getMb_nick_a());
+                jo.put("file",file);
             }
 
             jo.put("users_title", chatList.getUsers_title());
@@ -274,7 +288,7 @@ public class ChatApplicationController {
                 // 읽지 않은 chatRoomId들과 현재 chatRoomId 대조 후 처리
                 for (int ele : unreadChatId) {
                     if (chatList.getId() == ele) {
-                        jo.put("messageUnread", "메세지가 도착했습니다.");
+                        jo.put("messageUnread", "NEW");
                         break;
                     } else {
                         jo.put("messageUnread", "");
@@ -304,13 +318,27 @@ public class ChatApplicationController {
         for (ChatList chatList : chatRoomList) {
 
             JSONObject jo = new JSONObject();
+            jo.put("id",chatList.getId());
             ja.put(jo);
         }
+
         JSONObject jsnResult = new JSONObject();
+
         jsnResult.put("chatList", ja);
+
         String result = jsnResult.toString();
 
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/insert_last_chat.do", method = RequestMethod.POST,produces = "application/json; charset=UTF-8" )
+    public void insertlastchat(@RequestBody String json) throws IOException{
+        JSONObject jsn = new JSONObject(json);
+
+        String content = (String)jsn.get("content");
+        String id = (String) jsn.get("id");
+
+        chatRoomService.last_chat(id, content);
+    }
 }

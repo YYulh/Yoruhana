@@ -4,15 +4,15 @@
 }
 
 .chatbox {
-  width: 80%;
-  height: 70%;
+
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 0 5px 5px 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width:580px;
+  width:600px;
 }
 
 #content {
@@ -21,9 +21,10 @@
   padding: 10px;
   scrollbar-width: thin;
   scrollbar-color: #ccc #f2f2f2;
-  min-height:430px;
-  max-height:600px;
-  width:570px;
+  min-height: 650px;
+  max-height: 650px;
+  width: 600px;
+  box-sizing: border-box;
 
 }
 
@@ -81,7 +82,10 @@ input[type="button"] {
   border-radius: 12px;
   margin:auto;
   margin-top:30px;
-  width:50%;
+  width:90%;
+  justify-content: center;
+  border:1px solid #ccc;
+  display:flex;
 }
 
 .chatRoomContent {
@@ -91,8 +95,9 @@ input[type="button"] {
 
 .chatRoomSendTime {
   font-size: 12px;
-  margin-left: 10px;
   color: #aaa;
+  margin-left: 5px;
+  margin-right: 3px;
 }
 
 .chat_content {
@@ -101,12 +106,16 @@ input[type="button"] {
 
 .chatbox_inputPanel {
   display: flex;
+  position:relative;
   align-items: center;
   margin-top: 10px;
   background-color: #f2f2f2;
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 100%;
+  top:-80px;
+  left: -4px;
 }
 
 .chatbox_input {

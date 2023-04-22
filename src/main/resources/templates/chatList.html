@@ -75,7 +75,7 @@
 		 //1000milliseconds(==1초) 간격으로 getUnreadMessageInfo()를 실행시키는 반복 메서드
 	 	function unreadAlertInfinite() {
 	 		setInterval(() => {
-	 			getUnreadMessageInfo();
+
 			}, 1000);
 	 	}
 
@@ -96,7 +96,7 @@
 
 	 	//페이지가 로드되는 시점 한 번만 출력하면 되는 div, img를 출력하는 메서드
 	 	function addChatDivImg(idx) {
-	 			$(document.body).append('<div class= chatMessageInfo' + idx + '><div class="wrapSellerTitle' +
+	 			$('#wrapper').append('<div class= chatMessageInfo' + idx + '><div class="wrapSellerTitle' +
 	 					idx +
 	 					'"></div></div>');
 	 	}

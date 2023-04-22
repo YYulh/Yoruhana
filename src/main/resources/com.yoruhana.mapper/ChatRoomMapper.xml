@@ -91,4 +91,19 @@
         where
         id = #{read}
     </select>
+
+    <select id="getFile" resultType="String" parameterType="String">
+        select mb_file from members
+        where mb_nick = #{nick}
+    </select>
+
+    <update id="last_chat" parameterType="String" >
+        UPDATE chat_chatroom
+        SET last_chat = #{content}
+        WHERE id = #{id};
+    </update>
+
+    <select id="getLast_chat" parameterType="int" resultType="String">
+        select last_chat from chat_chatroom where id = #{id}
+    </select>
 </mapper>

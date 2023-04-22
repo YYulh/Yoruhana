@@ -42,4 +42,7 @@ public interface ChatRoomMapper {
     public List<ChatList> findByNick(@Param("nick")String nick);
     public int countByChatNick(@Param("mb_nick_a")String mb_nick_a, @Param("mb_nick_b")String mb_nick_b);
     public ChatRoom chatInfo(int read);
+    public String getFile(String nick);
+  public void last_chat(String id,String content);
+  public String getLast_chat(int id);
 }
