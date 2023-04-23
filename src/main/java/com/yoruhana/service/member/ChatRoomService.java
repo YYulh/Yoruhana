@@ -114,7 +114,6 @@ public class ChatRoomService implements ChatRoomMapper {
 
     //no connection with DB
     public void appendMessage(ChatRoom chatRoom) throws IOException {
-        System.out.println("appendMessage 들어옴");
         // 파일업로드 상대경로 추출
         String fileUploadPath = applicationContext.getResource("classpath:/static").getFile().getAbsolutePath();;
         //String fileUploadPath = "D:\\gtu_spring_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\RegenKids\\resources\\";
@@ -143,6 +142,7 @@ public class ChatRoomService implements ChatRoomMapper {
         System.out.println("senderEmail: "+ senderNick);
         System.out.println("mb_nick_b: "+ chatRoom.getMb_nick_b());
         System.out.println(senderNick.equals(chatRoom.getMb_nick_b()));
+
         if (senderNick.equals(chatRoom.getMb_nick_b())) {
             updateChatReadBuy(chatRoom.getId(), 0);
         } else {
@@ -208,5 +208,8 @@ public class ChatRoomService implements ChatRoomMapper {
     }
     public String getLast_chat(int id){
         return chatRoomMapper.getLast_chat(id);
+    }
+    public void update_chat(String id, String formatedNow){
+        chatRoomMapper.update_chat(id, formatedNow);
     }
 }

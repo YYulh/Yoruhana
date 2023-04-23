@@ -115,11 +115,12 @@
     border: 1px solid #ccc;
     width: 80%;
     max-width: 500px;
-    border-radius: 5px;
+    border-radius: 10px;
     position: relative;
     margin-top:3%;
     border: 1px solid #ddd;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index:5;
   }
 
   .close {
@@ -162,7 +163,7 @@
   border-radius: 12px;
   align:center;
   margin:auto;
-  margin-top:0px;
+  margin-top: 20px;
   width:70%;
 }
 /* 페이징 */
@@ -195,4 +196,31 @@ font-weight:bold;
   color: #fff;
   background-color: #555;
   border-color: #555;
+}
+#head{
+    background-color: #A2D9CE;
+    color: #fff;
+    width: 760px;
+    height: 50px;
+    margin: auto;
+    border-radius: 5px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: xx-large;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    opacity: 0.8;
+}
+#total{
+margin-left: 260px;
+    margin-bottom: 15px;
+    background-color: #A2D9CE;
+    color: #fff;
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 1px;
 }

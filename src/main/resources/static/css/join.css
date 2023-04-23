@@ -9,12 +9,7 @@ input[type="button"] {
   border: none;
 
 }
-#head {
-  font-size: 30px;
-  font-weight: bold;
-  color: black;
-  text-shadow: 2px 2px 2px white;
-}
+
 
 #section {
   background-color: #fff;
@@ -23,7 +18,7 @@ input[type="button"] {
   align:center;
   margin:auto;
   margin-top:30px;
-  width:50%;
+  width:51%;
 }
 th {
   padding: 10px;
@@ -63,7 +58,8 @@ th {
   input[type="text"],
   input[type="password"],
   input[type="number"],
-  select {
+  #mb_country
+{
     padding: 10px;
     width: 97%;
     border-radius: 5px;
@@ -78,18 +74,28 @@ th {
    border-collapse: collapse;
   }
 
-#head {
-  font-size: 30px;
-  font-weight: bold;
-  color: black;
-  text-shadow: 2px 2px 2px white;
-}
-
 /* 중복확인 버튼 스타일 */
 #mb_nick + input[type="button"] {
   background-color: #A2D9CE;
   color: #fff;
   border: none;
+}
+#head{
+    background-color: #A2D9CE;
+    color: #fff;
+    width: 850px;
+    height: 50px;
+    margin: auto;
+    border-radius: 5px;
+    margin-bottom: 50px
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: xx-large;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    opacity: 0.8;
+    font-weight:bold;
+    margin-bottom:30px;
 }
 
 

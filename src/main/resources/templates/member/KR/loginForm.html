@@ -62,7 +62,17 @@
 
 </body>
 <script>
+        var loginGo = document.getElementById('mb_pw');
+		loginGo.addEventListener('keyup', function enterSend(event) {
 
+			if (event.keyCode === null) {
+				event.preventDefault();
+			}
+
+			if (event.keyCode === 13) {
+				loginCheck();
+			}
+		});
 
 function loginCheck() {
 let f = document.form1;

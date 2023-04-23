@@ -24,7 +24,7 @@
 
   .target_mb_file{
   width:100%;
-  height:45px;
+  height:60px;
   object-fit:cover;
   }
 
@@ -37,7 +37,7 @@
 
   .chat_target_mb_file{
   width:100%;
-  height:60px;
+  height:45px;
   object-fit:cover;
   }
   .chatMessageInfo{
@@ -109,11 +109,83 @@ justify-content:space-between;
   justify-content:space-between;
 
   }
+.chatbox {
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 0 5px 5px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width:600px;
+}
+#chatNick{
+    background-color: #A2D9CE;
+    color: #fff;
+    width: 920px;
+    height: 50px;
+    margin: auto;
+    border-radius: 5px;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: xx-large;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    opacity: 0.8;
+}
+    #side_menu{
+    display: flex;
+    position: absolute;
+    top: 82px;
+    left: 265px;
+    justify-content: space-around;
+    width: 320px;
+    }
+    #notice{
+    border-radius: 10px;
+    width: 300px;
+    background-color: #A2D9CE;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    }
 
-
+    .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 15%;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  .modal_btn{
+  margin-left: 7px;
+  margin-right: 7px;
+  width: 100px;
+  }
 </style>
 <body>
 <div th:insert = "~{common/header :: header}"></div>
+
+<div id="chatNick"  th:text="${chatRoomInfo.mb_nick_a}"></div>
 
 <div id="section" align = "center">
 <input type="hidden" th:value="${mb_nick}" id="mb_nick"/>
@@ -125,6 +197,7 @@ justify-content:space-between;
   <div id="wrapper">
 
   </div>
+
 </div>
 
 
@@ -133,13 +206,16 @@ justify-content:space-between;
 <div class="chatbox"  >
   <!-- 채팅 내용 -->
   <div id="content">
-    <div th:each="chatRoom : ${chatHistory}">
+  <div id="notice">
+    채팅방이 생성되었습니다.
+  </div>
+    <div th:each="chatRoom : ${chatHistory}" >
       <th:block th:if="${chatRoom.senderName == mb_name}" class="chat_content">
         <div class="chatbox_messages">
           <div class="chatbox_messageBox" style="text-align:right">
             <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}" style="margin-inline-start: auto;"></div>
-            <div class="chatRoomSendTime" th:text="${chatRoomRead.chatRead_b == 1 ? '읽음' : ''} + '&nbsp;' + ${chatRoom.sendTime}" th:if="${mb_nick} == ${chatRoomInfo.mb_nick_a}"></div>
-            <div class="chatRoomSendTime" th:text="${chatRoomRead.chatRead_a == 1 ? '읽음' : ''} + '&nbsp;' + ${chatRoom.sendTime}" th:if="${mb_nick} == ${chatRoomInfo.mb_nick_b}"></div>
+            <div class="chatRoomSendTime" th:text="${chatRoomRead.chatRead_b == 1 ? '읽음' : '읽지않음'} + '&nbsp;' + ${chatRoom.sendTime}" th:if="${mb_nick} == ${chatRoomInfo.mb_nick_a}"></div>
+            <div class="chatRoomSendTime" th:text="${chatRoomRead.chatRead_a == 1 ? '읽음' : '읽지않음'} + '&nbsp;' + ${chatRoom.sendTime}" th:if="${mb_nick} == ${chatRoomInfo.mb_nick_b}"></div>
 
           </div>
         </div>
@@ -168,7 +244,15 @@ justify-content:space-between;
       <div class="chatbox__tooltip chatbox__tooltip--bottom">
         <input type="button" id="send_btn" class="button"  th:onclick="send()" value="전송하기">
       </div>
+      <div id="side_menu">
+        <input type="button" value="친구신청" class="button">
+        <input type="button" value="신고하기" class="button">
+        <input type="button" value="나가기" class="button" onclick="exit();">
+      </div>
     </div>
+
+
+
     <input type="hidden" th:value="${chatRoomInfo.mb_nick_a}" id="mb_nick_a" />
     <input type="hidden" th:value="${chatRoomInfo.mb_name_a}" id="mb_name_a" />
     <input type="hidden" th:value="${chatRoomInfo.id}" id="id" />
@@ -184,11 +268,64 @@ justify-content:space-between;
 </div>
   <!-- 채팅 내용 끝 -->
 
+<!--모달-->
+<div id="exit_modal" align="center" class="modal">
+  <div class="modal-content">
+    <div th:text="${chatRoomInfo.mb_nick_a} + '님과의 채팅을 종료합니다'"></div>
+    <div>
+      <input type="button" value="확인" onclick="delete_room();" class="modal_btn">
+      <input type="button" value="취소" onclick="close_exit();" class="modal_btn">
+    </div>
+
+  </div>
+</div>
+
 <!-- Footer 고정 Nav 버튼 -->
 
 <div th:insert = "~{common/footer :: footer}"></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:inline="javascript">
+function delete_room(){
+var roomId = document.getElementById("id").value;
+
+location.href="/deleteRoom.do?id=" + roomId;
+
+}
+
+function exit(){
+  var modal = document.getElementById("exit_modal");
+
+  let opacity = 0;
+   modal.style.opacity = 0;
+  modal.style.display = 'block';
+
+  const timer = setInterval(() => {
+    opacity += 0.34;
+    modal.style.opacity = opacity;
+    if (opacity >= 1) {
+      clearInterval(timer);
+    }
+  }, 50);
+};
+
+ function close_exit(){
+  var modal = document.getElementById("exit_modal");
+  let opacity = 1;
+
+const timer = setInterval(() => {
+
+  opacity -= 0.34;
+  modal.style.opacity = opacity;
+  if (opacity <= 0) {
+    clearInterval(timer);
+
+   setTimeout(() => {
+      modal.style.display = 'none';
+    }, 100);
+  }
+}, 50);
+}
+
 
 	function scroll_go(){
 $('#content').scrollTop($('#content')[0].scrollHeight);
@@ -250,9 +387,11 @@ $('#content').scrollTop($('#content')[0].scrollHeight);
 
 		function send() {
         var content_origin = document.getElementsByName('message')[0];
-         var content_value = content_origin.value;
+        var content_value = content_origin.value;
+		var content = content_value.replace(/(<([^>]+)>)/ig,"");
+        var roomId = 'message_list' + id ;
 
-			var content = content_value.replace(/(<([^>]+)>)/ig,"");
+        document.getElementById(roomId).innerText = content;
 
 			sendBroadcast({
 				'id': id,
@@ -266,8 +405,10 @@ $('#content').scrollTop($('#content')[0].scrollHeight);
 				});
 
 			 insert_lastChat_ajax(content);
-
 			 document.getElementsByName('message')[0].value = " ";
+			 document.getElementById('message').focus();
+
+
 		}
 
           function insert_lastChat_ajax(content){
@@ -299,11 +440,11 @@ $('#content').scrollTop($('#content')[0].scrollHeight);
 
 
 if($('#mb_nick').val() == $('#mb_nick_b').val()){
-var chatRead = $('#chatRoomRead.chatRead_a').val() == 1 ? '읽음': '';
+var chatRead = $('#chatRoomRead.chatRead_a').val() == 1 ? '읽음': '읽지않음';
 }
 
 if($('#mb_nick').val() == $('#mb_nick_a').val()){
-var chatRead = $('#chatRoomRead.chatRead_b').val() == 1 ? '읽음': '';
+var chatRead = $('#chatRoomRead.chatRead_b').val() == 1 ? '읽음': '읽지않음';
 }
 
 		function createTextNode(messageObj) {
@@ -432,13 +573,13 @@ $(window).ready(initialize());
 						 var parsed = JSON.parse(data);
 						 var length = parsed.chatList.length;
 
+
+
 						 for (var i = 0; i < length; i++) {
 							$('.wrapSellerTitle' + i).html('');
-						 	addChatList(parsed.chatList[i].senderName, parsed.chatList[i].users_title, parsed.chatList[i].messageUnread, parsed.chatList[i].id, parsed.chatList[i].file,  parsed.chatList[i].last_chat);
+						 	addChatList(parsed.chatList[i].senderName,parsed.chatList[i].senderNick, parsed.chatList[i].users_title, parsed.chatList[i].messageUnread, parsed.chatList[i].id, parsed.chatList[i].file,  parsed.chatList[i].last_chat);
 						 }
-						 var content_memo = contentNum.value;
-                         var roomId = $('#id').val();
-                         $('#message_list' + roomId).empty().text(content_memo);
+
 					 }
 			 });
 		 }
@@ -448,15 +589,15 @@ $(window).ready(initialize());
 	 		setInterval(() => {
 	 			getUnreadMessageInfo();
 
-			}, 100000);
+			}, 300);
 	 	}
 
 
 
 	 	//일정 간격으로 업데이트된 데이터를 화면에 출력하는 메서드 됨
-	 	function addChatList(senderName, users_title, messageUnread, roomId, file, last_chat) {
+	 	function addChatList(senderName,senderNick, users_title, messageUnread, roomId, file, last_chat) {
 
-         var url = "/chatMessage.do?nick2="+ senderName;
+         var url = "/chatMessage.do?nick2="+ senderNick;
 	 		var str =
 	 		"<a href='" + url + "' class = chatbox_1>" +
 	 		'<div class="img_box"><div>' +
@@ -466,10 +607,10 @@ $(window).ready(initialize());
             "' class ='target_mb_file' name = 'target_mb_file'" +
             '></div>' +
 	 		'</div><h4><div class="unReadBox"><div class="senderName">' +
-	 		senderName +
+	 		senderNick +
 	 		'&nbsp;</div><span class ="unReadMessage">' + messageUnread +
 	 		'</span></div><p id= message_list' + roomId +
-	 		' class = message_list >' +
+	 		' class = message_list>' +
 	 		last_chat +
 	 		'</p></h4></div></a>';
 
@@ -478,9 +619,6 @@ $(window).ready(initialize());
 
 	 	}
 
-
-
-
 	 	//페이지가 로드되는 시점 한 번만 출력하면 되는 div, img를 출력하는 메서드
 	 	function addChatDivImg(roomId) {
 	 			$('#wrapper').append('<div class= chatMessageInfo1'+
@@ -488,6 +626,7 @@ $(window).ready(initialize());
 	 			roomId +
 	 			'"></div></div>');
 	 	}
+
 
 	</script>
 </body>

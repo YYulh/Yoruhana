@@ -37,8 +37,28 @@
         update members set mb_file = #{mb_file}, mb_prof_stat = #{mb_prof_stat}, mb_prof_content = #{mb_prof_content} where mb_no = #{mb_no}
     </update>
 
-    <select id="searchPenpalList" parameterType="int" resultType="com.yoruhana.entity.MemberVO">
-        SELECT * FROM members WHERE mb_prof_stat = 0 and mb_stat =0 limit #{start},#{limit}
+    <select id="searchPenpalList" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
+        SELECT * FROM members WHERE
+        <if test="searchSex != null and searchSex == 0">
+            mb_sex = "남" and
+        </if>
+        <if test="searchSex != null and searchSex == 1">
+            mb_sex = "여" and
+        </if>
+        <if test="searchCountry != null and searchCountry == 0 and searchCountry != 99">
+            mb_country = "Japan" and
+        </if>
+        <if test="searchCountry != null and searchCountry == 1 and searchCountry != 99">
+            mb_country = "South,Korea" and
+        </if>
+        <if test="searchPic != null and searchPic ==0 and searchPic != 99">
+            mb_file = "" or mb_file = null or mb_file = "person-circle.svg" and
+        </if>
+        <if test="searchPic != null and searchPic ==1 and searchPic != 99">
+            mb_file != "" and mb_file is not null and mb_file != "person-circle.svg" and
+        </if>
+         mb_prof_stat = 0 and mb_stat =0 order by mb_recent desc limit #{start},#{limit}
+
     </select>
 
     <select id = "getTotal" resultType="int">
@@ -48,4 +68,21 @@
     <select id="getInfo_Nick" parameterType="String" resultType="com.yoruhana.entity.MemberVO">
         select * from members where mb_nick = #{mb_nick_a}
     </select>
+
+    <select id="getMbSee" parameterType="int" resultType="int">
+        select mb_see from members
+        where mb_no =#{mb_no}
+    </select>
+
+    <update id="increaseSee" parameterType="int" >
+        update members set mb_see = #{total} where mb_no=#{mb_no}
+    </update>
+
+    <update id="loginTime" parameterType="String">
+        update members set mb_recent = #{loginT} where mb_no =#{mb_no}
+    </update>
+
+    <delete id="deleteRoom" parameterType="int">
+        delete from chat_chatroom where id = #{id}
+    </delete>
 </mapper>

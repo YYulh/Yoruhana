@@ -3,6 +3,7 @@ package com.yoruhana.entity;
 import lombok.Data;
 
 import java.sql.Blob;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -29,14 +30,19 @@ public class MemberVO {
     private String mb_bir2;
     private String mb_bir3;
     private int mb_see;
-    private String mb_ptn_name;
-    private String mb_ptn_email;
-    private String mb_ptn_nick;
-    private Date mb_ptn_con_date;
     private String mb_sex;
     private int mb_agree1;
     private int mb_agree2;
+    private Timestamp mb_recent;
 
+    //------------검색----------
+    private String start_old;
+    private String end_old;
+    private String searchSex;
+    private String searchCountry;
+    private String searchPic;
+    private int start;
+    private int limit;
 
 
 }

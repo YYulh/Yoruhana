@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Broadcast Product</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="/css/test.css" />
+
+
+</head>
+
+<style>
+
+
+  .img_box {
+  width:60px;
+  height:60px;
+  border-radius:70%;
+  overflow:hidden;
+  }
+
+  .target_mb_file{
+  width:100%;
+  height:60px;
+  object-fit:cover;
+  }
+
+ .chat_img_box {
+  width:45px;
+  height:45px;
+  border-radius:70%;
+  overflow:hidden;
+  }
+
+  .chat_target_mb_file{
+  width:100%;
+  height:45px;
+  object-fit:cover;
+  }
+  .chatMessageInfo{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 6px;
+  height: 60px;
+  border-radius: 5px;
+  margin: 5px;
+  text-align:center;
+  display:flex;
+  }
+  #wrapper{
+  height:100%;
+  width:100%;
+  border-radius: 5px 0 0 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  box-sizing: border-box;
+  }
+
+  #chatList_Box{
+  width:320px;
+  height:650px;
+  }
+
+  .chatbox_1{
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  vertical-align:center;
+  justify-content:space-between;
+  width:100%;
+  }
+
+  .message_list{
+  margin:0;
+  overflow:hidden;
+  height:39px;
+  color: #ccc;
+  font-weight:100;
+  text-align:left;
+  font-size: 14px;
+  }
+
+  h4{
+  width:200px;
+  max-width:200px;
+  }
+
+.unReadMessage{
+  color: #A2D9CE;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+  margin-right:5px;
+}
+
+.unReadBox{
+height:23px;
+display:flex;
+justify-content:space-between;
+
+}
+  .senderName{
+    text-align:left;
+  margin-bottom:3px;
+  color: black;
+  font-weight: 500;
+  display:flex;
+  justify-content:space-between;
+
+  }
+.chatbox {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 0 5px 5px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width:600px;
+}
+#message_img_box{
+    margin-top: 30%;
+    width: 160px;
+    height: 160px;
+    background: #A2D9CE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+#message_img{
+    width: 80%;
+    height: 80%;
+
+}
+</style>
+<body>
+<div th:insert = "~{common/header :: header}"></div>
+
+<div id="section" align = "center">
+    <input type="hidden" th:value="${mb_nick}" id="mb_nick"/>
+    <input type="hidden" th:value="${mb_name}" id="mb_name"/>
+    <input type="hidden" th:value="${mb_no}" id="mb_no"/>
+
+    <div id="chatList_Box" align="center" name = "chatList_Box">
+        <div id="wrapper">
+        </div>
+    </div>
+
+    <div>
+        <div class="chatbox"  >
+            <!-- 채팅 내용 -->
+            <div id="content">
+                <div id="message_img_box">
+                    <img src="/img/white_msaage.png" id="message_img">
+                </div>
+                <div>
+                    <input type="button" class = "button" value = "펜팔 친구 찾기" onclick="searchPenpal();">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 채팅 내용 끝 -->
+
+<!-- Footer 고정 Nav 버튼 -->
+
+<div th:insert = "~{common/footer :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+function searchPenpal(){
+    location.href="/searchPenpalForm.do";
+    return;
+}
+ /*<![CDATA[*/
+    var nick = /*[[${session.nick}]]*/;
+/*]]>*/
+
+
+$(window).ready(initialize());
+
+		function initialize() {
+			getChatList();
+			getUnreadMessageInfo();
+			unreadAlertInfinite();
+		}
+
+		//async(비동기)로 일정간격 업뎃되지 않아도 되는 img 파일을 불러옴
+		function getChatList() {
+			console.log("getChatList inprocess");
+			$.ajax({
+				url: "/chatList/ajax",
+				type: "POST",
+				data: JSON.stringify({
+					nick: nick
+				}),
+				contentType: "application/json",
+				//전달을 성공했을때 Controller로부터 data를 return 받아 처리해주는 메서드
+				success: function(data) {
+
+					 var parsed = JSON.parse(data);
+					 var length = parsed.chatList.length;
+					 for (var i = 0; i < length; i++) {
+
+					 var roomId = parsed.chatList[i].id;
+
+						 //채팅방 갯수만큼 반복문을 돌면서 채팅방 틀(div, img 태그)를 만들어줌
+						 addChatDivImg(roomId);
+					 }
+				}
+			});
+		}
+
+		 //async(비동기) 방식으로 일정간격 업데이트 되어야 하는 정보들(메세지 알림기능)
+		 function getUnreadMessageInfo() {
+
+				 $.ajax({
+					 url:"/chatUnreadMessageInfo/ajax",
+					 type: "POST",
+					 data: JSON.stringify({
+						 nick : nick
+					 }),
+					 contentType: "application/json",
+					 success: function(data) {
+
+						 var parsed = JSON.parse(data);
+						 var length = parsed.chatList.length;
+
+						 for (var i = 0; i < length; i++) {
+							$('.wrapSellerTitle' + i).html('');
+						 	addChatList(parsed.chatList[i].senderName,parsed.chatList[i].senderNick, parsed.chatList[i].users_title, parsed.chatList[i].messageUnread, parsed.chatList[i].id, parsed.chatList[i].file,  parsed.chatList[i].last_chat);
+						 }
+
+					 }
+			 });
+		 }
+
+		 //1000milliseconds(==1초) 간격으로 getUnreadMessageInfo()를 실행시키는 반복 메서드
+	 	function unreadAlertInfinite() {
+	 		setInterval(() => {
+	 			getUnreadMessageInfo();
+
+			}, 300);
+	 	}
+
+
+
+	 	//일정 간격으로 업데이트된 데이터를 화면에 출력하는 메서드 됨
+	 	function addChatList(senderName,senderNick, users_title, messageUnread, roomId, file, last_chat) {
+
+         var url = "/chatMessage.do?nick2="+ senderNick;
+	 		var str =
+	 		"<a href='" + url + "' class = chatbox_1>" +
+	 		'<div class="img_box"><div>' +
+            "<img src='" +
+            '/upload/' +
+            file +
+            "' class ='target_mb_file' name = 'target_mb_file'" +
+            '></div>' +
+	 		'</div><h4><div class="unReadBox"><div class="senderName">' +
+	 		senderNick +
+	 		'&nbsp;</div><span class ="unReadMessage">' + messageUnread +
+	 		'</span></div><p id= message_list' + roomId +
+	 		' class = message_list>' +
+	 		last_chat +
+	 		'</p></h4></div></a>';
+
+	 		//HTML화면의 <div class="wrapSellerTitle0,1,...etc"> 하위에 str 변수를 추가해준다.
+	 		 $('.wrapSellerTitle' + roomId).empty().append(str);
+
+	 	}
+
+	 	//페이지가 로드되는 시점 한 번만 출력하면 되는 div, img를 출력하는 메서드
+	 	function addChatDivImg(roomId) {
+	 			$('#wrapper').append('<div class= chatMessageInfo1'+
+	 			'><div class="chatMessageInfo wrapSellerTitle' +
+	 			roomId +
+	 			'"></div></div>');
+	 	}
+
+	</script>
+</body>
+
+
+
+</html>

@@ -15,8 +15,12 @@ public interface MemberMapper {
     List<MemberVO> getProfPic(int mb_no);
     int mypageUpdate(MemberVO vo);
     int updateProfile(MemberVO vo);
-    List<MemberVO> searchPenpalList(int start,int limit);
+    List<MemberVO> searchPenpalList(MemberVO vo);
     int getTotal();
     MemberVO getInfo_Nick(String mb_nick_a);
+    int getMbSee(int mb_no);
+    void increaseSee(int mb_no, int total);
+    void loginTime(String mb_no,String loginT);
+    void deleteRoom(int id);
 }
 

@@ -2,13 +2,11 @@ package com.yoruhana.controller;
 
 import com.yoruhana.entity.MemberVO;
 import com.yoruhana.service.member.MemberService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
@@ -18,10 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static jdk.nashorn.internal.objects.NativeDate.now;
 
@@ -115,6 +110,11 @@ public class MemberController {
         boolean check = false;
 
         if (vo != null) {
+            Date now = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+            String loginT = formatter.format(now);
+            String mb_no = String.valueOf(vo.getMb_no());
+            memberService.loginTime(mb_no,loginT);
 
             check = true;
             session.setAttribute("login",vo);
@@ -295,9 +295,6 @@ public class MemberController {
         } else {
 
             int mb_no = (Integer) session.getAttribute("no");
-
-            System.out.println(mb_no);
-
             vo = memberService.getInfo(mb_no); //회원정보
         }
         String str = vo.getMb_tel();
@@ -377,7 +374,7 @@ public class MemberController {
     }
 
     @PostMapping("/profileUpdate.do")
-    public String profileUpdate(MemberVO vo, HttpServletRequest request,@RequestParam("file") MultipartFile photo){
+    public String profileUpdate(MemberVO vo, HttpServletRequest request,@RequestParam("file") MultipartFile photo) {
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute("lang");
         String msg = "";
@@ -449,7 +446,7 @@ public class MemberController {
         return "common/result";
     }
     @GetMapping("/searchPenpalForm.do")
-    public String searchPenpalForm(Model model,HttpServletRequest request,Integer start, Integer limit){
+    public String searchPenpalForm(Model model,HttpServletRequest request,Integer start, Integer limit,MemberVO vo) throws NullPointerException{
 
         HttpSession session = request.getSession();
         String lang = (String) session.getAttribute("lang");
@@ -461,13 +458,29 @@ public class MemberController {
             limit = 8;
         }
 
+        System.out.println("시작나이:" + vo.getStart_old());
+        System.out.println("끝나이:" + vo.getEnd_old());
+        System.out.println("성별:" + vo.getSearchSex());
+        System.out.println("사진유무:" + vo.getSearchPic());
+        System.out.println("국적:" + vo.getSearchCountry());
+
         //현재 페이지
         int nowPage = (start) / limit + 1;
 
-        List<MemberVO> list = memberService.searchPenpalList(start,limit);
+        vo.setStart(start);
+        vo.setLimit(limit);
+
+        List<MemberVO> list;
+
+         list = memberService.searchPenpalList(vo);
+
 
         //총 글의 개수
         int total = memberService.getTotal();
+
+        if(session.getAttribute("no") !=null){
+            total =total-1;
+        }
         int totalPage = total % limit == 0 ? total / limit : total / limit + 1;
 
         for(int i = 0; i <list.size(); i++){
@@ -491,5 +504,31 @@ public class MemberController {
         model.addAttribute("limit",limit);
 
         return "member/"+lang + "/searchPenpal";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/increase_see.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+    public void chatListUnread(@RequestBody String json, HttpSession session) {
+
+        JSONObject jsn = new JSONObject(json);
+
+        int mb_no = (int) jsn.get("mb_no");
+
+        int see = memberService.getMbSee(mb_no);
+
+        int total = see + 1;
+        memberService.increaseSee(mb_no,total);
+
+    }
+
+    @GetMapping("/deleteRoom.do")
+    public String deleteRoom(HttpServletRequest request,int id){
+
+        HttpSession session = request.getSession();
+        String lang = (String)request.getSession().getAttribute("lang");
+
+        memberService.deleteRoom(id);
+
+        return "chat/"+ lang + "/chatBasic";
     }
 }

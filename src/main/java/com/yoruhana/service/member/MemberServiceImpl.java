@@ -36,9 +36,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int updateProfile(MemberVO vo){return memberMapper.updateProfile(vo);}
     @Override
-    public List<MemberVO> searchPenpalList(int start,int limit){return memberMapper.searchPenpalList(start,limit);}
+    public List<MemberVO> searchPenpalList(MemberVO vo){return memberMapper.searchPenpalList(vo);}
     @Override
     public int getTotal(){return memberMapper.getTotal();}
     @Override
     public MemberVO getInfo_Nick(String mb_nick_a){return memberMapper.getInfo_Nick(mb_nick_a);}
+    @Override
+    public int getMbSee(int mb_no){return memberMapper.getMbSee(mb_no);};
+    @Override
+    public void increaseSee(int mb_no,int total){memberMapper.increaseSee(mb_no,total);}
+    @Override
+    public void loginTime(String mb_no, String loginT){memberMapper.loginTime(mb_no,loginT);}
+    @Override
+    public void deleteRoom(int id){memberMapper.deleteRoom(id);}
 }

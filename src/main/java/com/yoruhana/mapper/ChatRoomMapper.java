@@ -45,4 +45,5 @@ public interface ChatRoomMapper {
     public String getFile(String nick);
   public void last_chat(String id,String content);
   public String getLast_chat(int id);
+  public void update_chat(String id, String formatedNow);
 }

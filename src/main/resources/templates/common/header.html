@@ -10,7 +10,7 @@
 
 <body>
     <div id = "header" align="center">
-        <div>
+        <div style="height:120px;">
             <h3 id="logo"><a href = "/"><img src="/img/main.png" style="width:230px;"></a></h3>
         </div>
         <div id="title" th:text="${session.title}"></div>
@@ -21,8 +21,16 @@
                 <li th:if="${session.nick}==null"><a href = "/joinForm.do">Join</a></li>
                 <li><a>Ground</a></li>
                 <li><a href="/searchPenpalForm.do">SearchPenpal</a></li>
-                <li><a href="/chatList.do">ChatList</a></li>
-                <li><a><img src="/img/bell.svg" id="bell"></a></li>
+                <li><a href="/chatBasic.do">Mesaage</a></li>
+                <li><a><img src="/img/bell.svg" id="bell"></a>
+
+                    <ul id="drop1" >
+                        <li><a href="#">알림1</a></li>
+                        <li><a href="#">알림2</a></li>
+                        <li><a href="#">알림3</a></li>
+                    </ul>
+
+                </li>
                 <li id="drop_li">
                     <div id="img_box_header">
                         <a href="#" id ="menu" th:if ="${session.file}==null or ${session.file}==''" class ="menu">
@@ -32,7 +40,7 @@
                             <img th:src="@{/upload/} + ${session.file}" id="mb_file" class ="menu">
                         </a>
                     </div>
-                    <ul id="drop1" >
+                    <ul id="drop2" >
                         <li th:if="${session.no} != null"><a href="/profile.do">Profile</a></li>
                         <li th:if="${session.no} != null"><a href="/mypageCon.do" >Mypage</a></li>
                         <li th:if="${session.no} != null"><a href="/logout.do" >Logout</a></li>
@@ -48,7 +56,7 @@
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+<script th:inline="javascript">
 
 	function googleTranslateElementInit() {
 		new google.translate.TranslateElement({
@@ -60,8 +68,16 @@
 	};
 
 	$(function(){
-        $(".menu").click(function(){
+        $("#bell").click(function(){
            $("#drop1").slideToggle();
+            $("#drop2").slideUp();
+        });
+     });
+
+     $(function(){
+        $(".menu").click(function(){
+           $("#drop2").slideToggle();
+           $("#drop1").slideUp();
         });
      });
 

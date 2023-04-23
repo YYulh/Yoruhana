@@ -2,6 +2,7 @@ package com.yoruhana.entity;
 
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 @Data
 public class ChatList {
@@ -21,6 +22,7 @@ public class ChatList {
     private String content;
     private String fileName;
     private int chatRoomRead;
+    private Timestamp  updateDate;
 
     public ChatList() {
         // TODO Auto-generated constructor stub

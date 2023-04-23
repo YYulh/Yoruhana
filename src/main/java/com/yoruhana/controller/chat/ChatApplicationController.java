@@ -6,6 +6,7 @@ import com.yoruhana.entity.ChatRoom;
 import com.yoruhana.entity.MemberVO;
 import com.yoruhana.service.member.ChatRoomService;
 import com.yoruhana.service.member.MemberService;
+import org.apache.ibatis.jdbc.Null;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,12 @@ public class ChatApplicationController {
     // 채팅으로 매칭연결 하기(view detail 화면)
     @RequestMapping(value = "/chatMessage.do", method = RequestMethod.GET)
     public String getWebSocketWithSockJs(Model model, String nick2, HttpServletRequest request)
-            throws IOException {
+            throws IOException  {
 
         // productInfo화면에서 Chat화면에 전달해줄 parameter
         HttpSession session = request.getSession();
+        String lang = (String) session.getAttribute("lang");
+
          int session_mb_no = (int) session.getAttribute("no");
         String session_mb_nick = (String) session.getAttribute("nick");
         String session_mb_name = (String) session.getAttribute("name");
@@ -133,7 +136,8 @@ public class ChatApplicationController {
         model.addAttribute("target_nick", mb_nick_a);
         model.addAttribute("target_user_name", target_mb_name);
         model.addAttribute("target_mb_file",target_mb_file);
-        return "chatBroadcastProduct";
+
+        return "chat/"+ lang + "/chatBroadcastProduct";
     }
 
     @MessageMapping("/broadcast")
@@ -244,13 +248,16 @@ public class ChatApplicationController {
 
     @RequestMapping(value = "/chatUnreadMessageInfo/ajax", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
     @ResponseBody
-    public String chatListUnread(@RequestBody String json, HttpSession session) {
+    public String chatListUnread(@RequestBody String json, HttpSession session)  {
 
         JSONObject jsn = new JSONObject(json);
         // JSON.get([mapped name])으로 value 추출하기
         String nick = (String) jsn.get("nick");
         // email에 해당되는 모든 chatRoom select 받기
         List<ChatList> chatRoomList = chatRoomService.findByNick(nick);
+
+
+
         // chatRoom 정보는 JSON Array에 저장됨
         JSONArray ja = new JSONArray();
         // email에 해당되는 읽지 않은 chatRoom select 받기
@@ -260,6 +267,7 @@ public class ChatApplicationController {
         String last_chat = "";
 
         for (ChatList chatList : chatRoomList) {
+
             // chatRoom 정보를 JSON Object에 put 해줌. chatRoom이 반복문에서 넘어갈 때마다 객체 초기화
             JSONObject jo = new JSONObject();
             jo.put("id",chatList.getId());
@@ -267,15 +275,16 @@ public class ChatApplicationController {
 
             last_chat = chatRoomService.getLast_chat(chatList.getId());
             jo.put("last_chat",last_chat);
+
             // 리스트에 출력할 상대방 닉네임 확인
             if (chatList.getMb_nick_a().equals(nick)) {
                 jo.put("senderName", chatList.getMb_name_b());
-
+                jo.put("senderNick",chatList.getMb_nick_b());
                 file = chatRoomService.getFile(chatList.getMb_nick_b());
                 jo.put("file",file);
             } else {
                 jo.put("senderName", chatList.getMb_name_a());
-
+                jo.put("senderNick",chatList.getMb_nick_a());
                 file = chatRoomService.getFile(chatList.getMb_nick_a());
                 jo.put("file",file);
             }
@@ -339,6 +348,19 @@ public class ChatApplicationController {
         String content = (String)jsn.get("content");
         String id = (String) jsn.get("id");
 
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        String formatedNow = formatter.format(now);
+
         chatRoomService.last_chat(id, content);
+        chatRoomService.update_chat(id,formatedNow);
+    }
+
+    @RequestMapping("/chatBasic.do")
+    public String chatBasic (HttpServletRequest request){
+    HttpSession session = request.getSession();
+    String lang = (String)request.getSession().getAttribute("lang");
+
+    return "chat/" +lang +"/chatBasic";
     }
 }
