@@ -45,11 +45,14 @@
         <if test="searchSex != null and searchSex == 1">
             mb_sex = "여" and
         </if>
-        <if test="searchCountry != null and searchCountry == 0 and searchCountry != 99">
+       <!-- <if test="searchCountry != null and searchCountry == 0 and searchCountry != 99">
             mb_country = "Japan" and
         </if>
         <if test="searchCountry != null and searchCountry == 1 and searchCountry != 99">
             mb_country = "South,Korea" and
+        </if>-->
+        <if test='searchCountry != null and searchCountry != "99"'>
+            mb_country = #{searchCountry} and
         </if>
         <if test="searchPic != null and searchPic ==0 and searchPic != 99">
             mb_file = "" or mb_file = null or mb_file = "person-circle.svg" and

@@ -381,7 +381,8 @@ public class MemberController {
         String url = "/profile.do";
         //--------------------------------------
         //파일을 저장할 경로
-        String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        //String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        String savePath = "C:\\Users\\gtu\\Desktop\\storage\\";
         String filename = null;
 
 

@@ -44,5 +44,7 @@ public class MemberVO {
     private int start;
     private int limit;
 
+    public MemberVO() {
+    }
 
 }
