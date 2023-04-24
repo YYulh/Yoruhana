@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static java.lang.String.valueOf;
 import static jdk.nashorn.internal.objects.NativeDate.now;
 
 @Controller
@@ -43,6 +44,16 @@ public class MemberController {
         String msg = "";
         String url = "";
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+
+        String mb_bir = (vo.getMb_bir1() + vo.getMb_bir2() + vo.getMb_bir3());
+        int parse = ((Integer.parseInt(strToday) - Integer.parseInt(mb_bir)) / 10000);
+        vo.setMb_old(parse);
+        System.out.println("old:" + parse);
+System.out.println("old:" + vo.getMb_old());
         int result = memberService.insertJoin(vo);
         if (result != 0) {
             msg = "회원가입에 성공하였습니다";
@@ -113,7 +124,7 @@ public class MemberController {
             Date now = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
             String loginT = formatter.format(now);
-            String mb_no = String.valueOf(vo.getMb_no());
+            String mb_no = valueOf(vo.getMb_no());
             memberService.loginTime(mb_no,loginT);
 
             check = true;
@@ -309,7 +320,7 @@ public class MemberController {
         Calendar c1 = Calendar.getInstance();
         String strToday = sdf.format(c1.getTime());
         int parse = ((Integer.parseInt(strToday) - Integer.parseInt(vo.getMb_bir())) / 10000);
-        String mb_bir = String.valueOf(parse);
+        String mb_bir = valueOf(parse);
         vo.setMb_bir(mb_bir);
 
         request.setAttribute("vo", vo);
@@ -459,12 +470,6 @@ public class MemberController {
             limit = 8;
         }
 
-        System.out.println("시작나이:" + vo.getStart_old());
-        System.out.println("끝나이:" + vo.getEnd_old());
-        System.out.println("성별:" + vo.getSearchSex());
-        System.out.println("사진유무:" + vo.getSearchPic());
-        System.out.println("국적:" + vo.getSearchCountry());
-
         //현재 페이지
         int nowPage = (start) / limit + 1;
 
@@ -474,6 +479,7 @@ public class MemberController {
         List<MemberVO> list;
 
          list = memberService.searchPenpalList(vo);
+
 
 
         //총 글의 개수
@@ -491,11 +497,17 @@ public class MemberController {
             String strToday = sdf.format(c1.getTime());
 
             int parse = ((Integer.parseInt(strToday) - Integer.parseInt(list.get(i).getMb_bir())) / 10000);
-            String mb_bir = String.valueOf(parse);
+            String mb_bir = valueOf(parse);
 
             list.get(i).setMb_bir(mb_bir);
 
         }
+
+        model.addAttribute("start_old",vo.getStart_old());
+        model.addAttribute("end_old",vo.getEnd_old());
+        model.addAttribute("searchSex",vo.getSearchSex());
+        model.addAttribute("searchCountry",vo.getSearchCountry());
+        model.addAttribute("searchPic",vo.getSearchPic());
 
         model.addAttribute("start", start);
         model.addAttribute("nowPage", nowPage);

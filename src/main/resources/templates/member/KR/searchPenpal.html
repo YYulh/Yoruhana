@@ -30,7 +30,7 @@
     align-items: center;
     justify-content: center;
     width: 60%;
-    margin-left: 236px;
+    margin: auto;
     margin-bottom: 40px;
     border-bottom: 1px solid #ccc;
     padding-bottom: 15px;
@@ -58,77 +58,77 @@
   <form name="form1" id = "search_box" action="/searchPenpalForm.do">
   <div class="searchName">나이 </div>
   <select name="start_old" class="searchSelect">
-    <option value="0" selected>무관</option>
-    <option value="18">18</option>
-    <option value="19">19</option>
-    <option value="20">20</option>
-    <option value="21">21</option>
-    <option value="22">22</option>
-    <option value="23">23</option>
-    <option value="24">24</option>
-    <option value="25">25</option>
-    <option value="26">26</option>
-    <option value="27">27</option>
-    <option value="28">28</option>
-    <option value="29">29</option>
-    <option value="30">30</option>
-    <option value="31">31</option>
-    <option value="32">32</option>
-    <option value="33">33</option>
-    <option value="34">34</option>
-    <option value="35">35</option>
-    <option value="36">36</option>
-    <option value="37">37</option>
-    <option value="38">38</option>
-    <option value="39">39</option>
-    <option value="40">40</option>
+    <option value="0" th:selected="#{start_old} ==0">무관</option>
+    <option value="18" th:selected="#{start_old} ==18">18</option>
+    <option value="19" th:selected="#{start_old} ==19">19</option>
+    <option value="20" th:selected="#{start_old} ==20">20</option>
+    <option value="21" th:selected="#{start_old} ==21">21</option>
+    <option value="22" th:selected="#{start_old} ==22">22</option>
+    <option value="23" th:selected="#{start_old} ==23">23</option>
+    <option value="24" th:selected="#{start_old} ==24">24</option>
+    <option value="25" th:selected="#{start_old} ==25">25</option>
+    <option value="26" th:selected="#{start_old} ==26">26</option>
+    <option value="27" th:selected="#{start_old} ==27">27</option>
+    <option value="28" th:selected="#{start_old} ==28">28</option>
+    <option value="29" th:selected="#{start_old} ==29">29</option>
+    <option value="30" th:selected="#{start_old} ==30">30</option>
+    <option value="31" th:selected="#{start_old} ==31">31</option>
+    <option value="32" th:selected="#{start_old} ==32">32</option>
+    <option value="33" th:selected="#{start_old} ==33">33</option>
+    <option value="34" th:selected="#{start_old} ==34">34</option>
+    <option value="35" th:selected="#{start_old} ==35">35</option>
+    <option value="36" th:selected="#{start_old} ==36">36</option>
+    <option value="37" th:selected="#{start_old} ==37">37</option>
+    <option value="38" th:selected="#{start_old} ==38">38</option>
+    <option value="39" th:selected="#{start_old} ==39">39</option>
+    <option value="40" th:selected="#{start_old} ==40">40</option>
   </select> ~
   <select  name="end_old" class="searchSelect">
-    <option value="99" selected>무관</option>
-    <option value="18">18</option>
-    <option value="19">19</option>
-    <option value="20">20</option>
-    <option value="21">21</option>
-    <option value="22">22</option>
-    <option value="23">23</option>
-    <option value="24">24</option>
-    <option value="25">25</option>
-    <option value="26">26</option>
-    <option value="27">27</option>
-    <option value="28">28</option>
-    <option value="29">29</option>
-    <option value="30">30</option>
-    <option value="31">31</option>
-    <option value="32">32</option>
-    <option value="33">33</option>
-    <option value="34">34</option>
-    <option value="35">35</option>
-    <option value="36">36</option>
-    <option value="37">37</option>
-    <option value="38">38</option>
-    <option value="39">39</option>
-    <option value="40">40</option>
+    <option value="99" th:selected="#{end_old} ==0">무관</option>
+    <option value="18" th:selected="#{end_old} ==18">18</option>
+    <option value="19" th:selected="#{end_old} ==19">19</option>
+    <option value="20" th:selected="#{end_old} ==20">20</option>
+    <option value="21" th:selected="#{end_old} ==21">21</option>
+    <option value="22" th:selected="#{end_old} ==22">22</option>
+    <option value="23" th:selected="#{end_old} ==23">23</option>
+    <option value="24" th:selected="#{end_old} ==24">24</option>
+    <option value="25" th:selected="#{end_old} ==25">25</option>
+    <option value="26" th:selected="#{end_old} ==26">26</option>
+    <option value="27" th:selected="#{end_old} ==27">27</option>
+    <option value="28" th:selected="#{end_old} ==28">28</option>
+    <option value="29" th:selected="#{end_old} ==29">29</option>
+    <option value="30" th:selected="#{end_old} ==30">30</option>
+    <option value="31" th:selected="#{end_old} ==31">31</option>
+    <option value="32" th:selected="#{end_old} ==32">32</option>
+    <option value="33" th:selected="#{end_old} ==33">33</option>
+    <option value="34" th:selected="#{end_old} ==34">34</option>
+    <option value="35" th:selected="#{end_old} ==35">35</option>
+    <option value="36" th:selected="#{end_old} ==36">36</option>
+    <option value="37" th:selected="#{end_old} ==37">37</option>
+    <option value="38" th:selected="#{end_old} ==38">38</option>
+    <option value="39" th:selected="#{end_old} ==39">39</option>
+    <option value="40" th:selected="#{end_old} ==40">40</option>
   </select>
 
   <div  class="searchName">성별 </div>
   <select id="sex" class="searchSelect" name="searchSex">
-    <option value="99">무관</option>
-    <option value="0">남자</option>
-    <option value="1">여자</option>
+    <option value="99" th:selected="${searchSex} == 99">무관</option>
+    <option value="0" th:selected="${searchSex} == 0">남자</option>
+    <option value="1" th:selected="${searchSex} == 1">여자</option>
   </select>
 
   <div  class="searchName">국적 </div>
   <select id="country" class="searchSelect" name="searchCountry">
-    <option value="99">무관</option>
-    <option value="Japan">일본</option>
-    <option value="South,Korea">대한민국</option>
+    <option value="99" th:selected="${searchCountry} == 99">무관</option>
+    <option value="Japan" th:selected="${searchCountry} == 'Japan'">일본</option>
+    <option value="South,Korea" th:selected="${searchCountry} == ('South'+ ',' + 'Korea')">대한민국</option>
   </select>
 
   <div class="searchName">사진 </div>
   <select id="pic" class="searchSelect" name="searchPic" >
-    <option value="99">무관</option>
-    <option value="0">있음</option>
-    <option value="1">없음</option>
+    <option value="99" th:selected="${searchPic} == 99">무관</option>
+    <option value="0" th:selected="${searchPic} == 0">있음</option>
+    <option value="1" th:selected="${searchPic} == 1">없음</option>
   </select>
   <input type="button" value="검색" id="searchGo" onclick ="searchList();">
   </form>

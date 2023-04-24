@@ -29,6 +29,7 @@ public class MemberVO {
     private String mb_bir1;
     private String mb_bir2;
     private String mb_bir3;
+    private int mb_old;
     private int mb_see;
     private String mb_sex;
     private int mb_agree1;

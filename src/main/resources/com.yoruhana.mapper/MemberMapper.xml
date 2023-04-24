@@ -5,8 +5,8 @@
 
     <!--회원가입-->
     <insert id="insertJoin" parameterType="com.yoruhana.entity.MemberVO">
-        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw,mb_tel,mb_bir, mb_stat,mb_join_date, mb_prof_stat,mb_agree1,mb_agree2,mb_see ,mb_file, mb_sex)
-                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),CONCAT(#{mb_bir1},#{mb_bir2},#{mb_bir3}),0,NOW(),1,0,0,0,"person-circle.svg",#{mb_sex})
+        insert into members (mb_country,mb_nick,mb_name, mb_id, mb_pw,mb_tel,mb_bir,mb_old , mb_stat,mb_join_date, mb_prof_stat,mb_agree1,mb_agree2,mb_see ,mb_file, mb_sex)
+                    values(#{mb_country}, #{mb_nick} ,#{mb_name},#{mb_id},#{mb_pw},CONCAT(#{mb_tel1},'-',#{mb_tel2},'-',#{mb_tel3}),CONCAT(#{mb_bir1},#{mb_bir2},#{mb_bir3}),#{mb_old},0,NOW(),1,0,0,0,"person-circle.svg",#{mb_sex})
     </insert>
 
     <select id = "login" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
@@ -39,18 +39,17 @@
 
     <select id="searchPenpalList" parameterType="com.yoruhana.entity.MemberVO" resultType="com.yoruhana.entity.MemberVO">
         SELECT * FROM members WHERE
+        <if test="start_old != null and end_old !=null">
+            <![CDATA[
+            mb_old > (#{start_old}-1) and mb_old < (#{end_old}+1) and
+            ]]>
+        </if>
         <if test="searchSex != null and searchSex == 0">
             mb_sex = "남" and
         </if>
         <if test="searchSex != null and searchSex == 1">
             mb_sex = "여" and
         </if>
-       <!-- <if test="searchCountry != null and searchCountry == 0 and searchCountry != 99">
-            mb_country = "Japan" and
-        </if>
-        <if test="searchCountry != null and searchCountry == 1 and searchCountry != 99">
-            mb_country = "South,Korea" and
-        </if>-->
         <if test='searchCountry != null and searchCountry != "99"'>
             mb_country = #{searchCountry} and
         </if>
