@@ -54,11 +54,12 @@
             mb_country = #{searchCountry} and
         </if>
         <if test="searchPic != null and searchPic ==0 and searchPic != 99">
-            mb_file = "" or mb_file = null or mb_file = "person-circle.svg" and
-        </if>
-        <if test="searchPic != null and searchPic ==1 and searchPic != 99">
             mb_file != "" and mb_file is not null and mb_file != "person-circle.svg" and
         </if>
+        <if test="searchPic != null and searchPic ==1 and searchPic != 99">
+            mb_file = "" or mb_file = null or mb_file = "person-circle.svg" and
+        </if>
+
          mb_prof_stat = 0 and mb_stat =0 order by mb_recent desc limit #{start},#{limit}
 
     </select>

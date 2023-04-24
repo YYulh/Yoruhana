@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
+</head>
+
+<style>
+  #section{
+  width:60%;
+  }
+
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #333;
+    text-decoration: none;
+  }
+
+   .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    width: 464px;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 2%;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .mb_file{
+  width:100%;
+  height:45px;
+  object-fit:cover;
+  }
+
+ #writer_img_box {
+  width:45px;
+  height:45px;
+  border-radius:70%;
+  overflow:hidden;
+  }
+
+  #img_section{
+display: flex;
+    max-height: 500px;
+    width: 100%;
+    white-space: nowrap;
+    position: relative;
+    list-style:none;
+    padding-inline-start: 0;
+  }
+  .appendImg_Box{
+  height: 100%;
+  position: relative;
+  }
+   .appendImg{
+  height: 500px;
+    border: 2px solid;
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: 375.8px;
+    object-fit: cover;
+
+  }
+  .post_head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 85%;
+  }
+  .post_wrap{
+  display:flex;
+  align-items: center;
+  }
+  .writer_header{
+  margin-right:15px;
+  }
+  #post_content{
+    resize: none;
+    width: 375px;
+    min-height: 150px;
+    margin-top: 15px;
+    border: 2px solid;
+    border-radius: 5px;
+  }
+.slidewrap_prod{
+text-align: center;
+    max-width: 375.8px;
+    overflow-x: hidden;
+ }
+</style>
+
+<link type="text/css" rel="stylesheet" href="/css/common.css" />
+<div th:insert = "~{common/header :: header}"></div>
+<body>
+<input type="button" class="button" value="작성하기" onclick="writePost();">
+  <div id="section" align="center">
+    <div th:each="list : ${list}" th:if="${list} != null">
+
+      <div class="post_head">
+        <a  href="#" id="'img_box' + ${mb_no}">
+          <img src ="@{/upload} + ${list.mb_file}">
+        </a>
+      </div>
+
+    </div>
+
+    <!--모달-->
+    <div id="post_modal" align="center" class="modal">
+      <div class="modal-content">
+        <a  href="#" class = "close" onclick="closing()">&times;</a>
+        <form action="#" name = "form1" method="post" enctype="multipart/form-data">
+          <div class="post_head">
+            <div class="post_wrap">
+                <div id="writer_img_box" class="writer_header">
+                  <img th:src ="@{/upload/} + ${session.file}" class="mb_file">
+                </div>
+                <div th:text="${session.nick}" class="writer_header" style="font-weight: bold;"></div>
+                <div th:text="${time_now}" class="writer_header" style="font-size: smaller;"></div>
+            </div>
+            <div><input type="file" id="file" value="사진첨부" multiple style="display:none;"></div>
+            <div><input type="button" value="사진등록" id="clickFile"></div>
+          </div>
+<div class="slidewrap_prod">
+          <ul id="img_section">
+
+          </ul>
+</div>
+          <div id="content">
+            <textarea placeholder="게시물의 내용을 입력해주세요" maxlength="1000" id="post_content"></textarea>
+          </div>
+
+        </form>
+
+        <div>
+
+          <div id="slider-nav">
+          </div>
+
+          <input type="button" value="왼" class="button" onclick="slidebanner_left();">
+          <input type="button" value="오" class="button" onclick="slidebanner_right();">
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+</body>
+
+<div th:insert = "~{common/footer :: footer}"></div>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+  $('#file').on("change",changeImg);
+
+
+})
+
+function changeImg(e) {
+  var imgCount = 0;
+  $('#slider-nav').empty();
+
+  imgArr = [];
+  $('#img_section').empty();
+
+  var files = e.target.files;
+  var filesArr = Array.prototype.slice.call(files);
+
+  for (var i = 0; i < filesArr.length; i++) {
+
+    if (!filesArr[i].type.match("image.*")) {
+      alert("이미지 파일만 등록 가능합니다.");
+      return;
+    }
+
+    imgArr.push(filesArr[i]);
+    var f = imgArr[i];
+
+    imgCount ++;
+
+    reader(f);
+  }
+
+console.log("이미지 갯수" + imgCount);
+for(var i=0; i<imgCount; i++){
+
+var a = "<input type='radio' name='slider' id='slide" + i + "' onclick='radioChange(" + i + ")'>";
+  $('#slider-nav').append(a);
+}
+}
+
+function reader(f){
+
+var reader = new FileReader();
+    reader.onload = function(f) {
+      var html = "<li class='appendImg_Box'>" +
+        "<img src='" + f.target.result + "' class='appendImg'></li>";
+      $('#img_section').append(html);
+
+    }
+
+
+    reader.readAsDataURL(f);
+}
+
+
+  $('#clickFile').click(function (e) {
+   //document.form1.mb_file.value =  document.getElementById('target_mb_file' ).src;
+    e.preventDefault();
+    $('#file').click();
+});
+
+function writePost(){
+  var modal = document.getElementById("post_modal");
+
+  let opacity = 0;
+   modal.style.opacity = 0;
+  modal.style.display = 'block';
+
+  const timer = setInterval(() => {
+    opacity += 0.34;
+    modal.style.opacity = opacity;
+    if (opacity >= 1) {
+      clearInterval(timer);
+    }
+  }, 50);
+};
+
+function closing(){
+  var modal = document.getElementById("post_modal");
+  let opacity = 1;
+
+const timer = setInterval(() => {
+  opacity -= 0.34;
+  modal.style.opacity = opacity;
+  if (opacity <= 0) {
+    clearInterval(timer);
+
+   setTimeout(() => {
+      modal.style.display = 'none';
+    }, 100);
+  }
+}, 50);
+}
+//-----------
+
+
+
+
+
+/*	 function slidebanner_left(){
+
+			$("#img_section").animate({left: "-100%"}, 500, function () {
+				$("#img_section").append($("#img_section li:first-child"));
+				$("#img_section").css("left", 0);
+				})
+		}
+
+		 function slidebanner_right(){
+
+			$("#img_section").animate({left: "100%"}, 500, function () {
+                $("#img_section").prepend($("#img_section li:last-child"));
+				$("#img_section").css("left", 0);
+				})
+		*/
+
+
+//라디오 버튼 슬라이드
+$('#slider-nav input:first-child').attr('checked', 'checked');
+
+  function radioChange(i){
+  $('.appendImg_Box').stop().animate({left: -100 * i + '%'}, 500);
+};
+
+
+</script>
+
+</html>

@@ -1,4 +1,4 @@
-package com.yoruhana.controller;
+package com.yoruhana.controller.member;
 
 import com.yoruhana.entity.MemberVO;
 import com.yoruhana.service.member.MemberService;
@@ -392,8 +392,8 @@ System.out.println("old:" + vo.getMb_old());
         String url = "/profile.do";
         //--------------------------------------
         //파일을 저장할 경로
-        //String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
-        String savePath = "C:\\Users\\gtu\\Desktop\\storage\\";
+        String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        //String savePath = "C:\\Users\\gtu\\Desktop\\storage\\";
         String filename = null;
 
 
