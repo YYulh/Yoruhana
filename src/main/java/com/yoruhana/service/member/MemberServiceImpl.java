@@ -49,4 +49,8 @@ public class MemberServiceImpl implements MemberService {
     public void loginTime(String mb_no, String loginT){memberMapper.loginTime(mb_no,loginT);}
     @Override
     public void deleteRoom(int id){memberMapper.deleteRoom(id);}
+    @Override
+    public void insertBlog(int mb_no){memberMapper.insertBlog(mb_no);}
+    @Override
+    public int lastNo(){return memberMapper.lastNo();}
 }

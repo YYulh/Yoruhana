@@ -23,6 +23,8 @@ public interface MemberService{
    public void increaseSee(int mb_no,int total);
    public void loginTime(String mb_no,String loginT);
    public void deleteRoom(int id);
+   public void insertBlog(int mb_no);
+   public int lastNo();
 
 }
 

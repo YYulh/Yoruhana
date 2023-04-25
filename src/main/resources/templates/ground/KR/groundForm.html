@@ -126,7 +126,7 @@ text-align: center;
 
       <div class="post_head">
         <a  href="#" id="'img_box' + ${mb_no}">
-          <img src ="@{/upload} + ${list.mb_file}">
+          <img th:src ="@{/upload/}+ ${list.mb_file}">
         </a>
       </div>
 
@@ -136,7 +136,10 @@ text-align: center;
     <div id="post_modal" align="center" class="modal">
       <div class="modal-content">
         <a  href="#" class = "close" onclick="closing()">&times;</a>
-        <form action="#" name = "form1" method="post" enctype="multipart/form-data">
+
+        <form action="/insertPost.do" name = "form1" method="post" enctype="multipart/form-data">
+            <input type ="hidden" th:value =${session.no} name = "mb_no">
+
           <div class="post_head">
             <div class="post_wrap">
                 <div id="writer_img_box" class="writer_header">
@@ -145,27 +148,26 @@ text-align: center;
                 <div th:text="${session.nick}" class="writer_header" style="font-weight: bold;"></div>
                 <div th:text="${time_now}" class="writer_header" style="font-size: smaller;"></div>
             </div>
-            <div><input type="file" id="file" value="사진첨부" multiple style="display:none;"></div>
+            <div><input type="file" id="file" value="사진첨부" name="imgList" multiple style="display:none;"></div>
             <div><input type="button" value="사진등록" id="clickFile"></div>
           </div>
-<div class="slidewrap_prod">
-          <ul id="img_section">
+            <div class="slidewrap_prod">
+                      <ul id="img_section">
 
-          </ul>
-</div>
+                      </ul>
+            </div>
           <div id="content">
-            <textarea placeholder="게시물의 내용을 입력해주세요" maxlength="1000" id="post_content"></textarea>
+            <textarea placeholder="게시물의 내용을 입력해주세요" maxlength="1000" id="post_content" name = "post_content"></textarea>
           </div>
 
         </form>
 
         <div>
-
           <div id="slider-nav">
           </div>
 
-          <input type="button" value="왼" class="button" onclick="slidebanner_left();">
-          <input type="button" value="오" class="button" onclick="slidebanner_right();">
+          <input type="button" value="포스트 등록" class="button" onclick="insertPost();">
+            <input type="hidden" id ="imgHidden">
         </div>
       </div>
     </div>
@@ -191,6 +193,17 @@ text-align: center;
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+function insertPost(){
+    if(form1.post_content.value == "" && document.getElementById("imgHidden").value == ""){
+        return;
+        }
+
+    form1.submit();
+    return;
+
+}
+
+
 $(document).ready(function(){
   $('#file').on("change",changeImg);
 
@@ -208,6 +221,8 @@ function changeImg(e) {
   var filesArr = Array.prototype.slice.call(files);
 
   for (var i = 0; i < filesArr.length; i++) {
+
+    document.getElementById("imgHidden").value = filesArr[i].name;
 
     if (!filesArr[i].type.match("image.*")) {
       alert("이미지 파일만 등록 가능합니다.");

@@ -52,10 +52,14 @@ public class MemberController {
         String mb_bir = (vo.getMb_bir1() + vo.getMb_bir2() + vo.getMb_bir3());
         int parse = ((Integer.parseInt(strToday) - Integer.parseInt(mb_bir)) / 10000);
         vo.setMb_old(parse);
-        System.out.println("old:" + parse);
-System.out.println("old:" + vo.getMb_old());
+
+
+
         int result = memberService.insertJoin(vo);
         if (result != 0) {
+            int lastno = memberService.lastNo();
+            memberService.insertBlog(lastno);
+
             msg = "회원가입에 성공하였습니다";
             url = "/";
         } else {
@@ -392,8 +396,8 @@ System.out.println("old:" + vo.getMb_old());
         String url = "/profile.do";
         //--------------------------------------
         //파일을 저장할 경로
-        String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
-        //String savePath = "C:\\Users\\gtu\\Desktop\\storage\\";
+        //String savePath = "C:\\Users\\82107\\Desktop\\storage\\";
+        String savePath = "C:\\Users\\gtu\\Desktop\\storage\\";
         String filename = null;
 
 

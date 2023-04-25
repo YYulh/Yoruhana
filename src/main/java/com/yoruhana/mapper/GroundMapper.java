@@ -9,4 +9,7 @@ import java.util.List;
 public interface GroundMapper {
 
     List<BlogVO> getPostList();
+    int insertPost(BlogVO vo);
+    int getPostListByMb_no(int mb_no);
+    void insertPostPic(BlogVO vo);
 }

@@ -88,4 +88,15 @@
     <delete id="deleteRoom" parameterType="int">
         delete from chat_chatroom where id = #{id}
     </delete>
+
+    <select id="lastNo" resultType="int">
+        select mb_no from members order by mb_no desc limit 1
+    </select>
+
+    <insert id="insertBlog" parameterType="int">
+        insert into blog
+        (mb_no, blog_stat) values (#{mb_no},0)
+    </insert>
+    
+
 </mapper>

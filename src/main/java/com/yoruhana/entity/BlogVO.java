@@ -12,15 +12,18 @@ public class BlogVO {
     private String blog_short;
     private int blog_stat;
     //--블로그 게시물--
-
+    private String mb_file;
     private int post_no;
-    private String post_title;
     private String post_content;
     private int post_origin_re;
     private int post_order_re;
     private int post_layer_re;
-    private Timestamp post_date;
+    private String post_date;
 
     //--좋아요--
     private int post_like;
+
+    //--사진
+    private int post_p_no;
+    private String post_p_file;
 }

@@ -9,5 +9,19 @@
         select * from members m, blog b, blogPost p where m.mb_no = b.mb_no and b.blog_no = p.blog_no order by p.post_date desc
     </select>
 
+    <insert id="insertPost" parameterType="com.yoruhana.entity.BlogVO">
+        insert into blogPost (blog_no,post_content,post_origin_re, post_order_re, post_layer_re, post_date)
+        values (#{blog_no}, #{post_content}, 0, 0, 0, #{post_date})
+        <selectKey resultType="int" keyProperty="blog_no"  keyColumn="blog_no" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
 
+    <select id="getPostListByMb_no" parameterType="int" resultType="int">
+        select blog_no from members m, blog b where m.mb_no = #{mb_no} and m.mb_no = b.mb_no
+    </select>
+
+    <insert id="insertPostPic" parameterType="com.yoruhana.entity.BlogVO">
+        insert into blogPostPic (post_no, post_p_file) values (#{post_no},#{post_p_file})
+    </insert>
 </mapper>

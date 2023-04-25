@@ -22,5 +22,7 @@ public interface MemberMapper {
     void increaseSee(int mb_no, int total);
     void loginTime(String mb_no,String loginT);
     void deleteRoom(int id);
+    void insertBlog(int mb_no);
+    int lastNo();
 }
 
