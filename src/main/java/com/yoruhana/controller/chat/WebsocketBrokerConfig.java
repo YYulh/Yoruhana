@@ -18,8 +18,6 @@ public class WebsocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
         // for publish prefix
         registry.setApplicationDestinationPrefixes("/app");
         // user destination provides ability to have unique user queue
-        //registry.setUserDestinationPrefix("/topic");
-
     }
 
     @Override

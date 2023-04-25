@@ -34,8 +34,12 @@
 }
 
 .chatbox_messages {
+display:flex;
+align-items:center;
 
-  margin-bottom: 10px;
+}
+.chatbox_messages,.chatbox_messages1{
+ margin-bottom: 10px;
 }
 .chatbox_message{
   border:1px solid #ccc;

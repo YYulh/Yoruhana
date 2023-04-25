@@ -61,8 +61,7 @@ public class GroundController {
         System.out.println("selectkey:" + post_no);
         vo.setPost_no(post_no);
         //------------------
-        //String savePath = "C:\\Users\\gtu\\Desktop\\storage\\";
-        String savePath = "C:\\Users\\gtu\\Desktop\\storage\\post\\";
+        String savePath = "C:\\Users\\82107\\Desktop\\storage\\post\\";
         String filename = null;
 
 

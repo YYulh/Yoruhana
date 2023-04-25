@@ -124,10 +124,41 @@ text-align: center;
   <div id="section" align="center">
     <div th:each="list : ${list}" th:if="${list} != null">
 
-      <div class="post_head">
-        <a  href="#" id="'img_box' + ${mb_no}">
-          <img th:src ="@{/upload/}+ ${list.mb_file}">
-        </a>
+      <div id="post_modal" align="center" class="modal">
+        <div class="modal-content">
+          <a  href="#" class = "close" onclick="closing()">&times;</a>
+
+          <form action="/insertPost.do" name = "form1" method="post" enctype="multipart/form-data">
+            <input type ="hidden" th:value =${session.no} name = "mb_no">
+
+            <div class="post_head">
+              <div class="post_wrap">
+                <div id="writer_img_box" class="writer_header">
+                  <img th:src ="@{/upload/} + ${session.file}" class="mb_file">
+                </div>
+                <div th:text="${session.nick}" class="writer_header" style="font-weight: bold;"></div>
+                <div th:text="${time_now}" class="writer_header" style="font-size: smaller;"></div>
+              </div>
+              <div><input type="file" id="file" value="사진첨부" name="imgList" multiple style="display:none;"></div>
+              <div><input type="button" value="사진등록" id="clickFile"></div>
+            </div>
+            <div class="slidewrap_prod">
+              <ul id="img_section">
+
+              </ul>
+            </div>
+            <div id="content">
+              <textarea placeholder="게시물의 내용을 입력해주세요" maxlength="1000" id="post_content" name = "post_content"></textarea>
+            </div>
+
+          </form>
+
+          <div>
+            <div id="slider-post">
+            </div>
+
+          </div>
+        </div>
       </div>
 
     </div>

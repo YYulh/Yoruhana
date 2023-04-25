@@ -8,9 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private String connectPath = "/upload/**";
-    //private String resourcePath = "file:///C:/Users/82107/Desktop/storage/";
-    private String resourcePath = "file:///C:/Users/gtu/Desktop/storage/";
-
+    private String resourcePath = "file:///C:/Users/82107/Desktop/storage/";
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(connectPath)

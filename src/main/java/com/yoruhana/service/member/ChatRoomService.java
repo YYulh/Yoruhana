@@ -116,7 +116,7 @@ public class ChatRoomService implements ChatRoomMapper {
     public void appendMessage(ChatRoom chatRoom) throws IOException {
         // 파일업로드 상대경로 추출
         String fileUploadPath = applicationContext.getResource("classpath:/static").getFile().getAbsolutePath();;
-        //String fileUploadPath = "D:\\gtu_spring_workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\RegenKids\\resources\\";
+
         int mb_no = chatRoom.getMb_no();
         String mb_nick_a = chatRoom.getMb_nick_a();
         String mb_nick_b = chatRoom.getMb_nick_b();

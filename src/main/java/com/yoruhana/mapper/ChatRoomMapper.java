@@ -16,8 +16,6 @@ public interface ChatRoomMapper {
 
     public void addChatRoom (ChatRoom chatRoom) throws IOException;
 
-    //String chatId, String pr_id, String senderId, String recipientId
-
     public int countByChatId(@Param("mb_no")int mb_no, @Param("mb_nick_a")String mb_nick_a);
 
     public void appendMessage(ChatRoom chatRoom) throws FileNotFoundException, IOException;
@@ -40,10 +38,16 @@ public interface ChatRoomMapper {
     public ChatRoom findByChatId2(@Param("mb_no")int mb_no, @Param("mb_nick_a")String mb_nick_a);
 
     public List<ChatList> findByNick(@Param("nick")String nick);
+
     public int countByChatNick(@Param("mb_nick_a")String mb_nick_a, @Param("mb_nick_b")String mb_nick_b);
+
     public ChatRoom chatInfo(int read);
+
     public String getFile(String nick);
-  public void last_chat(String id,String content);
-  public String getLast_chat(int id);
-  public void update_chat(String id, String formatedNow);
+
+    public void last_chat(String id,String content);
+
+    public String getLast_chat(int id);
+
+    public void update_chat(String id, String formatedNow);
 }

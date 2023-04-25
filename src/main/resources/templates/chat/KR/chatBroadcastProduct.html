@@ -33,7 +33,7 @@
   </div>
     <div th:each="chatRoom : ${chatHistory}" >
       <th:block th:if="${chatRoom.senderName == mb_name}" class="chat_content">
-        <div class="chatbox_messages">
+        <div class="chatbox_messages1">
           <div class="chatbox_messageBox" style="text-align:right">
             <div class="chatbox_message chatRoomContent" th:text="${chatRoom.content}" style="margin-inline-start: auto;"></div>
             <div class="chatRoomSendTime" th:text="${chatRoomRead.chatRead_b == 1 ? '읽음' : '읽지않음'} + '&nbsp;' + ${chatRoom.sendTime}" th:if="${mb_nick} == ${chatRoomInfo.mb_nick_a}"></div>
@@ -279,7 +279,7 @@ var chatRead = $('#chatRoomRead.chatRead_b').val() == 1 ? '읽음': '읽지않�
 			var time = origin_time.substring(0,5);
 
 				if (mb_name == messageObj.senderName) {
-                    return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: right" class="chatRoomSenderName">'+
+                    return '<div class="chatbox_messages1"><div class="chatbox_messageBox" style="text-align: right" class="chatRoomSenderName">'+
                     '<div class="chatbox_message chatRoomContent" style="margin-inline-start: auto;">' +
                     messageObj.content+
                     '</div><div class="chatRoomSendTime">' +
@@ -289,10 +289,11 @@ var chatRead = $('#chatRoomRead.chatRead_b').val() == 1 ? '읽음': '읽지않�
                     time +
                     '</div></div></div>';
                 }else {
-				return '<div class="chatbox_messages"><div class="chatbox_messageBox" style="text-align: left" class="chatRoomSenderName"><div>' +
-	            messageObj.senderName +
-	            '</div><div class="chat_img_box">' +
-                '<div><img src="' + target_mb_file + '" class ="chat_target_mb_file""></div>' +
+				return '<div class="chatbox_messages">' +
+	            '<div class="chat_img_box"><div>' +
+                '<img src="' + target_mb_file + '" class ="chat_target_mb_file"">' +
+                '</div></div><div class="chatbox_messageBox" style="text-align:left"><div class="chatRoomSenderName">' +
+                messageObj.senderName +
                 '</div><div class="chatbox_message chatRoomContent" style="margin-inline-end: auto;">' +
 	            messageObj.content+
 	            '</div><div class="chatRoomSendTime">' +
@@ -349,7 +350,7 @@ $(window).ready(initialize());
 			unreadAlertInfinite();
 		}
 
-		//async(비동기)로 일정간격 업뎃되지 않아도 되는 img 파일을 불러옴
+		//async(비동기)로 일정간격 업뎃되지 않아도 정보를 불러옴
 		function getChatList() {
 			console.log("getChatList inprocess");
 			$.ajax({
