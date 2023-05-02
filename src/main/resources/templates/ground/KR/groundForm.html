@@ -9,6 +9,7 @@
 <style>
   #section{
   width:60%;
+  margin: auto;
   }
 
     .modal {
@@ -50,6 +51,8 @@
     margin-top: 2%;
     border: 1px solid #ddd;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    height: 850px;
+    margin-bottom: 5%;
   }
 
   .mb_file{
@@ -74,7 +77,7 @@ display: flex;
     list-style:none;
     padding-inline-start: 0;
   }
-  .appendImg_Box{
+  .appendImg_Box,.appendImg_Box2{
   height: 100%;
   position: relative;
   }
@@ -85,7 +88,6 @@ display: flex;
     box-sizing: border-box;
     width: 375.8px;
     object-fit: cover;
-
   }
   .post_head{
   display: flex;
@@ -102,7 +104,7 @@ display: flex;
   .writer_header{
   margin-right:15px;
   }
-  #post_content{
+  #post_content,#post_content2{
     resize: none;
     width: 375px;
     min-height: 150px;
@@ -115,52 +117,147 @@ text-align: center;
     max-width: 375.8px;
     overflow-x: hidden;
  }
+
+   .mb_file{
+  width:100%;
+  height:45px;
+  object-fit:cover;
+  }
+
+ #poster_img_box {
+  width:45px;
+  height:45px;
+  border-radius:70%;
+  overflow:hidden;
+  }
+  #img_section2{
+  list-style:none;
+  display: flex;
+    max-height: 500px;
+    width: 100%;
+    white-space: nowrap;
+    position: relative;
+    list-style:none;
+    padding-inline-start: 0;
+  }
+  .slidewrap_prod2{
+text-align: center;
+    max-width: 375.8px;
+    overflow-x: hidden;
+ }
+    .appendImg2{
+  height: 500px;
+    border: 2px solid;
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: 375.8px;
+    object-fit: cover;
+  }
+  .like_section{
+      display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 8px;
+    width:80%;
+  }
+  .like{
+  width:25px;
+margin-right: 15px;
+  position: relative;
+  }
+  .likeCntBox{
+    width: 80%;
+    font-weight: bold;
+    font-size: 17px;
+  }
+  .coment{
+  width:23px;
+  margin-right: 15px;
+  }
+  .letter{
+  width: 24px;
+   margin-right: 15px;
+    padding-bottom: 3px;
+  }
+  .chat{
+  width: 24px;
+    padding-bottom: 3px;
+  }
+  .radioBox{
+  position: absolute;
+    top: 64%;
+    left: -1px;
+    width: 100%;
+  }
 </style>
 
 <link type="text/css" rel="stylesheet" href="/css/common.css" />
 <div th:insert = "~{common/header :: header}"></div>
 <body>
+<input type="hidden" th:value="${session.no}" id="session_no">
 <input type="button" class="button" value="작성하기" onclick="writePost();">
+
   <div id="section" align="center">
-    <div th:each="list : ${list}" th:if="${list} != null">
 
-      <div id="post_modal" align="center" class="modal">
+    <div th:each="list : ${list}" th:if="${list} != null" align="center" >
+      <div id="post" align="center" >
         <div class="modal-content">
-          <a  href="#" class = "close" onclick="closing()">&times;</a>
-
-          <form action="/insertPost.do" name = "form1" method="post" enctype="multipart/form-data">
+          <form action="#" name = "form2" method="post" enctype="multipart/form-data">
             <input type ="hidden" th:value =${session.no} name = "mb_no">
 
+            <!--포스트 헤더-->
             <div class="post_head">
               <div class="post_wrap">
-                <div id="writer_img_box" class="writer_header">
-                  <img th:src ="@{/upload/} + ${session.file}" class="mb_file">
+                <div id="poster_img_box" class="writer_header">
+                  <img th:src ="@{/upload/} + ${list.mb_file}" class="mb_file">
                 </div>
-                <div th:text="${session.nick}" class="writer_header" style="font-weight: bold;"></div>
-                <div th:text="${time_now}" class="writer_header" style="font-size: smaller;"></div>
+                <div th:text="${list.mb_nick}" class="writer_header" style="font-weight: bold;"></div>
+                <div th:text="${list.post_date}" class="writer_header" style="font-size: smaller;"></div>
               </div>
-              <div><input type="file" id="file" value="사진첨부" name="imgList" multiple style="display:none;"></div>
-              <div><input type="button" value="사진등록" id="clickFile"></div>
             </div>
-            <div class="slidewrap_prod">
-              <ul id="img_section">
-
+            <!--이미지-->
+            <div class="slidewrap_prod2">
+              <ul id="img_section2">
+                <li th:if="${imgList.post_no} == ${list.post_no}" th:each="imgList,stat : ${imgList}" th:class="'appendImg_Box'+${list.post_no}+' appendImg_Box2'">
+                  <img th:src="@{/upload/post/} + ${imgList.post_p_file}"  class="appendImg2">
+                </li>
               </ul>
             </div>
-            <div id="content">
-              <textarea placeholder="게시물의 내용을 입력해주세요" maxlength="1000" id="post_content" name = "post_content"></textarea>
+            <div class="radioBox">
+            <!--라디오 버튼 생성-->
+              <div id="slider-post">
+                <input type="radio"  th:name ="'postRadio'+${list.post_no}"
+                       th:if="${imgList.post_no} == ${list.post_no}"
+                       th:each="imgList : ${imgList}"
+                       th:onclick="|postRadioChange(${list.post_no}, this)|">
+              </div>
             </div>
-
+            <!--콘텐츠 내용-->
+            <div id="content2">
+              <textarea  id="post_content2" name = "post_content" th:text="${list.post_content}" readonly></textarea>
+            </div>
           </form>
+          <!--좋아요-->
+          <div class="like_section">
 
-          <div>
-            <div id="slider-post">
-            </div>
+              <input type="hidden" th:value="${list.post_no}" class = "hiddenInput">
+              <span th:class="'likebox' + ' likebox'+ ${list.post_no}">
+              <img src = "/img/heart 1.png" th:onclick="|postLike(${session.no}, ${list.post_no}, 0)|" th:class ="like"
+                        th:if="${like.post_no}==${list.post_no} and ${like.post_like}== 1" th:each="like:${like}" >
+              <img src = "/img/heart 0.png" th:onclick="|postLike(${session.no}, ${list.post_no}, 1)|" th:class ="like"
+                     th:if="${like.post_no}==${list.post_no} and ${like.post_like}== 0" th:each="like:${like}" >
 
+              </span>
+            <span th:class = "'likeinsert'+ ' likeSubBox' + ${list.post_no}"></span>
+            <img src="/img/chat-square-text.svg" class="coment">
+            <img src="/img/envelope.svg" class ="letter">
+            <img src="/img/chat-dots.svg" class="chat">
+          </div>
+          <div class="likeCntBox" align="left">
+            <span>좋아요 &nbsp;</span><span th:class = "'likeCnt' + ${list.post_no}" th:text="${list.post_like_cnt}"></span><span>&nbsp;개</span>
           </div>
         </div>
       </div>
-
     </div>
 
     <!--모달-->
@@ -224,8 +321,71 @@ text-align: center;
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+//좋아요 버튼 누를시 상태 변경 ajax
+function postLike(m,p,n){
+var mb_no = $('#session_no').val();
+
+    $.ajax({
+        type : "POST",
+        url : "/postLike.do",
+        dataType : 'text',
+        contentType : 'application/json',
+        data : JSON.stringify({
+            "mb_no" : m,
+            "post_no" : p,
+            "post_like" : n
+        }),
+        success : function(data){
+        console.log(data);
+
+        //빈 하트
+        var str1 = '<span><img src = "/img/heart 0.png" onclick="postLike(' +
+                 mb_no +
+                 ',' +
+                 p +
+                 ', 1)" class ="like"></span>';
+        //채워진 하트
+        var str0 = '<span><img src = "/img/heart 1.png" onclick="postLike(' +
+                 mb_no +
+                 ',' +
+                 p +
+                 ', 0)" class ="like"></span>';
+
+                $('.likeSubBox'+p).empty();
+                var text= $('.likeCnt'+p).text();
+                var int = parseInt(text);
+
+                console.log(int);
+
+                if(data == "좋아요로 추가"){
+                $('.likebox'+p).empty().append(str0);
+                var add = int+1;
+                $('.likeCnt'+p).text(add);
+                  }
+
+                if(data == "좋아요로 변경"){
+                var add = int+1;
+                $('.likebox'+p).empty().append(str0);
+                $('.likeCnt'+p).text(add);
+                }
+
+                if(data == "좋아요로 취소"){
+                var minus = int-1;
+                $('.likebox'+p).empty().append(str1);
+                $('.likeCnt'+p).text(minus);
+                }
+        },
+        error : function(xhr, status, error){
+            console.log(xhr, status, error);
+            }
+    });
+}
+
+//포스트 등록
 function insertPost(){
-    if(form1.post_content.value == "" && document.getElementById("imgHidden").value == ""){
+    if(form1.post_content.value == ""){
+    form1.post_content.value = "내용을 입력해주세요!";
         return;
         }
 
@@ -237,10 +397,33 @@ function insertPost(){
 
 $(document).ready(function(){
   $('#file').on("change",changeImg);
+$('#slider-post input:first-child').attr('checked', 'checked');
 
-
+getNoneLike();
 })
 
+//아무 좋아요 액션도 취하지 않았던 게시물들 default로 하트아이콘 넣어주기
+function getNoneLike(){
+  var length = $('.likebox').length;
+
+  for(var i = 0; i <length; i++){
+
+    if($('.likebox').eq(i).children().length == 0){
+
+      var post_no = $('.hiddenInput').eq(i).val();
+      var mb_no = $('#session_no').val();
+      var str = '<span><img src = "/img/heart 0.png" onclick="postLike(' +
+                 mb_no +
+                 ',' +
+                 post_no +
+                 ', 1)" class ="like"></span>';
+
+      $('.likeinsert').eq(i).append(str);
+    }
+  }
+}
+
+//포스트 등록시 이미지 파일 등록
 function changeImg(e) {
   var imgCount = 0;
   $('#slider-nav').empty();
@@ -252,8 +435,6 @@ function changeImg(e) {
   var filesArr = Array.prototype.slice.call(files);
 
   for (var i = 0; i < filesArr.length; i++) {
-
-    document.getElementById("imgHidden").value = filesArr[i].name;
 
     if (!filesArr[i].type.match("image.*")) {
       alert("이미지 파일만 등록 가능합니다.");
@@ -268,12 +449,16 @@ function changeImg(e) {
     reader(f);
   }
 
-console.log("이미지 갯수" + imgCount);
+//console.log("이미지 갯수" + imgCount);
 for(var i=0; i<imgCount; i++){
 
+//사진의 갯수만큼 라디오 버튼 추가
 var a = "<input type='radio' name='slider' id='slide" + i + "' onclick='radioChange(" + i + ")'>";
   $('#slider-nav').append(a);
 }
+
+//첫 라디오는 체크되어 있도록
+$('#slider-nav input:first-child').attr('checked', 'checked');
 }
 
 function reader(f){
@@ -283,10 +468,7 @@ var reader = new FileReader();
       var html = "<li class='appendImg_Box'>" +
         "<img src='" + f.target.result + "' class='appendImg'></li>";
       $('#img_section').append(html);
-
     }
-
-
     reader.readAsDataURL(f);
 }
 
@@ -353,10 +535,14 @@ const timer = setInterval(() => {
 
 
 //라디오 버튼 슬라이드
-$('#slider-nav input:first-child').attr('checked', 'checked');
-
   function radioChange(i){
   $('.appendImg_Box').stop().animate({left: -100 * i + '%'}, 500);
+};
+
+  function postRadioChange(i,a){
+  var index = $(a).index();
+  console.log(index);
+  $('.appendImg_Box'+i).stop().animate({left: -100 * index + '%'}, 500);
 };
 
 

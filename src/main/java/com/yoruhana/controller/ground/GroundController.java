@@ -2,19 +2,15 @@ package com.yoruhana.controller.ground;
 
 import com.yoruhana.entity.BlogVO;
 import com.yoruhana.service.member.GroundService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Blob;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -25,26 +21,31 @@ public class GroundController {
     @Autowired
     private GroundService groundService;
 
-    @GetMapping("/groundForm.do")
-    public String groundForm(HttpServletRequest request){
-        String lang = (String)request.getSession().getAttribute("lang");
+    @RequestMapping("/groundForm.do")
+    public String groundForm(HttpServletRequest request) {
+        String lang = (String) request.getSession().getAttribute("lang");
 
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd HH:mm");
         String formatedNow = formatter.format(now);
 
+        int mb_no = (int)request.getSession().getAttribute("no");
 
         List<BlogVO> list = groundService.getPostList();
+        List<BlogVO> imgList = groundService.getImgList();
+        List<BlogVO> like = groundService.getPostLike(mb_no);
 
-        request.setAttribute("time_now",formatedNow);
-        request.setAttribute("list",list);
-
+        request.setAttribute("like", like);
+        request.setAttribute("imgList", imgList);
+        request.setAttribute("time_now", formatedNow);
+        request.setAttribute("list", list);
         return "ground/" + lang + "/groundForm";
     }
 
+
     @PostMapping("/insertPost.do")
-    public String insertPost(HttpServletRequest request,BlogVO vo,@RequestParam("imgList") List<MultipartFile> list){
-        String lang =  (String)request.getSession().getAttribute("lang");
+    public String insertPost(HttpServletRequest request, BlogVO vo, @RequestParam("imgList") List<MultipartFile> list) {
+        String lang = (String) request.getSession().getAttribute("lang");
 
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm");
@@ -58,17 +59,16 @@ public class GroundController {
         vo.setBlog_no(blog_no);
 
         int post_no = groundService.insertPost(vo);
-        System.out.println("selectkey:" + post_no);
-        vo.setPost_no(post_no);
+        System.out.println("selectkey:" + vo.getPost_no());
+        vo.setPost_no(vo.getPost_no());
         //------------------
         String savePath = "C:\\Users\\82107\\Desktop\\storage\\post\\";
         String filename = null;
 
 
-
-            if (!list.isEmpty()) { //가져온 사진이 있으면
-                for(int i =0; i<list.size(); i++) {
-                    filename = list.get(i).getOriginalFilename();//업로드된 실제파일명
+        if (!list.isEmpty()) { //가져온 사진이 있으면
+            for (int i = 0; i < list.size(); i++) {
+                filename = list.get(i).getOriginalFilename();//업로드된 실제파일명
 
                 //File 객체 생성
                 File saveFile = new File(savePath, filename);
@@ -98,16 +98,44 @@ public class GroundController {
                 vo.setPost_p_file(filename);
 
                 groundService.insertPostPic(vo);
-                }
-            } else {
-                filename = "";
             }
+        } else {
+            filename = "";
+        }
 
+        String msg = "포스트 등록에 성공하였습니다.";
+        String url = "/groundForm.do";
 
-
-
-        //--------------------------
-        return "ground/" + lang + "/groundForm";
+        request.setAttribute("msg", msg);
+        request.setAttribute("url", url);
+        return "common/result";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/postLike.do", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public String postLike(@RequestBody String json) throws IOException {
+
+        JSONObject jsn = new JSONObject(json);
+
+        int mb_no = (int) jsn.get("mb_no");
+        int post_no = (int)jsn.get("post_no");
+        int post_like = (int)jsn.get("post_like");
+
+        BlogVO vo = groundService.isLike(mb_no, post_no);
+        String result = "";
+
+        if (vo == null) {
+            System.out.println("냐옹1");
+            groundService.insertLike(mb_no, post_no);
+            result = "좋아요로 추가";
+        } else if(vo.getPost_like()==0){
+            System.out.println("냐옹2");
+            groundService.iLike(mb_no, post_no,post_like);
+            result = "좋아요로 변경";
+        } else{
+            groundService.unLike(mb_no, post_no,post_like);
+            result = "좋아요로 취소";
+        }
+        return result;
+    }
 }

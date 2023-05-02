@@ -9,11 +9,11 @@
         select * from members m, blog b, blogPost p where m.mb_no = b.mb_no and b.blog_no = p.blog_no order by p.post_date desc
     </select>
 
-    <insert id="insertPost" parameterType="com.yoruhana.entity.BlogVO">
-        insert into blogPost (blog_no,post_content,post_origin_re, post_order_re, post_layer_re, post_date)
-        values (#{blog_no}, #{post_content}, 0, 0, 0, #{post_date})
-        <selectKey resultType="int" keyProperty="blog_no"  keyColumn="blog_no" order="AFTER">
-            SELECT LAST_INSERT_ID()
+    <insert id="insertPost" parameterType="com.yoruhana.entity.BlogVO" >
+        insert into blogPost (blog_no,post_content,post_origin_re, post_order_re, post_layer_re, post_date,post_like_cnt)
+        values (#{blog_no}, #{post_content}, 0, 0, 0, #{post_date},0)
+        <selectKey resultType="int" keyProperty="post_no" order="AFTER">
+            SELECT MAX(post_no) from blogpost
         </selectKey>
     </insert>
 
@@ -24,4 +24,34 @@
     <insert id="insertPostPic" parameterType="com.yoruhana.entity.BlogVO">
         insert into blogPostPic (post_no, post_p_file) values (#{post_no},#{post_p_file})
     </insert>
+    <select id="getImgList" resultType="com.yoruhana.entity.BlogVO">
+        select post_no, post_p_file from blogPostPic
+    </select>
+    <select id="getPostLike" resultType="com.yoruhana.entity.BlogVO" parameterType="int">
+        select * from postLike where mb_no =#{mb_no}
+    </select>
+
+    <select id="isLike" parameterType="int" resultType="com.yoruhana.entity.BlogVO">
+        select * from postLike where mb_no =#{mb_no} and post_no = #{post_no}
+    </select>
+
+    <insert id="insertLike" parameterType="int">
+        insert into postLike (mb_no, post_no, post_like) values (#{mb_no},#{post_no},1)
+    </insert>
+
+    <update id="unLike" parameterType="int">
+        update postLike set post_like = #{post_like} where mb_no = #{mb_no} and post_no = ${post_no}
+    </update>
+
+    <update id="iLike" parameterType="int">
+        update postLike set post_like = #{post_like} where mb_no = #{mb_no} and post_no = ${post_no}
+    </update>
+
+    <update id="decreaseLikeCnt" parameterType="int">
+        update blogPost set post_like_cnt = post_like_cnt-1 where post_no =${post_no}
+    </update>
+
+    <update id="increaseLikeCnt" parameterType="int">
+        update blogPost set post_like_cnt = post_like_cnt+1 where post_no =${post_no}
+    </update>
 </mapper>

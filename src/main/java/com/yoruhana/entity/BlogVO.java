@@ -19,10 +19,11 @@ public class BlogVO {
     private int post_order_re;
     private int post_layer_re;
     private String post_date;
+    private String mb_nick;
 
     //--좋아요--
     private int post_like;
-
+    private int post_like_cnt;
     //--사진
     private int post_p_no;
     private String post_p_file;
